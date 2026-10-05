@@ -8,7 +8,7 @@
         <div class="hero-card__orb hero-card__orb--one"></div><div class="hero-card__orb hero-card__orb--two"></div>
         <div class="hero-card__content">
             <p class="eyebrow"><span></span> MANPOWER OPERATIONS CENTER</p>
-            <h2>Good morning, Ahmed.</h2>
+            <h2>Good morning, Zeeshan.</h2>
             <p>Everything you need to manage recruitment, workforce deployment, and client operations—beautifully organized in one place.</p>
             <div class="hero-card__actions">
                 <button class="button button--light" @click="setSection('candidates')">@include('partials.icon', ['name' => 'plus']) Add candidate</button>

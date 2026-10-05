@@ -44,7 +44,7 @@
 
     <div class="sidebar-user">
         <span class="avatar">AM</span>
-        <span class="sidebar-user__copy"><strong>Ahmed Malik</strong><small>Administrator</small></span>
+        <span class="sidebar-user__copy"><strong>M Zeeshan</strong><small>Administrator</small></span>
         <a href="{{ route('login') }}" class="sidebar-user__logout" title="Sign out">@include('partials.icon', ['name' => 'logout'])</a>
     </div>
 </aside>

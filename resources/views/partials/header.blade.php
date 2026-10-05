@@ -15,8 +15,8 @@
         <button class="icon-button notification-button" aria-label="Notifications">@include('partials.icon', ['name' => 'bell'])<span></span></button>
         <div class="profile" @click.outside="profileOpen = false">
             <button class="profile__button" @click="profileOpen = !profileOpen">
-                <span class="avatar avatar--header">AM</span>
-                <span class="profile__copy"><strong>Ahmed Malik</strong><small>Administrator</small></span>
+                <span class="avatar avatar--header">MZ</span>
+                <span class="profile__copy"><strong>M Zeeshan</strong><small>Administrator</small></span>
                 <span class="profile__chevron">⌄</span>
             </button>
             <div class="profile-menu" x-cloak x-show="profileOpen" x-transition>
