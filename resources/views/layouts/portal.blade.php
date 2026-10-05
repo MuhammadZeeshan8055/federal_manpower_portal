@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#145f90">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/favicon.png') }}">
     <title>@yield('title', 'Dashboard') — Federal Manpower Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

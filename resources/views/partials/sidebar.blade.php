@@ -1,6 +1,6 @@
 <aside class="sidebar" :class="{ 'sidebar--open': sidebarOpen }">
     <a class="sidebar-brand" href="{{ route('dashboard') }}" aria-label="Federal Manpower Portal">
-        <img src="{{ asset('images/federal-mark.svg') }}" alt="" class="sidebar-brand__mark">
+        <img src="{{ asset('images/federal-mark.png') }}" alt="Federal Group symbol" class="sidebar-brand__mark">
         <span class="sidebar-brand__copy">
             <strong>Federal</strong>
             <small>Manpower Portal</small>
