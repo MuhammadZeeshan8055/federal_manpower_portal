@@ -60,6 +60,7 @@
                 featureTitle: '',
 
                 modules: @js($modulesMap ?? []),
+                statsByModule: @js($moduleStats ?? []),
 
                 init() {
                     this.applyTheme(this.darkMode ? 'dark' : 'light', false);

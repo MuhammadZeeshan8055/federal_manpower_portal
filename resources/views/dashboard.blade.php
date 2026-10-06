@@ -47,7 +47,7 @@
     </div>
 </div>
 
-{{-- MODULE: feature buttons --}}
+{{-- MODULE: dashboard space reserved for future summaries and charts --}}
 <div class="dashboard-view module-workspace" x-show="screen === 'module'" x-cloak>
     <section class="module-workspace__hero">
         <button type="button" class="text-button back-button" @click="goHome()">
@@ -58,18 +58,21 @@
         <p x-text="moduleDescription"></p>
     </section>
 
-    <div class="feature-grid">
-        <template x-for="feature in features" :key="feature.key">
-            <button
-                type="button"
-                class="feature-card"
-                @click="openFeature(feature.key)"
-            >
-                <strong x-text="feature.label"></strong>
-                <span>Open</span>
-            </button>
+    <section class="module-summary" aria-label="Module record totals">
+        <template x-for="stat in (statsByModule[moduleKey] || [])" :key="stat.key">
+            <article class="module-summary__card">
+                <span class="module-summary__icon">
+                    @include('partials.icon', ['name' => 'chart'])
+                </span>
+                <span class="module-summary__copy">
+                    <small x-text="stat.label"></small>
+                    <strong x-text="Number(stat.value).toLocaleString()"></strong>
+                    <span>listed</span>
+                </span>
+            </article>
         </template>
-    </div>
+    </section>
+
 </div>
 
 {{-- FEATURE screens --}}
