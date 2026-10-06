@@ -12,7 +12,7 @@
         <div class="hero-card__content">
             <p class="eyebrow"><span></span> MANPOWER OPERATIONS CENTER</p>
             <h2>Welcome back, {{ auth()->user()->name }}</h2>
-            <p>Open a module below to manage clients, care offs, accounts, attendance, and more.</p>
+            <!-- <p>Open a module below to manage clients, care offs, accounts, attendance, and more.</p> -->
         </div>
     </section>
 
@@ -23,15 +23,19 @@
                 class="module-card"
                 @click="openModule('{{ $module['key'] }}')"
             >
-                <span class="module-card__icon">
-                    @include('partials.icon', ['name' => $module['icon'] ?? 'grid'])
+                <span class="module-card__top">
+                    <span class="module-card__icon">
+                        @include('partials.icon', ['name' => $module['icon'] ?? 'grid'])
+                    </span>
                 </span>
                 <span class="module-card__body">
                     <span class="module-card__title">{{ $module['title'] }}</span>
                     <span class="module-card__desc">{{ $module['description'] }}</span>
                 </span>
-                <span class="module-card__arrow" aria-hidden="true">
-                    @include('partials.icon', ['name' => 'arrow'])
+                <span class="module-card__footer">
+                    <span class="module-card__arrow" aria-hidden="true">
+                        @include('partials.icon', ['name' => 'arrow'])
+                    </span>
                 </span>
             </button>
         @empty
@@ -89,7 +93,7 @@
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">
             Module: <strong x-text="moduleKey"></strong>
-            · Feature: <strong x-text="featureKey"></strong>
+            Â· Feature: <strong x-text="featureKey"></strong>
         </p>
     </div>
 </div>
