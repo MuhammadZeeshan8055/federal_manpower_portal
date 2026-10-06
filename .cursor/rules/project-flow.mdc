@@ -1,0 +1,41 @@
+---
+description: Federal Manpower Portal — domain, stack, and how we build
+alwaysApply: true
+---
+
+# Federal Manpower Portal — project flow
+
+## How we work
+- Build **one step at a time**. Finish a step, summarize what changed, wait for OK before the next.
+- Keep code **simple and readable**. No hidden magic, no unused fields “for later”.
+- Prefer clear names over clever abstractions. User must be able to change anything easily.
+- Scope is flexible: drop or simplify features when the user says so. Update this rule if domain terms change.
+- **No AI-flavored comments** — no “This component handles…”, “Fetch the data”, “TODO: implement”, or narrating obvious code. Comment only when a non-obvious business rule needs a short note. Prefer clear names so comments are rarely needed.
+
+## Stack
+- Laravel 12 + **Livewire 4** + Alpine
+- UI: existing `public/css/portal.css` + `layouts/portal` (not a Tailwind rebuild)
+- Patterns: follow `D:\laravel\DIG_Software_management` (Livewire panels, Support classes, custom permissions)
+- Private client files: `storage/app/private/...` only — never public disk
+
+## Domain (plain language)
+| Term | Meaning |
+|------|---------|
+| Client | Job-seeker / applicant (not employer) |
+| Company | Overseas employer **or** university (`employer` / `university`) |
+| Care Off | Person/company who referred or submitted the case (optional) |
+| Process status | Stage master (Applied, Visa applied, etc.) |
+| Overall status | `active` / `inactive` on each client |
+| Direct vs referred | No Care Off vs linked Care Off |
+
+## Do not add unless asked
+- Care Off margin / commission / payout fields
+- Invite-only client register (register is **public**)
+- Extra packages or layers without a clear need
+
+## Structure preference
+- Business logic in small `app/Support/*` classes when shared
+- One Livewire component per screen/feature
+- Config-driven nav/permissions (`config/portal.php`) when that step is built
+- Migrations and models with obvious column names
+- Blade/PHP/JS: clean markup and code; no decorative comment banners or emoji in source
