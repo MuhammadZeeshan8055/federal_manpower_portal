@@ -13,10 +13,30 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         foreach ([
-            ['name' => 'Saudi Arabia', 'code' => 'SA', 'flag_image' => 'images/flags/sa.svg'],
-            ['name' => 'United Arab Emirates', 'code' => 'AE', 'flag_image' => 'images/flags/ae.svg'],
+            ['name' => 'Serbia', 'code' => 'RS', 'flag_image' => 'images/flags/rs.svg'],
+            ['name' => 'Seribia-Study', 'code' => 'RS-ST', 'flag_image' => 'images/flags/rs.svg'],
+            ['name' => 'Romania', 'code' => 'RO', 'flag_image' => 'images/flags/ro.svg'],
+            ['name' => 'Cyprus', 'code' => 'CY', 'flag_image' => 'images/flags/cy.svg'],
+            ['name' => 'Cyprus-Urgent', 'code' => 'CY-UR', 'flag_image' => 'images/flags/cy.svg'],
+            ['name' => 'Turkey', 'code' => 'TR', 'flag_image' => 'images/flags/tr.svg'],
+            ['name' => 'Ukraine', 'code' => 'UA', 'flag_image' => 'images/flags/ua.svg'],
+            ['name' => 'Bosnia', 'code' => 'BA', 'flag_image' => 'images/flags/ba.svg'],
+            ['name' => 'France', 'code' => 'FR', 'flag_image' => 'images/flags/fr.svg'],
             ['name' => 'Qatar', 'code' => 'QA', 'flag_image' => 'images/flags/qa.svg'],
+            ['name' => 'UAE', 'code' => 'AE', 'flag_image' => 'images/flags/ae.svg'],
+            ['name' => 'Italy', 'code' => 'IT', 'flag_image' => 'images/flags/it.svg'],
+            ['name' => 'Slovenia', 'code' => 'SI', 'flag_image' => 'images/flags/si.svg'],
+            ['name' => 'Belarus', 'code' => 'BY', 'flag_image' => 'images/flags/by.svg'],
+            ['name' => 'Spain', 'code' => 'ES', 'flag_image' => 'images/flags/es.svg'],
+            ['name' => 'KSA', 'code' => 'SA', 'flag_image' => 'images/flags/sa.svg'],
             ['name' => 'Oman', 'code' => 'OM', 'flag_image' => 'images/flags/om.svg'],
+            ['name' => 'Moldova', 'code' => 'MD', 'flag_image' => 'images/flags/md.svg'],
+            ['name' => 'Georgia', 'code' => 'GE', 'flag_image' => 'images/flags/ge.svg'],
+            ['name' => 'Hungary', 'code' => 'HU', 'flag_image' => 'images/flags/hu.svg'],
+            ['name' => 'Portugal', 'code' => 'PT', 'flag_image' => 'images/flags/pt.svg'],
+            ['name' => 'Albania', 'code' => 'AL', 'flag_image' => 'images/flags/al.svg'],
+            ['name' => 'Greece', 'code' => 'GR', 'flag_image' => 'images/flags/gr.svg'],
+            ['name' => 'Austria', 'code' => 'AT', 'flag_image' => 'images/flags/at.svg'],
         ] as $country) {
             Country::query()->updateOrCreate(
                 ['code' => $country['code']],

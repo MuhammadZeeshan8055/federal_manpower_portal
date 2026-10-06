@@ -45,13 +45,35 @@
 
         <div
             class="country-dd"
-            x-data="{ open: false }"
-            @click.outside="open = false"
+            x-data="{
+                open: false,
+                search: '',
+                countryNames: @js($countries->pluck('name')->values()),
+                showCountry(name) {
+                    if (this.search === '') {
+                        return true;
+                    }
+                    return name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1;
+                },
+                hasResults() {
+                    if (this.showCountry('All countries')) {
+                        return true;
+                    }
+                    var i;
+                    for (i = 0; i < this.countryNames.length; i++) {
+                        if (this.showCountry(this.countryNames[i])) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }"
+            @click.outside="open = false; search = ''"
         >
             <button
                 type="button"
                 class="country-dd__button"
-                @click="open = !open"
+                @click="open = !open; if (open) { search = ''; $nextTick(() => { $refs.countrySearch.focus(); }); } else { search = ''; }"
                 :aria-expanded="open.toString()"
             >
                 <span class="country-dd__meta">
@@ -68,29 +90,53 @@
                 <span class="country-dd__chevron" :class="{ 'country-dd__chevron--open': open }">▾</span>
             </button>
 
-            <div class="country-dd__menu" x-cloak x-show="open">
-                <form method="POST" action="{{ route('workspace.country') }}">
-                    @csrf
-                    <input type="hidden" name="country_id" value="">
-                    <button type="submit" class="country-dd__item {{ empty($workspaceCountryId) ? 'country-dd__item--active' : '' }}">
-                        <img class="country-dd__flag" src="{{ asset('images/flags/world.svg') }}" alt="">
-                        <span>All countries</span>
-                    </button>
-                </form>
+            <div class="country-dd__menu" x-cloak x-show="open" @click.stop>
+                <div class="country-dd__search">
+                    <input
+                        type="search"
+                        x-ref="countrySearch"
+                        x-model="search"
+                        placeholder="Search country..."
+                        autocomplete="off"
+                    >
+                </div>
 
-                @foreach ($countries as $country)
-                    <form method="POST" action="{{ route('workspace.country') }}">
+                <div class="country-dd__list">
+                    <form
+                        method="POST"
+                        action="{{ route('workspace.country') }}"
+                        x-show="showCountry('All countries')"
+                    >
                         @csrf
-                        <input type="hidden" name="country_id" value="{{ $country->id }}">
-                        <button
-                            type="submit"
-                            class="country-dd__item {{ (int) $workspaceCountryId === (int) $country->id ? 'country-dd__item--active' : '' }}"
-                        >
-                            <img class="country-dd__flag" src="{{ $country->flagUrl() }}" alt="">
-                            <span>{{ $country->name }}</span>
+                        <input type="hidden" name="country_id" value="">
+                        <button type="submit" class="country-dd__item {{ empty($workspaceCountryId) ? 'country-dd__item--active' : '' }}">
+                            <img class="country-dd__flag" src="{{ asset('images/flags/world.svg') }}" alt="">
+                            <span>All countries</span>
                         </button>
                     </form>
-                @endforeach
+
+                    @foreach ($countries as $country)
+                        <form
+                            method="POST"
+                            action="{{ route('workspace.country') }}"
+                            x-show="showCountry(@js($country->name))"
+                        >
+                            @csrf
+                            <input type="hidden" name="country_id" value="{{ $country->id }}">
+                            <button
+                                type="submit"
+                                class="country-dd__item {{ (int) $workspaceCountryId === (int) $country->id ? 'country-dd__item--active' : '' }}"
+                            >
+                                <img class="country-dd__flag" src="{{ $country->flagUrl() }}" alt="">
+                                <span>{{ $country->name }}</span>
+                            </button>
+                        </form>
+                    @endforeach
+
+                    <p class="country-dd__empty" x-show="search !== '' && !hasResults()" x-cloak>
+                        No country found
+                    </p>
+                </div>
             </div>
         </div>
 
