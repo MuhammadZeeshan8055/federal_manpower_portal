@@ -31,7 +31,7 @@ return [
             'key' => 'care_offs',
             'title' => 'Care Offs',
             'description' => 'People who submit or refer client cases.',
-            'icon' => 'badge',
+            'icon' => 'handshake',
             'children' => [
                 ['key' => 'list', 'label' => 'Care Off List'],
             ],
@@ -72,7 +72,7 @@ return [
             'key' => 'attendance',
             'title' => 'HR & Attendance',
             'description' => 'Check-in, leaves, holidays, and salary slips.',
-            'icon' => 'badge',
+            'icon' => 'clock',
             'children' => [
                 ['key' => 'my-daily-attendance', 'label' => 'My Daily Attendance'],
                 ['key' => 'apply-leave', 'label' => 'Apply Leave'],

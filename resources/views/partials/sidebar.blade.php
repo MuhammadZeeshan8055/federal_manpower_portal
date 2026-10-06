@@ -9,38 +9,65 @@
 
     <nav class="sidebar-nav" aria-label="Main navigation">
         <p class="sidebar-nav__label">Workspace</p>
-        @php
-            $items = [
-                ['overview', 'Overview', 'grid'],
-                ['recruitment', 'Recruitment', 'briefcase'],
-                ['candidates', 'Candidates', 'users'],
-                ['workforce', 'Workforce', 'badge'],
-                ['clients', 'Clients', 'building'],
-                ['documents', 'Documents & Visas', 'document'],
-            ];
-        @endphp
-        @foreach ($items as [$key, $label, $icon])
-            <button class="nav-item" :class="{ 'nav-item--active': activeSection === '{{ $key }}' }" @click="setSection('{{ $key }}')" @mouseenter="$el.classList.add('nav-touched')">
-                <span class="nav-item__icon">@include('partials.icon', ['name' => $icon])</span>
-                <span>{{ $label }}</span>
-                <span class="nav-item__indicator"></span>
-            </button>
-        @endforeach
 
-        <p class="sidebar-nav__label sidebar-nav__label--spaced">Management</p>
-        <button class="nav-item" :class="{ 'nav-item--active': activeSection === 'reports' }" @click="setSection('reports')" @mouseenter="$el.classList.add('nav-touched')">
-            <span class="nav-item__icon">@include('partials.icon', ['name' => 'chart'])</span><span>Reports</span><span class="nav-item__indicator"></span>
+        <button
+            type="button"
+            class="nav-item"
+            :class="{ 'nav-item--active': screen === 'home' }"
+            @click="goHome()"
+            @mouseenter="$el.classList.add('nav-touched')"
+        >
+            <span class="nav-item__icon">@include('partials.icon', ['name' => 'grid'])</span>
+            <span>Operations Overview</span>
+            <span class="nav-item__indicator"></span>
         </button>
-        <button class="nav-item" :class="{ 'nav-item--active': activeSection === 'settings' }" @click="setSection('settings')" @mouseenter="$el.classList.add('nav-touched')">
-            <span class="nav-item__icon">@include('partials.icon', ['name' => 'settings'])</span><span>Settings</span><span class="nav-item__indicator"></span>
-        </button>
+
+        <template x-if="screen !== 'home'">
+            <div
+                class="sidebar-module"
+                x-transition:enter="sidebar-anim-in"
+                x-transition:enter-start="sidebar-anim-in-start"
+                x-transition:enter-end="sidebar-anim-in-end"
+                x-transition:leave="sidebar-anim-out"
+                x-transition:leave-start="sidebar-anim-out-start"
+                x-transition:leave-end="sidebar-anim-out-end"
+            >
+                <p
+                    class="sidebar-nav__label sidebar-nav__label--spaced sidebar-module__item"
+                    style="--i: 0"
+                    x-text="moduleTitle"
+                ></p>
+
+                <button
+                    type="button"
+                    class="nav-item sidebar-module__item"
+                    style="--i: 1"
+                    :class="{ 'nav-item--active': screen === 'module' }"
+                    @click="goModule()"
+                    @mouseenter="$el.classList.add('nav-touched')"
+                >
+                    <span class="nav-item__icon">@include('partials.icon', ['name' => 'chart'])</span>
+                    <span>Module Dashboard</span>
+                    <span class="nav-item__indicator"></span>
+                </button>
+
+                <template x-for="(feature, index) in features" :key="feature.key">
+                    <button
+                        type="button"
+                        class="nav-item sidebar-module__item"
+                        :style="'--i:' + (index + 2)"
+                        :class="{ 'nav-item--active': featureKey === feature.key }"
+                        @click="openFeature(feature.key)"
+                        @mouseenter="$el.classList.add('nav-touched')"
+                    >
+                        <span class="nav-item__icon">@include('partials.icon', ['name' => 'document'])</span>
+                        <span x-text="feature.label"></span>
+                        <span class="nav-item__indicator"></span>
+                    </button>
+                </template>
+            </div>
+        </template>
     </nav>
-
-    <div class="sidebar-support">
-        <span class="sidebar-support__icon">@include('partials.icon', ['name' => 'headphones'])</span>
-        <div><strong>Need assistance?</strong><small>Contact portal support</small></div>
-        <span class="sidebar-support__arrow">›</span>
-    </div>
 
     <div class="sidebar-user">
         <span class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</span>

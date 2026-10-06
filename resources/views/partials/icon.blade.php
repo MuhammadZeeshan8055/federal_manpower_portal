@@ -18,7 +18,9 @@ $paths = [
     'clock' => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     'check' => '<path d="m5 12 4 4L19 6"/>',
     'trend' => '<path d="M3 17l6-6 4 4 7-8M14 7h6v6"/>',
+    'handshake' => '<path d="M12 11 8 7 4 11l3 3M12 11l4-4 4 4-3 3M8.5 15.5 11 18l2.5-2.5M7 14l-2 2M17 14l2 2"/>',
+    'moon' => '<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/>',
+    'sun' => '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/>',
 ];
 @endphp
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{!! $paths[$name] ?? $paths['grid'] !!}</svg>
-

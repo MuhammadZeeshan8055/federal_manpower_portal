@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Country;
 use App\Models\User;
 use App\Models\UserPermission;
 use Illuminate\Database\Seeder;
@@ -11,6 +12,22 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        foreach ([
+            ['name' => 'Saudi Arabia', 'code' => 'SA', 'flag_image' => 'images/flags/sa.svg'],
+            ['name' => 'United Arab Emirates', 'code' => 'AE', 'flag_image' => 'images/flags/ae.svg'],
+            ['name' => 'Qatar', 'code' => 'QA', 'flag_image' => 'images/flags/qa.svg'],
+            ['name' => 'Oman', 'code' => 'OM', 'flag_image' => 'images/flags/om.svg'],
+        ] as $country) {
+            Country::query()->updateOrCreate(
+                ['code' => $country['code']],
+                [
+                    'name' => $country['name'],
+                    'flag_image' => $country['flag_image'],
+                    'is_active' => true,
+                ]
+            );
+        }
+
         User::query()->updateOrCreate(
             ['email' => 'admin@federal.com'],
             [
