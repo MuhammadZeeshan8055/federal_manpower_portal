@@ -18,7 +18,7 @@
                 <span class="avatar avatar--header">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</span>
                 <span class="profile__copy">
                     <strong>{{ auth()->user()->name }}</strong>
-                    <small>{{ auth()->user()->email }}</small>
+                    <small>{{ auth()->user()->roleLabel() }}</small>
                 </span>
                 <span class="profile__chevron">⌄</span>
             </button>

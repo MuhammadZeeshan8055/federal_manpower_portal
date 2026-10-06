@@ -46,7 +46,7 @@
         <span class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</span>
         <span class="sidebar-user__copy">
             <strong>{{ auth()->user()->name }}</strong>
-            <small>{{ auth()->user()->email }}</small>
+            <small>{{ auth()->user()->roleLabel() }}</small>
         </span>
         <form method="POST" action="{{ route('logout') }}" class="sidebar-user__logout-form">
             @csrf
