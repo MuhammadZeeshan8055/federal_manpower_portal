@@ -68,20 +68,30 @@
     </div>
 </div>
 
-{{-- FEATURE: real Livewire screens go here later --}}
+{{-- FEATURE screens --}}
 <div class="dashboard-view" x-show="screen === 'feature'" x-cloak>
-    <section class="module-placeholder__hero">
+    <section class="feature-page-head">
         <button type="button" class="text-button back-button" @click="goModule()">
             <span aria-hidden="true">&larr;</span> Back to module
         </button>
         <p class="eyebrow"><span></span> FEATURE</p>
         <h2 x-text="featureTitle"></h2>
+    </section>
+
+    <div x-show="moduleKey === 'operations' && featureKey === 'countries'">
+        <livewire:operations.manage-countries />
+    </div>
+
+    <div
+        class="module-placeholder__hero"
+        x-show="!(moduleKey === 'operations' && featureKey === 'countries')"
+    >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">
             Module: <strong x-text="moduleKey"></strong>
-            ï¿½ Feature: <strong x-text="featureKey"></strong>
+            · Feature: <strong x-text="featureKey"></strong>
         </p>
-    </section>
+    </div>
 </div>
 
 @endsection
