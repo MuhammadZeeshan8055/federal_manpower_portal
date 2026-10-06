@@ -34,7 +34,34 @@
             </div>
 
             @if ($successMessage !== '')
-                <p class="master-message">{{ $successMessage }}</p>
+                <div
+                    class="portal-toast portal-toast--{{ $toastType }}"
+                    wire:key="country-toast-{{ $toastVersion }}"
+                    x-data="{ show: true }"
+                    x-init="setTimeout(() => show = false, 5000)"
+                    x-show="show"
+                    x-transition:enter="toast-enter"
+                    x-transition:enter-start="toast-enter-start"
+                    x-transition:enter-end="toast-enter-end"
+                    x-transition:leave="toast-leave"
+                    x-transition:leave-start="toast-leave-start"
+                    x-transition:leave-end="toast-leave-end"
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
+                    <span class="portal-toast__icon">
+                        @include('partials.icon', ['name' => $toastType === 'danger' ? 'trash' : 'check'])
+                    </span>
+                    <span class="portal-toast__copy">
+                        <small>{{ $toastType === 'danger' ? 'Deleted' : 'Success' }}</small>
+                        <strong>{{ $successMessage }}</strong>
+                    </span>
+                    <button type="button" class="portal-toast__close" @click="show = false" aria-label="Dismiss notification">
+                        &times;
+                    </button>
+                    <span class="portal-toast__progress" aria-hidden="true"></span>
+                </div>
             @endif
 
             <form class="master-form" wire:submit="saveCountry">

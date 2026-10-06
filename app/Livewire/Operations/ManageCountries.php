@@ -25,6 +25,10 @@ class ManageCountries extends Component
 
     public string $successMessage = '';
 
+    public int $toastVersion = 0;
+
+    public string $toastType = 'success';
+
     public function mount(): void
     {
         $user = auth()->user();
@@ -79,6 +83,8 @@ class ManageCountries extends Component
         }
 
         $this->successMessage = 'Country deleted.';
+        $this->toastType = 'danger';
+        $this->toastVersion++;
     }
 
     public function saveCountry(): void
@@ -114,6 +120,9 @@ class ManageCountries extends Component
             Country::query()->create($data);
             $this->successMessage = 'Country added.';
         }
+
+        $this->toastType = 'success';
+        $this->toastVersion++;
 
         $this->resetForm();
     }
