@@ -14,7 +14,8 @@ alwaysApply: true
 
 ## Stack
 - Laravel 12 + **Livewire 4** + Alpine
-- UI: existing `public/css/portal.css` + `layouts/portal` (not a Tailwind rebuild)
+- UI: `public/css/portal.css` + Google Fonts / Alpine / Livewire CDN assets — **no Vite, no `npm run dev`, no rebuild on change** (same style as DIG)
+- Do not add `@vite` to layouts. Edit CSS in `public/css/portal.css` directly.
 - Patterns: follow `D:\laravel\DIG_Software_management` (Livewire panels, Support classes, custom permissions)
 - Private client files: `storage/app/private/...` only — never public disk
 

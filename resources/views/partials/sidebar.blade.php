@@ -43,8 +43,16 @@
     </div>
 
     <div class="sidebar-user">
-        <span class="avatar">AM</span>
-        <span class="sidebar-user__copy"><strong>M Zeeshan</strong><small>Administrator</small></span>
-        <a href="{{ route('login') }}" class="sidebar-user__logout" title="Sign out">@include('partials.icon', ['name' => 'logout'])</a>
+        <span class="avatar">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</span>
+        <span class="sidebar-user__copy">
+            <strong>{{ auth()->user()->name }}</strong>
+            <small>{{ auth()->user()->email }}</small>
+        </span>
+        <form method="POST" action="{{ route('logout') }}" class="sidebar-user__logout-form">
+            @csrf
+            <button type="submit" class="sidebar-user__logout" title="Sign out">
+                @include('partials.icon', ['name' => 'logout'])
+            </button>
+        </form>
     </div>
 </aside>

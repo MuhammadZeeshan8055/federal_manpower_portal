@@ -1522,6 +1522,46 @@ body[x-cloak],
     color: var(--muted);
     margin: 0 0 30px;
 }
+.login-status {
+    margin: 0 0 16px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(159, 204, 55, 0.16);
+    color: var(--blue-dark);
+    font-size: 0.8rem;
+}
+.login-error {
+    display: block;
+    margin-top: 6px;
+    color: #c0392b;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.sidebar-user__logout-form {
+    margin: 0;
+    display: inline-flex;
+}
+.sidebar-user__logout-form .sidebar-user__logout {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    display: inline-flex;
+    color: inherit;
+}
+.profile-menu form {
+    margin: 0;
+}
+.profile-menu form button {
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+    padding: inherit;
+    color: inherit;
+
+}
 .login-card > label {
     display: block;
     color: #425c6f;
