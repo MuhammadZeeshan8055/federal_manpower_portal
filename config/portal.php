@@ -28,21 +28,14 @@ return [
             ],
         ],
         [
-            'key' => 'care_offs',
-            'title' => 'Care Offs',
-            'description' => 'People who submit or refer client cases.',
-            'icon' => 'handshake',
-            'children' => [
-                ['key' => 'list', 'label' => 'Care Off List'],
-            ],
-        ],
-        [
             'key' => 'operations',
             'title' => 'Operations',
-            'description' => 'Companies, countries, trades, and process statuses.',
+            'description' => 'Care offs, companies, universities, countries, trades, and process statuses.',
             'icon' => 'briefcase',
             'children' => [
+                ['key' => 'care_offs', 'label' => 'Care Offs'],
                 ['key' => 'companies', 'label' => 'Companies'],
+                ['key' => 'universities', 'label' => 'Universities'],
                 ['key' => 'countries', 'label' => 'Countries'],
                 ['key' => 'trades', 'label' => 'Trades'],
                 ['key' => 'process_statuses', 'label' => 'Process Statuses'],

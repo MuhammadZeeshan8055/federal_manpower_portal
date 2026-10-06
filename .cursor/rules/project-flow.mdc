@@ -29,6 +29,11 @@ alwaysApply: true
 | Overall status | `active` / `inactive` on each client |
 | Direct vs referred | No Care Off vs linked Care Off |
 
+## Module layout
+- **Operations** holds all masters in one place: Care Offs, Companies, Universities, Countries, Trades, Process Statuses
+- Care Offs is **not** a separate top-level module
+- Company type: employers under Companies, universities under Universities (same `companies` table, `type` column)
+
 ## Do not add unless asked
 - Care Off margin / commission / payout fields
 - Invite-only client register (register is **public**)

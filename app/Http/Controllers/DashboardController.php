@@ -34,9 +34,10 @@ class DashboardController extends Controller
                 'documents' => 'client_documents',
                 'import' => 'client_imports',
             ],
-            'care_offs' => ['list' => 'care_offs'],
             'operations' => [
-                'companies' => 'companies',
+                'care_offs' => 'care_offs',
+                'companies' => ['table' => 'companies', 'type' => 'employer'],
+                'universities' => ['table' => 'companies', 'type' => 'university'],
                 'countries' => 'countries',
                 'trades' => 'trades',
                 'process_statuses' => 'process_statuses',
@@ -67,18 +68,29 @@ class DashboardController extends Controller
 
             foreach ($module['children'] ?? [] as $feature) {
                 $featureKey = $feature['key'];
-                $table = $tables[$moduleKey][$featureKey] ?? null;
+                $source = $tables[$moduleKey][$featureKey] ?? null;
+                $countKey = is_array($source)
+                    ? ($source['table'].':'.($source['type'] ?? ''))
+                    : $source;
 
-                if ($table !== null && ! array_key_exists($table, $counts)) {
-                    $counts[$table] = Schema::hasTable($table)
-                        ? DB::table($table)->count()
-                        : 0;
+                if ($source !== null && ! array_key_exists($countKey, $counts)) {
+                    $table = is_array($source) ? $source['table'] : $source;
+
+                    if (! Schema::hasTable($table)) {
+                        $counts[$countKey] = 0;
+                    } elseif (is_array($source) && isset($source['type'])) {
+                        $counts[$countKey] = DB::table($table)
+                            ->where('type', $source['type'])
+                            ->count();
+                    } else {
+                        $counts[$countKey] = DB::table($table)->count();
+                    }
                 }
 
                 $stats[$moduleKey][] = [
                     'key' => $featureKey,
                     'label' => $feature['label'],
-                    'value' => $table !== null ? $counts[$table] : 0,
+                    'value' => $countKey !== null ? $counts[$countKey] : 0,
                 ];
             }
         }

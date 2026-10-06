@@ -89,9 +89,29 @@
         <livewire:operations.manage-countries />
     </div>
 
+    <div x-show="moduleKey === 'operations' && featureKey === 'companies'">
+        <livewire:operations.manage-companies />
+    </div>
+
+    <div x-show="moduleKey === 'operations' && featureKey === 'universities'">
+        <livewire:operations.manage-universities />
+    </div>
+
+    <div x-show="moduleKey === 'operations' && featureKey === 'care_offs'">
+        <livewire:operations.manage-care-offs />
+    </div>
+
+    <div x-show="moduleKey === 'operations' && featureKey === 'trades'">
+        <livewire:operations.manage-trades />
+    </div>
+
+    <div x-show="moduleKey === 'operations' && featureKey === 'process_statuses'">
+        <livewire:operations.manage-process-statuses />
+    </div>
+
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && featureKey === 'countries')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey))"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">
