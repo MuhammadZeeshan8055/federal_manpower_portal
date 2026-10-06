@@ -2334,6 +2334,87 @@ body[x-cloak],
 .master-list-panel {
     padding: 18px 20px 20px;
 }
+.master-form-panel--collapsible {
+    padding: 0;
+}
+.master-form-toggle {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    border-radius: inherit;
+    color: var(--ink);
+    background: transparent;
+    text-align: left;
+    transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+.master-form-toggle:hover {
+    background: rgba(28, 122, 180, 0.035);
+}
+.master-form-toggle:focus-visible {
+    outline: 3px solid rgba(28, 122, 180, 0.16);
+    outline-offset: -3px;
+}
+.master-form-panel--open .master-form-toggle {
+    border-bottom-color: var(--line);
+}
+.master-form-panel--open {
+    position: relative;
+    z-index: 25;
+}
+.master-form-toggle__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--blue);
+    font-size: 0.67rem;
+    font-weight: 800;
+}
+.master-form-toggle__title {
+    display: block;
+    color: var(--ink);
+    font-size: 0.95rem;
+    letter-spacing: -0.02em;
+}
+.master-form-toggle__icon {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(28, 122, 180, 0.16);
+    border-radius: 10px;
+    background: rgba(28, 122, 180, 0.08);
+    transition: transform 0.22s ease, color 0.18s ease, background-color 0.18s ease;
+}
+.master-form-toggle__icon svg {
+    width: 15px;
+    height: 15px;
+}
+.master-form-toggle__icon--open {
+    color: #fff;
+    background: var(--blue);
+    transform: rotate(45deg);
+}
+.master-form-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.28s ease;
+}
+.master-form-collapse--open {
+    grid-template-rows: 1fr;
+}
+.master-form-collapse__inner {
+    min-height: 0;
+    overflow: hidden;
+}
+.master-form-collapse--open .master-form-collapse__inner {
+    overflow: visible;
+}
+.master-form-content {
+    padding: 18px 20px 20px;
+}
+.master-form-content .master-form {
+    margin-top: 0;
+}
 .master-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -141,6 +141,7 @@ class ManageCountries extends Component
         $this->is_active = true;
         $this->resetValidation();
         $this->dispatch('country-form-reset');
+        $this->dispatch('master-form-reset');
     }
 
     private function storeFlag(): ?string

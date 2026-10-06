@@ -1,6 +1,7 @@
 <div
     class="master-page"
     x-data="{
+        formOpen: @js((bool) $editingId),
         deleteOpen: false,
         deleteId: null,
         deleteName: '',
@@ -18,6 +19,7 @@
         }
     }"
     @keydown.escape.window="if (deleteOpen) closeDelete()"
+    @master-form-reset.window="formOpen = false"
 >
     @if ($denied)
         <div class="panel empty-card">
@@ -25,13 +27,13 @@
             <p>You do not have permission to manage countries.</p>
         </div>
     @else
-        <section class="panel master-form-panel">
-            <div class="panel__header">
-                <div>
-                    <p class="panel__eyebrow">{{ $editingId ? 'EDIT' : 'ADD' }}</p>
-                    <h3>{{ $editingId ? 'Edit country' : 'New country' }}</h3>
-                </div>
-            </div>
+        <section class="panel master-form-panel master-form-panel--collapsible" :class="{ 'master-form-panel--open': formOpen }">
+            @include('partials.master-form-toggle', [
+                'targetId' => 'country-form-fields',
+                'eyebrow' => $editingId ? 'EDIT' : 'ADD',
+                'title' => $editingId ? 'Edit country' : 'New country',
+                'actionLabel' => 'Add country',
+            ])
 
             @if ($successMessage !== '')
                 <div
@@ -64,6 +66,8 @@
                 </div>
             @endif
 
+            <div id="country-form-fields" class="master-form-collapse" :class="{ 'master-form-collapse--open': formOpen }" :aria-hidden="(!formOpen).toString()" :inert="!formOpen">
+                <div class="master-form-collapse__inner"><div class="master-form-content">
             <form class="master-form" wire:submit="saveCountry">
                 <label>
                     Country name
@@ -116,12 +120,14 @@
                     </button>
 
                     @if ($editingId)
-                        <button type="button" class="button button--ghost" wire:click="cancelEdit">
+                        <button type="button" class="button button--ghost" wire:click="cancelEdit" @click="formOpen = false">
                             Cancel
                         </button>
                     @endif
                 </div>
             </form>
+                </div></div>
+            </div>
         </section>
 
         <section class="panel master-list-panel">
@@ -163,6 +169,7 @@
                                         type="button"
                                         class="row-action row-action--edit"
                                         wire:click="editCountry({{ $country->id }})"
+                                        @click="formOpen = true"
                                         wire:loading.attr="disabled"
                                         wire:target="editCountry({{ $country->id }})"
                                     >

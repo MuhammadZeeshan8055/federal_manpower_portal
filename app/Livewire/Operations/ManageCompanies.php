@@ -145,5 +145,6 @@ class ManageCompanies extends Component
         $this->reset('name', 'country_id');
         $this->is_active = true;
         $this->resetValidation();
+        $this->dispatch('master-form-reset');
     }
 }

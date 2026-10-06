@@ -125,5 +125,6 @@ class ManageCareOffs extends Component
         $this->reset('name', 'phone', 'email');
         $this->is_active = true;
         $this->resetValidation();
+        $this->dispatch('care-off-form-reset');
     }
 }

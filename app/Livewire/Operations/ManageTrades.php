@@ -115,5 +115,6 @@ class ManageTrades extends Component
         $this->reset('name');
         $this->is_active = true;
         $this->resetValidation();
+        $this->dispatch('master-form-reset');
     }
 }

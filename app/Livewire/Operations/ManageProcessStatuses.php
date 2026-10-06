@@ -124,5 +124,6 @@ class ManageProcessStatuses extends Component
         $this->sort_order = '0';
         $this->is_active = true;
         $this->resetValidation();
+        $this->dispatch('master-form-reset');
     }
 }

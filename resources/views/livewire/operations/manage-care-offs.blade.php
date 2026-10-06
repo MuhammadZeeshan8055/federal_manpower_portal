@@ -1,6 +1,7 @@
 <div
     class="master-page"
     x-data="{
+        formOpen: @js((bool) $editingId),
         deleteOpen: false,
         deleteId: null,
         deleteName: '',
@@ -18,6 +19,7 @@
         }
     }"
     @keydown.escape.window="if (deleteOpen) closeDelete()"
+    @care-off-form-reset.window="formOpen = false"
 >
     @if ($denied)
         <div class="panel empty-card">
@@ -25,13 +27,28 @@
             <p>You do not have permission to manage care offs.</p>
         </div>
     @else
-        <section class="panel master-form-panel">
-            <div class="panel__header">
+        <section
+            class="panel master-form-panel master-form-panel--collapsible"
+            :class="{ 'master-form-panel--open': formOpen }"
+        >
+            <button
+                type="button"
+                class="panel__header master-form-toggle"
+                @click="formOpen = !formOpen"
+                :aria-expanded="formOpen.toString()"
+                aria-controls="care-off-form-fields"
+            >
                 <div>
                     <p class="panel__eyebrow">{{ $editingId ? 'EDIT' : 'ADD' }}</p>
                     <h3>{{ $editingId ? 'Edit care off' : 'New care off' }}</h3>
                 </div>
-            </div>
+                <span class="master-form-toggle__action">
+                    <span x-text="formOpen ? 'Close form' : 'Add care off'"></span>
+                    <span class="master-form-toggle__icon" :class="{ 'master-form-toggle__icon--open': formOpen }">
+                        @include('partials.icon', ['name' => 'plus'])
+                    </span>
+                </span>
+            </button>
 
             @if ($successMessage !== '')
                 <div
@@ -64,6 +81,15 @@
                 </div>
             @endif
 
+            <div
+                id="care-off-form-fields"
+                class="master-form-collapse"
+                :class="{ 'master-form-collapse--open': formOpen }"
+                :aria-hidden="(!formOpen).toString()"
+                :inert="!formOpen"
+            >
+                <div class="master-form-collapse__inner">
+                    <div class="master-form-content">
             <form class="master-form" wire:submit="saveCareOff">
                 <label>
                     Name
@@ -94,12 +120,15 @@
                     </button>
 
                     @if ($editingId)
-                        <button type="button" class="button button--ghost" wire:click="cancelEdit">
+                        <button type="button" class="button button--ghost" wire:click="cancelEdit" @click="formOpen = false">
                             Cancel
                         </button>
                     @endif
                 </div>
             </form>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="panel master-list-panel">
@@ -139,6 +168,7 @@
                                         type="button"
                                         class="row-action row-action--edit"
                                         wire:click="editCareOff({{ $careOff->id }})"
+                                        @click="formOpen = true"
                                         wire:loading.attr="disabled"
                                         wire:target="editCareOff({{ $careOff->id }})"
                                     >
