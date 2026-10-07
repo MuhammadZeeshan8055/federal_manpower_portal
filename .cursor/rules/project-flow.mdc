@@ -34,10 +34,15 @@ alwaysApply: true
 - Care Offs is **not** a separate top-level module
 - Company type: employers under Companies, universities under Universities (same `companies` table, `type` column)
 
+## Delivery phases
+- **Phase 1 (demo):** Complete operational product — Clients, portal/QR, visitors, HR, polish. Start Clients only when user says so and provides form fields + doc list.
+- **Phase 2 (after initial payment):** Accounts (methods, ledgers, reports) and Excel import (last). Do not build these in the demo go.
+
 ## Do not add unless asked
 - Care Off margin / commission / payout fields
 - Invite-only client register (register is **public**)
 - Extra packages or layers without a clear need
+- Phase 2 Accounts / Excel before payment go-ahead
 
 ## Structure preference
 - Business logic in small `app/Support/*` classes when shared

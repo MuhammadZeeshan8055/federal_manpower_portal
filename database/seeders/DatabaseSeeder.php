@@ -104,6 +104,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->syncPermissions($staff, [
+            ['clients', 'create', 'view'],
             ['clients', 'list', 'view'],
             ['clients', 'documents', 'view'],
             ['attendance', 'my-daily-attendance', 'manage'],

@@ -22,6 +22,7 @@ return [
             'description' => 'Job-seekers, documents, and case status.',
             'icon' => 'users',
             'children' => [
+                ['key' => 'create', 'label' => 'Add Client'],
                 ['key' => 'list', 'label' => 'All Clients'],
                 ['key' => 'documents', 'label' => 'Documents'],
                 ['key' => 'import', 'label' => 'Excel Import', 'admin_only' => true],
