@@ -19,6 +19,17 @@ alwaysApply: true
 - Patterns: follow `D:\laravel\DIG_Software_management` (Livewire panels, Support classes, custom permissions)
 - Private client files: `storage/app/private/...` only — never public disk
 
+## Client documents (security — top priority)
+- **Never** use the `public` disk for client docs or photos
+- **Never** `storage:link` client files into `public/`
+- **Always** download/view through a protected auth + permission route
+- Store only relative paths in DB (e.g. `clients/{id}/passport_copy.pdf`) — never public URLs
+- On download: check login, clients permission, row belongs to that client, path stays under `clients/{id}/` (block `..`)
+- Upload: whitelist mime/extensions + max size from `config/portal.php` (`client_files`)
+- No auto-compression of client files (quality matters); control size with max limit instead
+- Suggested limit: **5 MB** per file (pdf/jpg/jpeg/png) — enough for scans, sane with many clients
+- `client_documents`: store a row only when a file is uploaded **or** marked N/A — skip empty checklist items
+
 ## Domain (plain language)
 | Term | Meaning |
 |------|---------|

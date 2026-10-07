@@ -9,12 +9,17 @@ use App\Models\Company;
 use App\Models\Country;
 use App\Models\ProcessStatus;
 use App\Models\Trade;
+use App\Support\ClientPrivateFiles;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class ClientBioDataForm extends Component
 {
+    use WithFileUploads;
+
     public bool $denied = false;
 
     public string $trade_id = '';
@@ -85,6 +90,12 @@ class ClientBioDataForm extends Component
 
     public string $overall_status = 'active';
 
+    /** @var mixed */
+    public $photo = null;
+
+    /** @var array<string, mixed> */
+    public array $doc_files = [];
+
     /** @var array<string, bool> */
     public array $doc_not_required = [];
 
@@ -154,6 +165,7 @@ class ClientBioDataForm extends Component
             'marital_status' => ['required', 'in:single,married,divorced,widowed'],
             'religion' => ['required', 'string', 'max:100'],
             'cnic' => ['required', 'string', 'max:30'],
+            'photo' => $this->photoRules(),
         ], [], [
             'full_name' => 'name',
             'father_name' => "father's name",
@@ -217,6 +229,9 @@ class ClientBioDataForm extends Component
             return;
         }
 
+        $maxKb = ClientPrivateFiles::maxKilobytes();
+        $docMimes = implode(',', ClientPrivateFiles::allowedMimes());
+
         $this->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'father_name' => ['required', 'string', 'max:255'],
@@ -236,6 +251,9 @@ class ClientBioDataForm extends Component
             'company_id' => ['nullable'],
             'process_status_id' => ['nullable'],
             'email' => ['nullable', 'email', 'max:255'],
+            'photo' => $this->photoRules(),
+            'doc_files' => ['array'],
+            'doc_files.*' => ['nullable', 'file', 'max:'.$maxKb, 'mimes:'.$docMimes],
         ], [], [
             'full_name' => 'name',
             'father_name' => "father's name",
@@ -247,62 +265,95 @@ class ClientBioDataForm extends Component
             'passport_issue_date' => 'date of issue',
             'passport_expiry' => 'date of expiry',
             'care_off_id' => 'care off',
+            'doc_files.*' => 'document',
         ]);
+
+        $allowedDocKeys = collect($this->documentRows())->pluck('key')->all();
+
+        foreach (array_keys($this->doc_files) as $key) {
+            if (! in_array($key, $allowedDocKeys, true)) {
+                unset($this->doc_files[$key]);
+            }
+        }
 
         $careOffId = $this->source === 'referred' ? $this->idOrNull($this->care_off_id) : null;
 
-        $client = Client::query()->create([
-            'country_id' => $this->idOrNull($this->country_id),
-            'trade_id' => $this->idOrNull($this->trade_id),
-            'company_id' => $this->idOrNull($this->company_id),
-            'care_off_id' => $careOffId,
-            'process_status_id' => $this->idOrNull($this->process_status_id),
-            'created_by' => auth()->id(),
-            'full_name' => $this->full_name,
-            'height' => $this->nullIfEmpty($this->height),
-            'weight' => $this->nullIfEmpty($this->weight),
-            'father_name' => $this->father_name,
-            'mother_name' => $this->mother_name,
-            'gender' => $this->gender,
-            'date_of_birth' => $this->date_of_birth,
-            'marital_status' => $this->marital_status,
-            'religion' => $this->religion,
-            'cnic' => $this->cnic,
-            'place_of_birth' => $this->nullIfEmpty($this->place_of_birth),
-            'phone' => $this->nullIfEmpty($this->phone),
-            'email' => $this->nullIfEmpty($this->email),
-            'address' => $this->nullIfEmpty($this->address),
-            'police_station' => $this->nullIfEmpty($this->police_station),
-            'district' => $this->nullIfEmpty($this->district),
-            'medical_fitness' => $this->nullIfEmpty($this->medical_fitness),
-            'photo_path' => null,
-            'passport_number' => $this->passport_number,
-            'passport_issue_date' => $this->passport_issue_date,
-            'passport_expiry' => $this->passport_expiry,
-            'degree' => $this->nullIfEmpty($this->degree),
-            'degree_year' => $this->nullIfEmpty($this->degree_year),
-            'certification' => $this->nullIfEmpty($this->certification),
-            'certification_year' => $this->nullIfEmpty($this->certification_year),
-            'board_university' => $this->nullIfEmpty($this->board_university),
-            'languages' => $this->nullIfEmpty($this->languages),
-            'total_experience' => $this->nullIfEmpty($this->total_experience),
-            'source' => $this->source,
-            'overall_status' => 'active',
-        ]);
-
-        foreach ($this->documentRows() as $row) {
-            ClientDocument::query()->create([
-                'client_id' => $client->id,
-                'doc_key' => $row['key'],
-                'label' => $row['label'],
-                'file_path' => null,
-                'original_name' => null,
-                'is_not_required' => (bool) ($this->doc_not_required[$row['key']] ?? false),
-                'uploaded_at' => null,
+        DB::transaction(function () use ($careOffId) {
+            $client = Client::query()->create([
+                'country_id' => $this->idOrNull($this->country_id),
+                'trade_id' => $this->idOrNull($this->trade_id),
+                'company_id' => $this->idOrNull($this->company_id),
+                'care_off_id' => $careOffId,
+                'process_status_id' => $this->idOrNull($this->process_status_id),
+                'created_by' => auth()->id(),
+                'full_name' => $this->full_name,
+                'height' => $this->nullIfEmpty($this->height),
+                'weight' => $this->nullIfEmpty($this->weight),
+                'father_name' => $this->father_name,
+                'mother_name' => $this->mother_name,
+                'gender' => $this->gender,
+                'date_of_birth' => $this->date_of_birth,
+                'marital_status' => $this->marital_status,
+                'religion' => $this->religion,
+                'cnic' => $this->cnic,
+                'place_of_birth' => $this->nullIfEmpty($this->place_of_birth),
+                'phone' => $this->nullIfEmpty($this->phone),
+                'email' => $this->nullIfEmpty($this->email),
+                'address' => $this->nullIfEmpty($this->address),
+                'police_station' => $this->nullIfEmpty($this->police_station),
+                'district' => $this->nullIfEmpty($this->district),
+                'medical_fitness' => $this->nullIfEmpty($this->medical_fitness),
+                'photo_path' => null,
+                'passport_number' => $this->passport_number,
+                'passport_issue_date' => $this->passport_issue_date,
+                'passport_expiry' => $this->passport_expiry,
+                'degree' => $this->nullIfEmpty($this->degree),
+                'degree_year' => $this->nullIfEmpty($this->degree_year),
+                'certification' => $this->nullIfEmpty($this->certification),
+                'certification_year' => $this->nullIfEmpty($this->certification_year),
+                'board_university' => $this->nullIfEmpty($this->board_university),
+                'languages' => $this->nullIfEmpty($this->languages),
+                'total_experience' => $this->nullIfEmpty($this->total_experience),
+                'source' => $this->source,
+                'overall_status' => 'active',
             ]);
-        }
 
-        $this->successMessage = 'Client saved. Document uploads come next (private storage).';
+            if ($this->photo) {
+                $photoPath = ClientPrivateFiles::storeForClient($client->id, 'photo', $this->photo);
+                $client->update(['photo_path' => $photoPath]);
+            }
+
+            foreach ($this->documentRows() as $row) {
+                $notRequired = (bool) ($this->doc_not_required[$row['key']] ?? false);
+                $file = (! $notRequired) ? ($this->doc_files[$row['key']] ?? null) : null;
+
+                if (! $notRequired && ! $file) {
+                    continue;
+                }
+
+                $filePath = null;
+                $originalName = null;
+                $uploadedAt = null;
+
+                if ($file) {
+                    $filePath = ClientPrivateFiles::storeForClient($client->id, $row['key'], $file);
+                    $originalName = $file->getClientOriginalName();
+                    $uploadedAt = now();
+                }
+
+                ClientDocument::query()->create([
+                    'client_id' => $client->id,
+                    'doc_key' => $row['key'],
+                    'label' => $row['label'],
+                    'file_path' => $filePath,
+                    'original_name' => $originalName,
+                    'is_not_required' => $notRequired,
+                    'uploaded_at' => $uploadedAt,
+                ]);
+            }
+        });
+
+        $this->successMessage = 'Client saved. Files stored privately.';
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();
@@ -346,7 +397,16 @@ class ClientBioDataForm extends Component
             'processStatuses' => ProcessStatus::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get(['id', 'name']),
             'documents' => $this->documentRows(),
             'age' => $this->age,
+            'maxUploadMb' => max(1, (int) ceil(ClientPrivateFiles::maxKilobytes() / 1024)),
         ]);
+    }
+
+    private function photoRules(): array
+    {
+        $maxKb = ClientPrivateFiles::maxKilobytes();
+        $mimes = implode(',', ClientPrivateFiles::photoMimes());
+
+        return ['nullable', 'image', 'max:'.$maxKb, 'mimes:'.$mimes];
     }
 
     private function resetForm(): void
@@ -385,6 +445,8 @@ class ClientBioDataForm extends Component
         $this->company_id = '';
         $this->process_status_id = '';
         $this->overall_status = 'active';
+        $this->photo = null;
+        $this->doc_files = [];
         $this->openPersonal = true;
         $this->openPassport = false;
         $this->openEducation = false;

@@ -11,6 +11,16 @@ return [
     ],
 
     /*
+    | Private client files (storage/app/private via local disk).
+    | max_kilobytes = 5120 → 5 MB per file.
+    */
+    'client_files' => [
+        'max_kilobytes' => 5120,
+        'mimes' => ['pdf', 'jpg', 'jpeg', 'png'],
+        'photo_mimes' => ['jpg', 'jpeg', 'png'],
+    ],
+
+    /*
     | Modules and features used for sidebar + permissions.
     | access on user_permissions: view | manage
     | admin_only children are not granted to staff via permission UI later.

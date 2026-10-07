@@ -36,11 +36,6 @@
             </div>
         @endif
 
-        <div class="bio-preview-banner" role="status">
-            <strong>Paused at uploads</strong>
-            <span>Client details save now. File uploads wait until private storage is set.</span>
-        </div>
-
         <section class="panel bio-panel">
             <div class="bio-toolbar">
                 <div class="bio-toolbar__job">
@@ -189,9 +184,11 @@
                                 <label class="bio-form__full">
                                     Photo
                                     <span class="bio-file-placeholder">
-                                        <input type="file" accept="image/*" disabled aria-label="Client photo">
-                                        <small>Upload later</small>
+                                        <input type="file" wire:model="photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-label="Client photo">
+                                        <small>JPG/PNG · max {{ $maxUploadMb }} MB · private</small>
                                     </span>
+                                    @error('photo') <span class="master-error">{{ $message }}</span> @enderror
+                                    <div wire:loading wire:target="photo" class="muted" style="font-size:0.7rem;">Uploading…</div>
                                 </label>
                             </div>
                             <div class="bio-form__actions">
@@ -378,7 +375,7 @@
                     @if ($openDocuments)
                         <div class="bio-collapse__body">
                             <p class="bio-doc-note muted">
-                                Mark <strong>N/A</strong> when a document is not needed. File upload is paused — private storage next.
+                                Files go to private storage only (pdf / jpg / png, max {{ $maxUploadMb }} MB). Mark <strong>N/A</strong> when not needed.
                             </p>
                             <div class="table-wrap">
                                 <table class="data-table bio-doc-table">
@@ -395,13 +392,21 @@
                                                 <td>{{ $doc['label'] }}</td>
                                                 <td>
                                                     <span class="bio-file-placeholder bio-file-placeholder--inline">
-                                                        <input type="file" disabled aria-label="Upload {{ $doc['label'] }}">
-                                                        <small>Private storage next</small>
+                                                        <input
+                                                            type="file"
+                                                            wire:model="doc_files.{{ $doc['key'] }}"
+                                                            accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                                                            aria-label="Upload {{ $doc['label'] }}"
+                                                            @disabled($doc_not_required[$doc['key']] ?? false)
+                                                        >
+                                                        <small>Private</small>
                                                     </span>
+                                                    @error('doc_files.'.$doc['key']) <span class="master-error">{{ $message }}</span> @enderror
+                                                    <div wire:loading wire:target="doc_files.{{ $doc['key'] }}" class="muted" style="font-size:0.7rem;">Uploading…</div>
                                                 </td>
                                                 <td>
                                                     <label class="master-check master-check--inline">
-                                                        <input type="checkbox" wire:model="doc_not_required.{{ $doc['key'] }}">
+                                                        <input type="checkbox" wire:model.live="doc_not_required.{{ $doc['key'] }}">
                                                         <span>N/A</span>
                                                     </label>
                                                 </td>
