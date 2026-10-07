@@ -137,6 +137,18 @@
                     <p class="panel__eyebrow">CARE OFFS</p>
                     <h3>Referrers &amp; submitters</h3>
                 </div>
+
+                <label class="master-search">
+                    <span class="master-search__icon" aria-hidden="true">
+                        @include('partials.icon', ['name' => 'search'])
+                    </span>
+                    <input
+                        type="search"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Search care offs..."
+                        aria-label="Search care offs"
+                    >
+                </label>
             </div>
 
             <div class="table-wrap">
@@ -193,6 +205,8 @@
                     </tbody>
                 </table>
             </div>
+
+            {{ $careOffs->links() }}
         </section>
 
         <template x-teleport="body">

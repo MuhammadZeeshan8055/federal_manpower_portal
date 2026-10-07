@@ -5,9 +5,14 @@ namespace App\Livewire\Operations;
 use App\Models\CareOff;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ManageCareOffs extends Component
 {
+    use WithPagination;
+
+    protected string $paginationTheme = 'portal';
+
     public bool $denied = false;
 
     public ?int $editingId = null;
@@ -19,6 +24,8 @@ class ManageCareOffs extends Component
     public string $email = '';
 
     public bool $is_active = true;
+
+    public string $search = '';
 
     public string $successMessage = '';
 
@@ -33,6 +40,11 @@ class ManageCareOffs extends Component
         if (! $user || ! $user->canManage('operations', 'care_offs')) {
             $this->denied = true;
         }
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage('careOffsPage');
     }
 
     public function editCareOff(int $id): void
@@ -77,6 +89,7 @@ class ManageCareOffs extends Component
         $this->successMessage = 'Care Off deleted.';
         $this->toastType = 'danger';
         $this->toastVersion++;
+        $this->resetPage('careOffsPage');
     }
 
     public function saveCareOff(): void
@@ -110,12 +123,24 @@ class ManageCareOffs extends Component
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();
+        $this->resetPage('careOffsPage');
     }
 
     public function render()
     {
+        $query = CareOff::query()->orderBy('name');
+
+        if (trim($this->search) !== '') {
+            $term = '%'.trim($this->search).'%';
+            $query->where(function ($q) use ($term) {
+                $q->where('name', 'like', $term)
+                    ->orWhere('phone', 'like', $term)
+                    ->orWhere('email', 'like', $term);
+            });
+        }
+
         return view('livewire.operations.manage-care-offs', [
-            'careOffs' => CareOff::query()->orderBy('name')->get(),
+            'careOffs' => $query->paginate(10, ['*'], 'careOffsPage'),
         ]);
     }
 

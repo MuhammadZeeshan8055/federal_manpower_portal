@@ -102,6 +102,18 @@
                     <p class="panel__eyebrow">TRADES</p>
                     <h3>Job trades</h3>
                 </div>
+
+                <label class="master-search">
+                    <span class="master-search__icon" aria-hidden="true">
+                        @include('partials.icon', ['name' => 'search'])
+                    </span>
+                    <input
+                        type="search"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Search trades..."
+                        aria-label="Search trades"
+                    >
+                </label>
             </div>
 
             <div class="table-wrap">
@@ -154,6 +166,8 @@
                     </tbody>
                 </table>
             </div>
+
+            {{ $trades->links() }}
         </section>
 
         <template x-teleport="body">

@@ -136,6 +136,18 @@
                     <p class="panel__eyebrow">COUNTRIES</p>
                     <h3>Saved list</h3>
                 </div>
+
+                <label class="master-search">
+                    <span class="master-search__icon" aria-hidden="true">
+                        @include('partials.icon', ['name' => 'search'])
+                    </span>
+                    <input
+                        type="search"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Search countries..."
+                        aria-label="Search countries"
+                    >
+                </label>
             </div>
 
             <div class="table-wrap">
@@ -194,6 +206,8 @@
                     </tbody>
                 </table>
             </div>
+
+            {{ $countries->links() }}
         </section>
 
         <template x-teleport="body">

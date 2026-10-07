@@ -6,10 +6,14 @@ use App\Models\Country;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class ManageCountries extends Component
 {
     use WithFileUploads;
+    use WithPagination;
+
+    protected string $paginationTheme = 'portal';
 
     public bool $denied = false;
 
@@ -22,6 +26,8 @@ class ManageCountries extends Component
     public bool $is_active = true;
 
     public $flag;
+
+    public string $search = '';
 
     public string $successMessage = '';
 
@@ -36,6 +42,11 @@ class ManageCountries extends Component
         if (! $user || ! $user->canManage('operations', 'countries')) {
             $this->denied = true;
         }
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage('countriesPage');
     }
 
     public function editCountry(int $id): void
@@ -85,6 +96,7 @@ class ManageCountries extends Component
         $this->successMessage = 'Country deleted.';
         $this->toastType = 'danger';
         $this->toastVersion++;
+        $this->resetPage('countriesPage');
     }
 
     public function saveCountry(): void
@@ -123,14 +135,24 @@ class ManageCountries extends Component
 
         $this->toastType = 'success';
         $this->toastVersion++;
-
         $this->resetForm();
+        $this->resetPage('countriesPage');
     }
 
     public function render()
     {
+        $query = Country::query()->orderBy('name');
+
+        if (trim($this->search) !== '') {
+            $term = '%'.trim($this->search).'%';
+            $query->where(function ($q) use ($term) {
+                $q->where('name', 'like', $term)
+                    ->orWhere('code', 'like', $term);
+            });
+        }
+
         return view('livewire.operations.manage-countries', [
-            'countries' => Country::query()->orderBy('name')->get(),
+            'countries' => $query->paginate(10, ['*'], 'countriesPage'),
         ]);
     }
 

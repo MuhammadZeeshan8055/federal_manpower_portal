@@ -5,9 +5,14 @@ namespace App\Livewire\Operations;
 use App\Models\Trade;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ManageTrades extends Component
 {
+    use WithPagination;
+
+    protected string $paginationTheme = 'portal';
+
     public bool $denied = false;
 
     public ?int $editingId = null;
@@ -15,6 +20,8 @@ class ManageTrades extends Component
     public string $name = '';
 
     public bool $is_active = true;
+
+    public string $search = '';
 
     public string $successMessage = '';
 
@@ -29,6 +36,11 @@ class ManageTrades extends Component
         if (! $user || ! $user->canManage('operations', 'trades')) {
             $this->denied = true;
         }
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->resetPage('tradesPage');
     }
 
     public function editTrade(int $id): void
@@ -71,6 +83,7 @@ class ManageTrades extends Component
         $this->successMessage = 'Trade deleted.';
         $this->toastType = 'danger';
         $this->toastVersion++;
+        $this->resetPage('tradesPage');
     }
 
     public function saveTrade(): void
@@ -100,12 +113,19 @@ class ManageTrades extends Component
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();
+        $this->resetPage('tradesPage');
     }
 
     public function render()
     {
+        $query = Trade::query()->orderBy('name');
+
+        if (trim($this->search) !== '') {
+            $query->where('name', 'like', '%'.trim($this->search).'%');
+        }
+
         return view('livewire.operations.manage-trades', [
-            'trades' => Trade::query()->orderBy('name')->get(),
+            'trades' => $query->paginate(10, ['*'], 'tradesPage'),
         ]);
     }
 
