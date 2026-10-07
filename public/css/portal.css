@@ -154,13 +154,22 @@ body[x-cloak],
 }
 .sidebar-brand__copy strong {
     font-size: 1.35rem;
-    letter-spacing: -0.04em;
+    letter-spacing: 0.31em;
+    color: #8dc63f;
+    background: linear-gradient(90deg, #9fcd35 0%, #61bd3f 48%, #009b55 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 .sidebar-brand__copy small {
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-size: 0.58rem;
     letter-spacing: 0.13em;
-    color: #fff;
+    color: #29abe2;
+    background: linear-gradient(90deg, #29abe2 0%, #168dcc 55%, #0071bc 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-top: 4px;
     font-weight: 700;
 }

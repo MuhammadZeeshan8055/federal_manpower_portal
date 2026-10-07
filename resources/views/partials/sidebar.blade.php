@@ -3,7 +3,7 @@
         <img src="{{ asset('images/federal-mark.png') }}" alt="Federal Group symbol" class="sidebar-brand__mark">
         <span class="sidebar-brand__copy">
             <strong>Federal</strong>
-            <small>Manpower Portal</small>
+            <small>Group Of Companies</small>
         </span>
     </a>
 
