@@ -60,7 +60,13 @@
 
     <section class="module-summary" aria-label="Module record totals">
         <template x-for="stat in (statsByModule[moduleKey] || [])" :key="stat.key">
-            <article class="module-summary__card">
+            <button
+                type="button"
+                class="module-summary__card"
+                :class="{ 'module-summary__card--button': stat.clickable }"
+                @click="stat.clickable ? openClientStat(stat) : null"
+                :disabled="!stat.clickable"
+            >
                 <span class="module-summary__icon">
                     @include('partials.icon', ['name' => 'chart'])
                 </span>
@@ -69,7 +75,7 @@
                     <strong x-text="Number(stat.value).toLocaleString()"></strong>
                     <span>listed</span>
                 </span>
-            </article>
+            </button>
         </template>
     </section>
 
@@ -113,9 +119,13 @@
         <livewire:clients.client-bio-data-form />
     </div>
 
+    <div x-show="moduleKey === 'clients' && featureKey === 'list'">
+        <livewire:clients.list-clients />
+    </div>
+
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && featureKey === 'create')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list'].includes(featureKey))"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

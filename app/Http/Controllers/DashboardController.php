@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\ProcessStatus;
 use App\Support\PortalModules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -66,6 +67,12 @@ class DashboardController extends Controller
         foreach ($modules as $module) {
             $moduleKey = $module['key'];
 
+            if ($moduleKey === 'clients') {
+                $stats[$moduleKey] = $this->clientModuleStats();
+
+                continue;
+            }
+
             foreach ($module['children'] ?? [] as $feature) {
                 $featureKey = $feature['key'];
                 $source = $tables[$moduleKey][$featureKey] ?? null;
@@ -91,10 +98,57 @@ class DashboardController extends Controller
                     'key' => $featureKey,
                     'label' => $feature['label'],
                     'value' => $countKey !== null ? $counts[$countKey] : 0,
+                    'process_status_id' => null,
+                    'clickable' => false,
                 ];
             }
         }
 
         return $stats;
+    }
+
+    private function clientModuleStats(): array
+    {
+        $cards = [];
+
+        $totalClients = Schema::hasTable('clients')
+            ? (int) DB::table('clients')->count()
+            : 0;
+
+        $cards[] = [
+            'key' => 'list',
+            'label' => 'All Clients',
+            'value' => $totalClients,
+            'process_status_id' => null,
+            'clickable' => true,
+        ];
+
+        if (! Schema::hasTable('process_statuses') || ! Schema::hasTable('clients')) {
+            return $cards;
+        }
+
+        $statuses = ProcessStatus::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        $statusCounts = DB::table('clients')
+            ->select('process_status_id', DB::raw('count(*) as total'))
+            ->whereNotNull('process_status_id')
+            ->groupBy('process_status_id')
+            ->pluck('total', 'process_status_id');
+
+        foreach ($statuses as $status) {
+            $cards[] = [
+                'key' => 'status_'.$status->id,
+                'label' => $status->name,
+                'value' => (int) ($statusCounts[$status->id] ?? 0),
+                'process_status_id' => $status->id,
+                'clickable' => true,
+            ];
+        }
+
+        return $cards;
     }
 }

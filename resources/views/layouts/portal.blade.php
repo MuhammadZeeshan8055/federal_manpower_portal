@@ -146,9 +146,12 @@
                     window.scrollTo(0, 0);
                 },
 
-                openFeature(key) {
+                openFeature(key, options) {
                     var i;
                     var feature = null;
+                    var statusId = '';
+
+                    options = options || {};
 
                     for (i = 0; i < this.features.length; i++) {
                         if (this.features[i].key === key) {
@@ -167,6 +170,34 @@
                     this.sidebarOpen = false;
                     this.saveScreen();
                     window.scrollTo(0, 0);
+
+                    if (this.moduleKey === 'clients' && key === 'list') {
+                        statusId = options.processStatusId ? String(options.processStatusId) : '';
+
+                        if (statusId && options.label) {
+                            this.featureTitle = options.label;
+                        }
+
+                        this.$nextTick(function () {
+                            window.dispatchEvent(new CustomEvent('clients-filter-status', {
+                                detail: {
+                                    id: statusId,
+                                    label: statusId ? (options.label || '') : '',
+                                },
+                            }));
+                        });
+                    }
+                },
+
+                openClientStat(stat) {
+                    if (!stat || !stat.clickable) {
+                        return;
+                    }
+
+                    this.openFeature('list', {
+                        processStatusId: stat.process_status_id || '',
+                        label: stat.label || '',
+                    });
                 },
 
                 goHome() {
