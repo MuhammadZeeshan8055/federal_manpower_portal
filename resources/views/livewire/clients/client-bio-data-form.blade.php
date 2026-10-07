@@ -5,9 +5,40 @@
             <p>You do not have permission to view clients.</p>
         </div>
     @else
+        @if ($successMessage !== '')
+            <div
+                class="portal-toast portal-toast--{{ $toastType }}"
+                wire:key="client-toast-{{ $toastVersion }}"
+                x-data="{ show: true }"
+                x-init="setTimeout(() => show = false, 5000)"
+                x-show="show"
+                x-transition:enter="toast-enter"
+                x-transition:enter-start="toast-enter-start"
+                x-transition:enter-end="toast-enter-end"
+                x-transition:leave="toast-leave"
+                x-transition:leave-start="toast-leave-start"
+                x-transition:leave-end="toast-leave-end"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+            >
+                <span class="portal-toast__icon">
+                    @include('partials.icon', ['name' => 'check'])
+                </span>
+                <span class="portal-toast__copy">
+                    <small>Success</small>
+                    <strong>{{ $successMessage }}</strong>
+                </span>
+                <button type="button" class="portal-toast__close" @click="show = false" aria-label="Dismiss notification">
+                    &times;
+                </button>
+                <span class="portal-toast__progress" aria-hidden="true"></span>
+            </div>
+        @endif
+
         <div class="bio-preview-banner" role="status">
-            <strong>Preview UI</strong>
-            <span>Layout only — nothing is saved yet.</span>
+            <strong>Paused at uploads</strong>
+            <span>Client details save now. File uploads wait until private storage is set.</span>
         </div>
 
         <section class="panel bio-panel">
@@ -347,7 +378,7 @@
                     @if ($openDocuments)
                         <div class="bio-collapse__body">
                             <p class="bio-doc-note muted">
-                                Country rules come later. Mark <strong>N/A</strong> when a document is not needed.
+                                Mark <strong>N/A</strong> when a document is not needed. File upload is paused — private storage next.
                             </p>
                             <div class="table-wrap">
                                 <table class="data-table bio-doc-table">
@@ -365,7 +396,7 @@
                                                 <td>
                                                     <span class="bio-file-placeholder bio-file-placeholder--inline">
                                                         <input type="file" disabled aria-label="Upload {{ $doc['label'] }}">
-                                                        <small>Later</small>
+                                                        <small>Private storage next</small>
                                                     </span>
                                                 </td>
                                                 <td>
@@ -380,13 +411,9 @@
                                 </table>
                             </div>
                             <div class="bio-form__actions">
-                                @if ($sectionsComplete)
-                                    <p class="bio-form__done muted">All sections done — save comes after fields are confirmed.</p>
-                                @else
-                                    <button type="button" class="button button--soft" wire:click="continueDocuments">
-                                        Continue
-                                    </button>
-                                @endif
+                                <button type="button" class="button button--soft" wire:click="saveClient">
+                                    Save client
+                                </button>
                             </div>
                         </div>
                     @endif

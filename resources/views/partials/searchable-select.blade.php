@@ -110,7 +110,7 @@
                 ></button>
             </template>
 
-            <p class="search-select__empty" x-show="search !== '' && !hasResults()" x-cloak>
+            <p class="search-select__empty" x-show="options.length === 0 || (search !== '' && !hasResults())" x-cloak>
                 {{ $emptyText }}
             </p>
         </div>

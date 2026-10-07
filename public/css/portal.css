@@ -2843,10 +2843,15 @@ body.sidebar-collapsed {
     border: 1px solid var(--line);
     border-radius: 10px;
     background: rgba(247, 250, 252, 0.55);
-    overflow: hidden;
+    overflow: visible;
+}
+.bio-collapse.is-open {
+    position: relative;
+    z-index: 6;
 }
 .bio-collapse.is-locked {
     opacity: 0.62;
+    z-index: 0;
 }
 .bio-collapse__toggle {
     display: flex;
