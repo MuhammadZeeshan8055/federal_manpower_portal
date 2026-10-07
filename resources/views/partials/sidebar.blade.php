@@ -1,4 +1,8 @@
-<aside class="sidebar" :class="{ 'sidebar--open': sidebarOpen }">
+<aside
+    class="sidebar"
+    :class="{ 'sidebar--open': sidebarOpen, 'sidebar--collapsed': sidebarCollapsed }"
+    :aria-expanded="(!sidebarCollapsed).toString()"
+>
     <a class="sidebar-brand" href="{{ route('dashboard') }}" aria-label="Federal Manpower Portal">
         <img src="{{ asset('images/federal-mark.png') }}" alt="Federal Group symbol" class="sidebar-brand__mark">
         <span class="sidebar-brand__copy">
@@ -18,7 +22,7 @@
             @mouseenter="$el.classList.add('nav-touched')"
         >
             <span class="nav-item__icon">@include('partials.icon', ['name' => 'grid'])</span>
-            <span>Operations Overview</span>
+            <span class="nav-item__label">Operations Overview</span>
             <span class="nav-item__indicator"></span>
         </button>
 
@@ -47,7 +51,7 @@
                     @mouseenter="$el.classList.add('nav-touched')"
                 >
                     <span class="nav-item__icon">@include('partials.icon', ['name' => 'chart'])</span>
-                    <span>Module Dashboard</span>
+                    <span class="nav-item__label">Module Dashboard</span>
                     <span class="nav-item__indicator"></span>
                 </button>
 
@@ -61,7 +65,7 @@
                         @mouseenter="$el.classList.add('nav-touched')"
                     >
                         <span class="nav-item__icon">@include('partials.icon', ['name' => 'document'])</span>
-                        <span x-text="feature.label"></span>
+                        <span class="nav-item__label" x-text="feature.label"></span>
                         <span class="nav-item__indicator"></span>
                     </button>
                 </template>

@@ -10,10 +10,17 @@
 
 <header class="topbar">
     <div class="topbar__title-wrap">
-        <button class="menu-button" type="button" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle navigation">
+        <button
+            class="menu-button"
+            type="button"
+            @click="toggleSidebar()"
+            :aria-label="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            :title="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            :aria-pressed="sidebarCollapsed.toString()"
+        >
             @include('partials.icon', ['name' => 'menu'])
         </button>
-        <div>
+        <div class="topbar__title">
             <p class="breadcrumb">
                 Federal Manpower
                 <span>/</span>
@@ -84,7 +91,9 @@
                             src="{{ $selectedCountry ? $selectedCountry->flagUrl() : asset('images/flags/world.svg') }}"
                             alt=""
                         >
-                        {{ $selectedCountry ? $selectedCountry->name : 'All countries' }}
+                        <span class="country-dd__name">
+                            {{ $selectedCountry ? $selectedCountry->name : 'All countries' }}
+                        </span>
                     </strong>
                 </span>
                 <span class="country-dd__chevron" :class="{ 'country-dd__chevron--open': open }">▾</span>

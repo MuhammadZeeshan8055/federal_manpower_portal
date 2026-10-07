@@ -17,7 +17,7 @@
 <body
     class="portal-body"
     x-data="portalApp()"
-    :class="{ 'nav-open': sidebarOpen }"
+    :class="{ 'nav-open': sidebarOpen, 'sidebar-collapsed': sidebarCollapsed }"
 >
     <div class="portal-shell">
         @include('partials.sidebar')
@@ -48,6 +48,7 @@
         function portalApp() {
             return {
                 sidebarOpen: false,
+                sidebarCollapsed: false,
                 profileOpen: false,
                 darkMode: document.documentElement.dataset.theme === 'dark',
 
@@ -64,7 +65,34 @@
 
                 init() {
                     this.applyTheme(this.darkMode ? 'dark' : 'light', false);
+                    this.loadSidebarCollapsed();
                     this.loadSavedScreen();
+                },
+
+                toggleSidebar() {
+                    if (window.innerWidth <= 820) {
+                        this.sidebarOpen = !this.sidebarOpen;
+                        return;
+                    }
+
+                    this.sidebarCollapsed = !this.sidebarCollapsed;
+                    this.saveSidebarCollapsed();
+                },
+
+                saveSidebarCollapsed() {
+                    try {
+                        localStorage.setItem('federal_sidebar_collapsed', this.sidebarCollapsed ? '1' : '0');
+                    } catch (error) {
+                        // Preference still applies for this page if storage is unavailable.
+                    }
+                },
+
+                loadSidebarCollapsed() {
+                    try {
+                        this.sidebarCollapsed = localStorage.getItem('federal_sidebar_collapsed') === '1';
+                    } catch (error) {
+                        this.sidebarCollapsed = false;
+                    }
                 },
 
                 toggleTheme() {
