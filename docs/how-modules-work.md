@@ -9,7 +9,7 @@ Alpine only changes which screen you see (like a small router).
 |----------------|--------------|
 | `home` | Module cards |
 | `module` | Feature buttons for one module |
-| `feature` | One feature page (placeholder for now) |
+| `feature` | One feature page (Livewire screens where built) |
 
 ## Main variables (in `layouts/portal.blade.php`)
 
@@ -28,7 +28,7 @@ Alpine only changes which screen you see (like a small router).
 2. `openModule` sets `screen = 'module'` and fills `moduleTitle`, `features`, etc.
 3. Feature button: `@click="openFeature('list')"`
 4. `openFeature` sets `screen = 'feature'`
-5. Later: put Livewire table inside the `screen === 'feature'` block when `moduleKey === 'clients'`
+5. Clients are wired: `create` → bio form, `list` → All Clients (view/edit inside list). Operations masters are also Livewire on this screen.
 
 ## Functions you can call
 

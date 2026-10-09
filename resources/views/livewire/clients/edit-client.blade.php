@@ -42,11 +42,14 @@
         @endif
 
         <section class="panel bio-panel">
+            <div class="bio-toolbar bio-toolbar--simple">
+                <button type="button" class="text-button back-button" wire:click="backToList">
+                    <span aria-hidden="true">&larr;</span> Back to list
+                </button>
+            </div>
+
             <div class="bio-toolbar">
                 <div class="bio-toolbar__job">
-                    <button type="button" class="text-button back-button" wire:click="backToList">
-                        <span aria-hidden="true">&larr;</span> Back to list
-                    </button>
                     <label>
                         Job title
                         @include('partials.searchable-select', [

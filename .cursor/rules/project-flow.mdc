@@ -46,8 +46,36 @@ alwaysApply: true
 - Company type: employers under Companies, universities under Universities (same `companies` table, `type` column)
 
 ## Delivery phases
-- **Phase 1 (demo):** Complete operational product — Clients, portal/QR, visitors, HR, polish. Start Clients only when user says so and provides form fields + doc list.
+- **Phase 1 (demo):** Complete operational product — Clients, portal/QR, visitors, HR, polish.
 - **Phase 2 (after initial payment):** Accounts (methods, ledgers, reports) and Excel import (last). Do not build these in the demo go.
+
+## Progress (keep this updated)
+### Done
+- Portal shell (sidebar, theme, permissions, dashboard module cards)
+- **Operations masters:** Care Offs, Companies, Universities, Countries, Trades, Process Statuses (CRUD + search/pagination where built)
+- **Clients (CRUD + docs):**
+  - Add Client (collapsible sections, Continue gates, Save)
+  - All Clients list (search, pagination, delete + private folder cleanup)
+  - View client (read-only; view-only users)
+  - Edit client (manage users; replace uploads)
+  - `clients` + `client_documents` tables/models
+  - Private uploads under `storage/app/private/clients/{id}/` via `ClientPrivateFiles`
+  - Protected download routes (`clients.documents.show`, `clients.photo.show`)
+  - Module overview cards: All Clients + per process-status counts (click → filtered list)
+  - Permissions: list **view** = View only; list **manage** = View + Edit + Delete
+
+### Not done yet (Phase 1)
+- Public client portal / QR
+- Daily Visitors
+- HR & Attendance polish
+- Print customer / Print office PDFs
+- Country-based document checklist rules
+- Clients → Documents feature screen (if separate from edit)
+- Demo polish
+
+### Blocked until Phase 2
+- Accounts (payments, methods, reports)
+- Excel Import
 
 ## Do not add unless asked
 - Care Off margin / commission / payout fields
