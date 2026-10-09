@@ -63,6 +63,7 @@ alwaysApply: true
   - Protected download routes (`clients.documents.show`, `clients.photo.show`)
   - Module overview cards: All Clients + per process-status counts (click → filtered list)
   - Permissions: list **view** = View only; list **manage** = View + Edit + Delete
+  - Documents desk (`ListClientDocuments`): Uploaded / Missing / N/A filters; View via same protected routes
 
 ### Not done yet (Phase 1)
 - Public client portal / QR
@@ -70,7 +71,6 @@ alwaysApply: true
 - HR & Attendance polish
 - Print customer / Print office PDFs
 - Country-based document checklist rules
-- Clients → Documents feature screen (if separate from edit)
 - Demo polish
 
 ### Blocked until Phase 2

@@ -123,9 +123,13 @@
         <livewire:clients.list-clients />
     </div>
 
+    <div x-show="moduleKey === 'clients' && featureKey === 'documents'">
+        <livewire:clients.list-client-documents />
+    </div>
+
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list'].includes(featureKey))"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey))"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">
