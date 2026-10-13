@@ -63,12 +63,11 @@
                     </label>
                 </div>
                 <div class="bio-print-actions">
-                    <button type="button" class="button button--ghost" disabled title="Available after fields are confirmed">
-                        Print customer
-                    </button>
-                    <button type="button" class="button button--ghost" disabled title="Available after fields are confirmed">
-                        Print office
-                    </button>
+                    @if ($lastSavedClientId)
+                        <a class="button button--ghost" href="/clients/{{ $lastSavedClientId }}/print" target="_blank">Print</a>
+                    @else
+                        <button type="button" class="button button--ghost" disabled title="Save the client first">Print</button>
+                    @endif
                 </div>
             </div>
 

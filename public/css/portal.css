@@ -2791,9 +2791,14 @@ button.module-summary__card:disabled {
 }
 .bio-toolbar--simple {
     align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
     border-bottom: 0;
     margin-bottom: 6px;
     padding-bottom: 0;
+}
+.bio-toolbar--simple .bio-print-actions {
+    margin-left: auto;
 }
 .bio-toolbar__job {
     display: grid;

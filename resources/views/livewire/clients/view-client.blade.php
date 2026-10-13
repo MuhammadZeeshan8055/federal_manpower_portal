@@ -16,6 +16,9 @@
                     <span aria-hidden="true">&larr;</span> Back to list
                 </button>
                 <p class="bio-section-title">View client</p>
+                <div class="bio-print-actions">
+                    <a class="button button--ghost" href="/clients/{{ $client->id }}/print" target="_blank">Print</a>
+                </div>
             </div>
 
             <div class="bio-form">

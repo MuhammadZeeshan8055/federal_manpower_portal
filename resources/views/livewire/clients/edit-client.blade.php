@@ -73,6 +73,9 @@
                         ])
                     </label>
                 </div>
+                <div class="bio-print-actions">
+                    <a class="button button--ghost" href="/clients/{{ $clientId }}/print" target="_blank">Print</a>
+                </div>
             </div>
 
             <form class="bio-form" wire:submit="saveClient">

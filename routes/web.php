@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientDocumentController;
+use App\Http\Controllers\ClientPrintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WorkspaceCountryController;
@@ -20,6 +21,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/clients/{client}/photo', [ClientDocumentController::class, 'photo'])
         ->middleware('throttle:60,1')
         ->name('clients.photo.show');
+
+    Route::get('/clients/{client}/print/preview', [ClientPrintController::class, 'preview'])
+        ->name('clients.print.preview');
+
+    Route::get('/clients/{client}/print', [ClientPrintController::class, 'print'])
+        ->name('clients.print');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

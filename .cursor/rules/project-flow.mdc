@@ -64,12 +64,12 @@ alwaysApply: true
   - Module overview cards: All Clients + per process-status counts (click → filtered list)
   - Permissions: list **view** = View only; list **manage** = View + Edit + Delete
   - Documents desk (`ListClientDocuments`): Uploaded / Missing / N/A filters; View via same protected routes
+  - Print BIO DATA PDF (`ClientPrintController`, DomPDF; private photo embed)
 
 ### Not done yet (Phase 1)
 - Public client portal / QR
 - Daily Visitors
 - HR & Attendance polish
-- Print customer / Print office PDFs
 - Country-based document checklist rules
 - Demo polish
 

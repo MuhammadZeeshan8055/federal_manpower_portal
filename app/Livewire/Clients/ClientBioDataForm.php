@@ -123,6 +123,8 @@ class ClientBioDataForm extends Component
 
     public string $toastType = 'success';
 
+    public ?int $lastSavedClientId = null;
+
     public function mount(): void
     {
         $user = auth()->user();
@@ -278,7 +280,9 @@ class ClientBioDataForm extends Component
 
         $careOffId = $this->source === 'referred' ? $this->idOrNull($this->care_off_id) : null;
 
-        DB::transaction(function () use ($careOffId) {
+        $savedId = null;
+
+        DB::transaction(function () use ($careOffId, &$savedId) {
             $client = Client::query()->create([
                 'country_id' => $this->idOrNull($this->country_id),
                 'trade_id' => $this->idOrNull($this->trade_id),
@@ -351,9 +355,12 @@ class ClientBioDataForm extends Component
                     'uploaded_at' => $uploadedAt,
                 ]);
             }
+
+            $savedId = $client->id;
         });
 
-        $this->successMessage = 'Client saved. Files stored privately.';
+        $this->lastSavedClientId = $savedId;
+        $this->successMessage = 'Client saved. You can print the bio data now.';
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();
