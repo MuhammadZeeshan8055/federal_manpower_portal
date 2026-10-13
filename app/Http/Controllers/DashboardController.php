@@ -119,6 +119,7 @@ class DashboardController extends Controller
             'key' => 'list',
             'label' => 'All Clients',
             'value' => $totalClients,
+            'tone' => '#3397c7',
             'process_status_id' => null,
             'clickable' => true,
         ];
@@ -144,11 +145,37 @@ class DashboardController extends Controller
                 'key' => 'status_'.$status->id,
                 'label' => $status->name,
                 'value' => (int) ($statusCounts[$status->id] ?? 0),
+                'tone' => $this->clientStatusTone($status->name),
                 'process_status_id' => $status->id,
                 'clickable' => true,
             ];
         }
 
         return $cards;
+    }
+
+    private function clientStatusTone(string $status): string
+    {
+        $status = strtolower($status);
+
+        return match (true) {
+            str_contains($status, 'refus'),
+            str_contains($status, 'reject'),
+            str_contains($status, 'denied'),
+            str_contains($status, 'fail'),
+            str_contains($status, 'cancel') => '#e05d68',
+            str_contains($status, 'issued'),
+            str_contains($status, 'approved'),
+            str_contains($status, 'complete'),
+            str_contains($status, 'success') => '#43b96e',
+            str_contains($status, 'ready'),
+            str_contains($status, 'pending'),
+            str_contains($status, 'waiting'),
+            str_contains($status, 'review') => '#dca139',
+            str_contains($status, 'applied'),
+            str_contains($status, 'submitted'),
+            str_contains($status, 'process') => '#7b79cf',
+            default => '#3397c7',
+        };
     }
 }

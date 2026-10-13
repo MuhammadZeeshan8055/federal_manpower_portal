@@ -2487,20 +2487,27 @@ body.sidebar-collapsed {
 .module-summary__card {
     --summary-tone: #1c7ab4;
     position: relative;
+    isolation: isolate;
     overflow: hidden;
     min-height: 112px;
     display: flex;
     align-items: center;
     gap: 13px;
     padding: 17px;
-    border: 1px solid color-mix(in srgb, var(--summary-tone) 18%, var(--line));
+    border: 1px solid color-mix(in srgb, var(--summary-tone) 34%, #243e4e);
     border-radius: 16px;
-    background: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--summary-tone) 7%, #fff),
-        #fff 72%
-    );
-    box-shadow: 0 9px 24px rgba(19, 56, 79, 0.055);
+    background:
+        radial-gradient(
+            circle at 100% 0,
+            color-mix(in srgb, var(--summary-tone) 38%, transparent),
+            transparent 50%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(in srgb, var(--summary-tone) 34%, #102735),
+            color-mix(in srgb, var(--summary-tone) 15%, #091923) 76%
+        );
+    box-shadow: 0 12px 28px rgba(7, 35, 52, 0.17);
     transition:
         transform 0.2s ease,
         border-color 0.2s ease,
@@ -2547,16 +2554,21 @@ button.module-summary__card:disabled {
     top: -40px;
     right: -35px;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--summary-tone) 8%, transparent);
+    z-index: -1;
+    background: color-mix(in srgb, var(--summary-tone) 18%, transparent);
     transition:
         transform 0.25s ease,
         opacity 0.25s ease;
 }
 .module-summary__card:hover {
-    border-color: color-mix(in srgb, var(--summary-tone) 40%, var(--line));
+    border-color: color-mix(in srgb, var(--summary-tone) 58%, #365064);
     box-shadow: 0 15px 32px
-        color-mix(in srgb, var(--summary-tone) 15%, rgba(19, 56, 79, 0.08));
+        color-mix(in srgb, var(--summary-tone) 18%, rgba(4, 25, 38, 0.28));
     transform: translateY(-3px);
+}
+.module-summary__card:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--summary-tone) 42%, transparent);
+    outline-offset: 3px;
 }
 .module-summary__card:hover::after {
     opacity: 0.9;
@@ -2569,8 +2581,10 @@ button.module-summary__card:disabled {
     place-items: center;
     flex: 0 0 auto;
     border-radius: 11px;
-    color: var(--summary-tone);
-    background: color-mix(in srgb, var(--summary-tone) 12%, #fff);
+    color: color-mix(in srgb, var(--summary-tone) 68%, #fff);
+    background: color-mix(in srgb, var(--summary-tone) 18%, #102b3d);
+    box-shadow: inset 0 0 0 1px
+        color-mix(in srgb, var(--summary-tone) 24%, transparent);
     transition:
         transform 0.22s ease,
         box-shadow 0.22s ease;
@@ -2595,20 +2609,20 @@ button.module-summary__card:disabled {
     grid-column: 1 / -1;
     overflow: hidden;
     margin-bottom: 2px;
-    color: var(--muted);
+    color: #a8bdca;
     font-size: 0.64rem;
     font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 .module-summary__copy strong {
-    color: var(--ink);
+    color: #f7fbfd;
     font-size: 1.55rem;
     line-height: 1;
     letter-spacing: -0.05em;
 }
 .module-summary__copy > span {
-    color: var(--muted);
+    color: #8fa7b7;
     font-size: 0.6rem;
     font-weight: 600;
 }
@@ -4358,12 +4372,19 @@ button.module-summary__card:disabled {
     background: color-mix(in srgb, var(--summary-tone) 16%, var(--surface));
 }
 [data-theme="dark"] .module-summary__card {
-    border-color: color-mix(in srgb, var(--summary-tone) 22%, var(--line));
-    background: linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--summary-tone) 10%, var(--surface)),
-        var(--surface) 75%
-    );
+    border-color: color-mix(in srgb, var(--summary-tone) 28%, var(--line));
+    background:
+        radial-gradient(
+            circle at 100% 0,
+            color-mix(in srgb, var(--summary-tone) 32%, transparent),
+            transparent 50%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(in srgb, var(--summary-tone) 29%, #10212c),
+            color-mix(in srgb, var(--summary-tone) 12%, #07131b) 76%
+        );
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
 }
 [data-theme="dark"] .search-box kbd {
     background: #0d1923;

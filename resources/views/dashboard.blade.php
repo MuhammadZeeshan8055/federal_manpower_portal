@@ -64,6 +64,7 @@
                 type="button"
                 class="module-summary__card"
                 :class="{ 'module-summary__card--button': stat.clickable }"
+                :style="stat.tone ? { '--summary-tone': stat.tone } : {}"
                 @click="stat.clickable ? openClientStat(stat) : null"
                 :disabled="!stat.clickable"
             >
