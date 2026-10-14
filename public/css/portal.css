@@ -3437,6 +3437,118 @@ button.module-summary__card:disabled {
     background-repeat: no-repeat;
     padding-right: 32px;
 }
+.master-form .visitor-textarea {
+    width: 100%;
+    min-height: 64px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 500;
+    line-height: 1.4;
+    resize: vertical;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.visitors-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+.visitors-toolbar__select {
+    min-height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+}
+.visitors-table-wrap {
+    overflow-x: hidden;
+}
+.visitors-table {
+    width: 100%;
+    white-space: normal;
+    table-layout: fixed;
+}
+.visitors-table th,
+.visitors-table td {
+    vertical-align: top;
+    padding: 10px 8px;
+}
+.visitors-table th:nth-child(1),
+.visitors-table td:nth-child(1) {
+    width: 6.5rem;
+}
+.visitors-table th:nth-child(2),
+.visitors-table td:nth-child(2) {
+    width: 14%;
+}
+.visitors-table th:nth-child(3),
+.visitors-table td:nth-child(3) {
+    width: 8.5rem;
+}
+.visitors-table th:nth-child(4),
+.visitors-table td:nth-child(4) {
+    width: 16%;
+}
+.visitors-table th:nth-child(5),
+.visitors-table td:nth-child(5) {
+    width: 12%;
+}
+.visitors-table th:nth-child(6),
+.visitors-table td:nth-child(6) {
+    width: 7.5rem;
+}
+.visitors-table th:nth-child(7),
+.visitors-table td:nth-child(7) {
+    width: 11.5rem;
+}
+.visitors-table__time {
+    white-space: normal;
+    line-height: 1.3;
+}
+.visitors-table__clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+    line-height: 1.35;
+}
+.visitors-table .master-row-actions {
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-start;
+}
+.visitors-table .row-action {
+    padding: 4px 7px;
+    font-size: 0.68rem;
+}
+.visitors-table .row-action + .row-action {
+    margin-left: 0;
+}
+.visitors-status-select {
+    width: 100%;
+    max-width: 9.5rem;
+    min-height: 30px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0 6px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.68rem;
+}
 .search-select {
     position: relative;
     z-index: 1;

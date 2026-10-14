@@ -71,9 +71,9 @@ alwaysApply: true
  - Client portal auth Step 1: `/portal` register/login/home (`role=client`, `clients.user_id`, office/client middleware)
  - Client portal Step 2: `/portal/application` fill/edit bio data + private docs (`ApplicationForm`; no process status edit)
  - All Clients: Portal badge + Pending (no process status) + “Portal applications only” filter
+ - Daily Visitors (basic): name, contact, purpose, meet with, status (waiting / in meeting / meeting done / visit complete)
 
 ### Not done yet (Phase 1)
-- Daily Visitors
 - HR & Attendance polish
 - Country-based document checklist rules
 - Demo polish
