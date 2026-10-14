@@ -67,9 +67,9 @@ alwaysApply: true
   - Documents desk (`ListClientDocuments`): Uploaded / Missing / N/A filters; View via same protected routes
   - Print BIO DATA PDF (`ClientPrintController`, DomPDF; private photo embed)
  - Workspace country filter (`WorkspaceCountry` + header session): Clients list/docs/stats + Companies/Universities; HR & Settings global; empty = all countries
+ - Public status page + QR on BIO DATA (`/status/{token}`, `ClientPublicLink`; no private docs)
 
 ### Not done yet (Phase 1)
-- Public client portal / QR
 - Daily Visitors
 - HR & Attendance polish
 - Country-based document checklist rules

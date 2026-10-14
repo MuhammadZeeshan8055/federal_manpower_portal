@@ -47,6 +47,7 @@ class Client extends Model
         'experience_rows',
         'source',
         'overall_status',
+        'public_token',
     ];
 
     protected function casts(): array

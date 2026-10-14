@@ -2,12 +2,18 @@
 
 use App\Http\Controllers\ClientDocumentController;
 use App\Http\Controllers\ClientPrintController;
+use App\Http\Controllers\ClientStatusController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WorkspaceCountryController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
+
+Route::get('/status/{token}', [ClientStatusController::class, 'show'])
+    ->where('token', '[A-Za-z0-9]{32,64}')
+    ->middleware('throttle:60,1')
+    ->name('client.status');
 
 Route::middleware('auth')->group(function () {
 

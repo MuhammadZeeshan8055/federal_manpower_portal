@@ -55,47 +55,79 @@
         }
 
         .logo-cell {
-            width: 24%;
+            width: 22%;
             padding-left: 1.5mm !important;
             text-align: left;
         }
 
         .logo {
             display: block;
-            width: 42mm;
+            width: 40mm;
             max-height: 28mm;
             object-fit: contain;
         }
 
         .brand-cell {
-            width: 57%;
-            padding: 0 3mm !important;
+            width: 46%;
+            padding: 0 2mm !important;
             text-align: center;
         }
 
         .brand-title {
             color: #202996;
-            font-size: 14.5pt;
+            font-size: 13.2pt;
             font-weight: 800;
-            letter-spacing: .055em;
+            letter-spacing: .04em;
             white-space: nowrap;
         }
 
         .brand-subtitle {
             margin-top: 2.2mm;
-            font-size: 10.5pt;
+            font-size: 10pt;
             font-weight: 700;
         }
 
         .brand-licence {
             margin-top: 2.3mm;
-            font-size: 8.8pt;
+            font-size: 8.2pt;
             font-weight: 700;
-            letter-spacing: .08em;
+            letter-spacing: .06em;
+        }
+
+        .qr-cell {
+            width: 14%;
+            padding: 0 1mm !important;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .qr-box {
+            display: inline-block;
+            width: 28mm;
+            height: 28mm;
+            overflow: hidden;
+            text-align: center;
+            vertical-align: middle;
+            background: #fff;
+        }
+
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .qr-caption {
+            margin-top: .6mm;
+            color: #5c6b8a;
+            font-size: 5.5pt;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-align: center;
         }
 
         .photo-cell {
-            width: 19%;
+            width: 18%;
             padding-right: 1.5mm !important;
             text-align: right;
         }
@@ -409,6 +441,14 @@
                     <div class="brand-title">FEDERAL MANPOWER PROMOTER</div>
                     <div class="brand-subtitle">Overseas Employment Promoters</div>
                     <div class="brand-licence">LICENCE NO. OP&amp;HRD/4749/RWP</div>
+                </td>
+                <td class="qr-cell">
+                    @if (! empty($qr))
+                        <div class="qr-box">
+                            <img src="{{ $qr }}" alt="Status QR">
+                        </div>
+                        <div class="qr-caption">SCAN STATUS</div>
+                    @endif
                 </td>
                 <td class="photo-cell">
                     <div class="photo-box">

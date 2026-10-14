@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Support\ClientPrivateFiles;
+use App\Support\ClientPublicLink;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,43 +14,35 @@ class ClientPrintController extends Controller
     {
         $this->mustBeAllowed();
 
-        $client->load(['country', 'trade', 'company', 'careOff', 'processStatus']);
-
-        return view('pdfs.client-biodata', [
-            'client' => $client,
-            'logo' => $this->imageAsBase64('images/federal-manpower-logo.png'),
-            'mark' => $this->imageAsBase64('images/federal-mark.png'),
-            'photo' => $this->clientPhotoAsBase64($client),
-            'iconLocation' => $this->imageAsBase64('images/print/location.svg'),
-            'iconGlobe' => $this->imageAsBase64('images/print/globe.svg'),
-            'iconLandline' => $this->imageAsBase64('images/print/landline.svg'),
-            'iconPhone' => $this->imageAsBase64('images/print/phone.svg'),
-            'iconMail' => $this->imageAsBase64('images/print/mail.svg'),
-        ]);
+        return view('pdfs.client-biodata', $this->viewData($client));
     }
 
     public function print(Client $client)
     {
         $this->mustBeAllowed();
 
+        $pdf = Pdf::loadView('pdfs.client-biodata', $this->viewData($client));
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->stream('biodata-'.$client->id.'.pdf');
+    }
+
+    private function viewData(Client $client): array
+    {
         $client->load(['country', 'trade', 'company', 'careOff', 'processStatus']);
 
-        $data = [
+        return [
             'client' => $client,
             'logo' => $this->imageAsBase64('images/federal-manpower-logo.png'),
             'mark' => $this->imageAsBase64('images/federal-mark.png'),
             'photo' => $this->clientPhotoAsBase64($client),
+            'qr' => ClientPublicLink::qrDataUri($client),
             'iconLocation' => $this->imageAsBase64('images/print/location.svg'),
             'iconGlobe' => $this->imageAsBase64('images/print/globe.svg'),
             'iconLandline' => $this->imageAsBase64('images/print/landline.svg'),
             'iconPhone' => $this->imageAsBase64('images/print/phone.svg'),
             'iconMail' => $this->imageAsBase64('images/print/mail.svg'),
         ];
-
-        $pdf = Pdf::loadView('pdfs.client-biodata', $data);
-        $pdf->setPaper('a4', 'portrait');
-
-        return $pdf->stream('biodata-'.$client->id.'.pdf');
     }
 
     private function mustBeAllowed(): void
