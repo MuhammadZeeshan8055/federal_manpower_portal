@@ -14,11 +14,28 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 class ClientBioDataForm extends Component
 {
     use WithFileUploads;
+
+    public function updated($name, $value): void
+    {
+        if ($name === 'photo' && $value instanceof TemporaryUploadedFile) {
+            $this->photo = ClientPrivateFiles::compressTemporaryIfNeeded($value);
+            $this->resetValidation('photo');
+
+            return;
+        }
+
+        if (str_starts_with($name, 'doc_files.') && $value instanceof TemporaryUploadedFile) {
+            $key = substr($name, strlen('doc_files.'));
+            $this->doc_files[$key] = ClientPrivateFiles::compressTemporaryIfNeeded($value);
+            $this->resetValidation('doc_files.'.$key);
+        }
+    }
 
     public bool $denied = false;
 

@@ -12,7 +12,8 @@ return [
 
     /*
     | Private client files (storage/app/private via local disk).
-    | max_kilobytes = 5120 → 5 MB per file.
+    | max_kilobytes = 5120 → 5 MB per stored file.
+    | JPG/PNG are compressed after upload to fit this limit.
     */
     'client_files' => [
         'max_kilobytes' => 5120,
