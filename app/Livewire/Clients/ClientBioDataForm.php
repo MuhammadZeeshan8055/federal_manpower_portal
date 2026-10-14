@@ -80,6 +80,9 @@ class ClientBioDataForm extends Component
 
     public string $total_experience = '';
 
+    /** @var array<int, array{from_to:string,company:string,project:string,country:string,job_title:string}> */
+    public array $experiences = [];
+
     public string $source = 'direct';
 
     public string $care_off_id = '';
@@ -133,6 +136,7 @@ class ClientBioDataForm extends Component
             $this->denied = true;
         }
 
+        $this->experiences = Client::emptyExperienceRows();
         $this->resetDocumentChecks();
     }
 
@@ -318,6 +322,7 @@ class ClientBioDataForm extends Component
                 'board_university' => $this->nullIfEmpty($this->board_university),
                 'languages' => $this->nullIfEmpty($this->languages),
                 'total_experience' => $this->nullIfEmpty($this->total_experience),
+                'experience_rows' => Client::cleanExperienceRows($this->experiences),
                 'source' => $this->source,
                 'overall_status' => 'active',
             ]);
@@ -447,6 +452,7 @@ class ClientBioDataForm extends Component
         $this->board_university = '';
         $this->languages = '';
         $this->total_experience = '';
+        $this->experiences = Client::emptyExperienceRows();
         $this->source = 'direct';
         $this->care_off_id = '';
         $this->company_id = '';

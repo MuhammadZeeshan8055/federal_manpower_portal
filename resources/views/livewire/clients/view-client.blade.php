@@ -84,6 +84,34 @@
                         <div class="bio-view-grid__full"><dt>Languages</dt><dd>{{ $client->languages ?: '—' }}</dd></div>
                         <div class="bio-view-grid__full"><dt>Total experience</dt><dd>{{ $client->total_experience ?: '—' }}</dd></div>
                     </dl>
+
+                    @php $experienceRows = $client->experience_rows ?? []; @endphp
+                    @if (count($experienceRows) > 0)
+                        <div class="table-wrap" style="margin-top:12px;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>From - To</th>
+                                        <th>Company</th>
+                                        <th>Project</th>
+                                        <th>Country</th>
+                                        <th>Job title</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($experienceRows as $row)
+                                        <tr>
+                                            <td>{{ $row['from_to'] ?: '—' }}</td>
+                                            <td>{{ $row['company'] ?: '—' }}</td>
+                                            <td>{{ $row['project'] ?: '—' }}</td>
+                                            <td>{{ $row['country'] ?: '—' }}</td>
+                                            <td>{{ $row['job_title'] ?: '—' }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </fieldset>
 
                 <fieldset class="bio-section">

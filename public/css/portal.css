@@ -2954,6 +2954,55 @@ button.module-summary__card:disabled {
 .bio-form__full {
     grid-column: 1 / -1;
 }
+.bio-experience {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+.bio-experience__hint {
+    margin: 0 0 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+.bio-experience__head,
+.bio-experience__row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+}
+.bio-experience__head {
+    margin-bottom: 6px;
+}
+.bio-experience__head span {
+    font-size: 0.64rem;
+    font-weight: 700;
+    color: #425c6f;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.bio-experience__row {
+    margin-bottom: 8px;
+}
+.bio-experience__row input {
+    width: 100%;
+    min-height: 34px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.78rem;
+}
+@media (max-width: 900px) {
+    .bio-experience__head {
+        display: none;
+    }
+    .bio-experience__row {
+        grid-template-columns: 1fr;
+    }
+}
 .bio-form__span-2 {
     grid-column: span 2;
 }
@@ -3134,6 +3183,7 @@ button.module-summary__card:disabled {
 }
 [data-theme="dark"] .bio-form input,
 [data-theme="dark"] .bio-form select,
+[data-theme="dark"] .bio-experience__row input,
 [data-theme="dark"] .bio-toolbar__job select {
     background: var(--surface-soft, #182936);
     border-color: var(--line);

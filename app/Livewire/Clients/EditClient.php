@@ -85,6 +85,9 @@ class EditClient extends Component
 
     public string $total_experience = '';
 
+    /** @var array<int, array{from_to:string,company:string,project:string,country:string,job_title:string}> */
+    public array $experiences = [];
+
     public string $source = 'direct';
 
     public string $care_off_id = '';
@@ -222,6 +225,7 @@ class EditClient extends Component
                 'board_university' => $this->nullIfEmpty($this->board_university),
                 'languages' => $this->nullIfEmpty($this->languages),
                 'total_experience' => $this->nullIfEmpty($this->total_experience),
+                'experience_rows' => Client::cleanExperienceRows($this->experiences),
                 'source' => $this->source,
                 'overall_status' => $this->overall_status,
             ]);
@@ -379,6 +383,7 @@ class EditClient extends Component
         $this->board_university = (string) ($client->board_university ?? '');
         $this->languages = (string) ($client->languages ?? '');
         $this->total_experience = (string) ($client->total_experience ?? '');
+        $this->experiences = $client->experienceRowsForForm();
         $this->source = $client->source ?: 'direct';
         $this->care_off_id = (string) ($client->care_off_id ?? '');
         $this->company_id = (string) ($client->company_id ?? '');

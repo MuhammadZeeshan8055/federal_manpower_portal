@@ -537,13 +537,15 @@
                 <th>COUNTRY</th>
                 <th>JOB TITLE</th>
             </tr>
+            @php $experienceRows = $client->experience_rows ?? []; @endphp
             @for ($i = 0; $i < 5; $i++)
+                @php $row = $experienceRows[$i] ?? []; @endphp
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td>{!! $show($row['from_to'] ?? null) !!}</td>
+                    <td>{!! $show($row['company'] ?? null) !!}</td>
+                    <td>{!! $show($row['project'] ?? null) !!}</td>
+                    <td>{!! $show($row['country'] ?? null) !!}</td>
+                    <td>{!! $show($row['job_title'] ?? null) !!}</td>
                 </tr>
             @endfor
         </table>

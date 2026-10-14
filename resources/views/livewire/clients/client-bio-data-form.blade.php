@@ -281,6 +281,9 @@
                                     <input type="text" wire:model="total_experience" placeholder="e.g. 5 years">
                                 </label>
                             </div>
+
+                            @include('partials.client-experience-rows')
+
                             <div class="bio-form__actions">
                                 <button type="button" class="button button--soft" wire:click="continueEducation">
                                     Continue

@@ -212,6 +212,8 @@
                             <label class="bio-form__full">Languages <input type="text" wire:model="languages"></label>
                             <label class="bio-form__full">Total experience <input type="text" wire:model="total_experience"></label>
                         </div>
+
+                        @include('partials.client-experience-rows')
                     </div>
                 </div>
 

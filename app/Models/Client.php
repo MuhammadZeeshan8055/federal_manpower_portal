@@ -44,6 +44,7 @@ class Client extends Model
         'board_university',
         'languages',
         'total_experience',
+        'experience_rows',
         'source',
         'overall_status',
     ];
@@ -54,7 +55,78 @@ class Client extends Model
             'date_of_birth' => 'date',
             'passport_issue_date' => 'date',
             'passport_expiry' => 'date',
+            'experience_rows' => 'array',
         ];
+    }
+
+    public static function emptyExperienceRows(): array
+    {
+        $rows = [];
+
+        for ($i = 0; $i < 5; $i++) {
+            $rows[] = [
+                'from_to' => '',
+                'company' => '',
+                'project' => '',
+                'country' => '',
+                'job_title' => '',
+            ];
+        }
+
+        return $rows;
+    }
+
+    public static function cleanExperienceRows(array $rows): ?array
+    {
+        $clean = [];
+
+        foreach ($rows as $row) {
+            $fromTo = trim((string) ($row['from_to'] ?? ''));
+            $company = trim((string) ($row['company'] ?? ''));
+            $project = trim((string) ($row['project'] ?? ''));
+            $country = trim((string) ($row['country'] ?? ''));
+            $jobTitle = trim((string) ($row['job_title'] ?? ''));
+
+            if ($fromTo === '' && $company === '' && $project === '' && $country === '' && $jobTitle === '') {
+                continue;
+            }
+
+            $clean[] = [
+                'from_to' => $fromTo,
+                'company' => $company,
+                'project' => $project,
+                'country' => $country,
+                'job_title' => $jobTitle,
+            ];
+
+            if (count($clean) >= 5) {
+                break;
+            }
+        }
+
+        return $clean === [] ? null : $clean;
+    }
+
+    public function experienceRowsForForm(): array
+    {
+        $rows = self::emptyExperienceRows();
+        $saved = $this->experience_rows ?? [];
+
+        foreach ($saved as $i => $row) {
+            if ($i >= 5) {
+                break;
+            }
+
+            $rows[$i] = [
+                'from_to' => (string) ($row['from_to'] ?? ''),
+                'company' => (string) ($row['company'] ?? ''),
+                'project' => (string) ($row['project'] ?? ''),
+                'country' => (string) ($row['country'] ?? ''),
+                'job_title' => (string) ($row['job_title'] ?? ''),
+            ];
+        }
+
+        return $rows;
     }
 
     public function getAgeAttribute(): ?int
