@@ -58,7 +58,8 @@
         <p x-text="moduleDescription"></p>
     </section>
 
-    <livewire:module-summary-stats />
+    {{-- Numbers for the open module (Alpine tells Livewire which module via refresh-module-stats) --}}
+    <livewire:module-summary-stats :module-key="$startModule" />
 
 </div>
 

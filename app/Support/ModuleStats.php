@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class ModuleStats
 {
-    public static function cardsFor(string $moduleKey): array
+    public static function cardsFor($moduleKey)
     {
         if ($moduleKey === '') {
             return [];
@@ -18,17 +18,18 @@ class ModuleStats
             return self::clientCards();
         }
 
-        return self::simpleFeatureCards($moduleKey);
+        return self::otherModuleCards($moduleKey);
     }
 
-    private static function clientCards(): array
+    private static function clientCards()
     {
         $cards = [];
 
+        // Card 1: all clients
         $cards[] = [
             'key' => 'list',
             'label' => 'All Clients',
-            'value' => self::countRows('clients'),
+            'value' => self::tableCount('clients'),
             'tone' => '#3397c7',
             'process_status_id' => null,
             'clickable' => true,
@@ -38,6 +39,7 @@ class ModuleStats
             return $cards;
         }
 
+        // One card per process status
         $statuses = ProcessStatus::query()
             ->where('is_active', true)
             ->orderBy('sort_order')
@@ -45,15 +47,15 @@ class ModuleStats
             ->get(['id', 'name']);
 
         foreach ($statuses as $status) {
-            $count = (int) DB::table('clients')
+            $count = DB::table('clients')
                 ->where('process_status_id', $status->id)
                 ->count();
 
             $cards[] = [
                 'key' => 'status_'.$status->id,
                 'label' => $status->name,
-                'value' => $count,
-                'tone' => self::colorForStatus($status->name),
+                'value' => (int) $count,
+                'tone' => self::statusColor($status->name),
                 'process_status_id' => $status->id,
                 'clickable' => true,
             ];
@@ -62,7 +64,7 @@ class ModuleStats
         return $cards;
     }
 
-    private static function simpleFeatureCards(string $moduleKey): array
+    private static function otherModuleCards($moduleKey)
     {
         $modules = PortalModules::forUser();
         $module = null;
@@ -78,49 +80,49 @@ class ModuleStats
             return [];
         }
 
-        // Which DB table each feature uses
+        // feature key => database table
         $tables = [
-            'operations' => [
-                'care_offs' => 'care_offs',
-                'companies' => 'companies:employer',
-                'universities' => 'companies:university',
-                'countries' => 'countries',
-                'trades' => 'trades',
-                'process_statuses' => 'process_statuses',
-            ],
-            'visitors' => [
-                'list' => 'visitors',
-            ],
-            'accounts' => [
-                'payments' => 'payments',
-                'payment_methods' => 'payment_methods',
-                'reports' => 'account_reports',
-            ],
-            'attendance' => [
-                'my-daily-attendance' => 'attendance_records',
-                'apply-leave' => 'leave_requests',
-                'staff-daily-attendance' => 'attendance_records',
-                'leave-approvals' => 'leave_requests',
-                'salary-slips' => 'salary_slips',
-                'office-settings' => 'office_settings',
-                'holidays' => 'holidays',
-            ],
-            'settings' => [
-                'users' => 'users',
-            ],
+            'care_offs' => 'care_offs',
+            'companies' => 'companies',
+            'universities' => 'companies',
+            'countries' => 'countries',
+            'trades' => 'trades',
+            'process_statuses' => 'process_statuses',
+            'list' => 'visitors',
+            'payments' => 'payments',
+            'payment_methods' => 'payment_methods',
+            'reports' => 'account_reports',
+            'users' => 'users',
+            'my-daily-attendance' => 'attendance_records',
+            'apply-leave' => 'leave_requests',
+            'staff-daily-attendance' => 'attendance_records',
+            'leave-approvals' => 'leave_requests',
+            'salary-slips' => 'salary_slips',
+            'office-settings' => 'office_settings',
+            'holidays' => 'holidays',
         ];
 
         $cards = [];
-        $moduleTables = $tables[$moduleKey] ?? [];
 
         foreach ($module['children'] ?? [] as $feature) {
             $featureKey = $feature['key'];
-            $source = $moduleTables[$featureKey] ?? null;
+            $table = $tables[$featureKey] ?? null;
+            $count = 0;
+
+            if ($table) {
+                if ($featureKey === 'companies') {
+                    $count = self::companyCount('employer');
+                } elseif ($featureKey === 'universities') {
+                    $count = self::companyCount('university');
+                } else {
+                    $count = self::tableCount($table);
+                }
+            }
 
             $cards[] = [
                 'key' => $featureKey,
                 'label' => $feature['label'],
-                'value' => self::countFromSource($source),
+                'value' => $count,
                 'tone' => null,
                 'process_status_id' => null,
                 'clickable' => false,
@@ -130,27 +132,7 @@ class ModuleStats
         return $cards;
     }
 
-    private static function countFromSource(?string $source): int
-    {
-        if ($source === null || $source === '') {
-            return 0;
-        }
-
-        // Special case: companies:employer or companies:university
-        if (str_contains($source, ':')) {
-            [$table, $type] = explode(':', $source, 2);
-
-            if (! Schema::hasTable($table)) {
-                return 0;
-            }
-
-            return (int) DB::table($table)->where('type', $type)->count();
-        }
-
-        return self::countRows($source);
-    }
-
-    private static function countRows(string $table): int
+    private static function tableCount($table)
     {
         if (! Schema::hasTable($table)) {
             return 0;
@@ -159,23 +141,32 @@ class ModuleStats
         return (int) DB::table($table)->count();
     }
 
-    private static function colorForStatus(string $name): string
+    private static function companyCount($type)
+    {
+        if (! Schema::hasTable('companies')) {
+            return 0;
+        }
+
+        return (int) DB::table('companies')->where('type', $type)->count();
+    }
+
+    private static function statusColor($name)
     {
         $name = strtolower($name);
 
-        if (str_contains($name, 'refus') || str_contains($name, 'reject') || str_contains($name, 'denied') || str_contains($name, 'fail') || str_contains($name, 'cancel')) {
+        if (str_contains($name, 'refus') || str_contains($name, 'reject') || str_contains($name, 'cancel')) {
             return '#e05d68';
         }
 
-        if (str_contains($name, 'issued') || str_contains($name, 'approved') || str_contains($name, 'complete') || str_contains($name, 'success')) {
+        if (str_contains($name, 'issued') || str_contains($name, 'approved') || str_contains($name, 'complete')) {
             return '#43b96e';
         }
 
-        if (str_contains($name, 'ready') || str_contains($name, 'pending') || str_contains($name, 'waiting') || str_contains($name, 'review')) {
+        if (str_contains($name, 'ready') || str_contains($name, 'pending') || str_contains($name, 'waiting')) {
             return '#dca139';
         }
 
-        if (str_contains($name, 'applied') || str_contains($name, 'submitted') || str_contains($name, 'process')) {
+        if (str_contains($name, 'applied') || str_contains($name, 'process')) {
             return '#7b79cf';
         }
 

@@ -1,19 +1,15 @@
 <section class="module-summary" aria-label="Module record totals">
     @foreach ($cards as $card)
-        @php
-            $canClick = ! empty($card['clickable']);
-            $tone = $card['tone'] ?? null;
-            $statusId = $card['process_status_id'] ?? '';
-        @endphp
-
         <button
             type="button"
-            class="module-summary__card {{ $canClick ? 'module-summary__card--button' : '' }}"
-            @if ($tone) style="--summary-tone: {{ $tone }}" @endif
-            @if ($canClick)
+            class="module-summary__card {{ ! empty($card['clickable']) ? 'module-summary__card--button' : '' }}"
+            @if (! empty($card['tone']))
+                style="--summary-tone: {{ $card['tone'] }}"
+            @endif
+            @if (! empty($card['clickable']))
                 @click="openClientStat({
                     label: @js($card['label']),
-                    process_status_id: @js($statusId),
+                    process_status_id: @js($card['process_status_id'] ?? ''),
                     clickable: true
                 })"
             @else

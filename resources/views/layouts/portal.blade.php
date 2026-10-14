@@ -39,12 +39,15 @@
     ></button>
 
     <script>
-        // Simple portal app
-        // URLs:
-        //   /dashboard
-        //   /dashboard/clients
-        //   /dashboard/clients/list
-        // Controller: DashboardController@index
+        /*
+         * FAST SPA (no full page reload)
+         *
+         * Debug map:
+         *   1. Wrong screen/title  → show()
+         *   2. Wrong URL           → setUrl()
+         *   3. Wrong count numbers → refreshStats() + ModuleStats.php
+         *   4. First load from URL → DashboardController + show()
+         */
         function portalApp() {
             return {
                 sidebarOpen: false,
@@ -69,26 +72,110 @@
 
                     this.applyTheme(this.darkMode ? 'dark' : 'light', false);
                     this.loadSidebarCollapsed();
-                    this.startFromServer();
 
+                    // Open whatever the server URL said (or home)
+                    this.show(this.startModule, this.startFeature, false);
+                    this.readStatusFromUrl();
+
+                    // Browser back / forward
                     window.addEventListener('popstate', function () {
-                        self.startFromBrowserUrl();
+                        self.showFromBrowserUrl();
                     });
 
+                    // When Livewire is ready, load count cards
                     document.addEventListener('livewire:initialized', function () {
-                        self.refreshModuleStats();
+                        self.refreshStats();
                     });
                 },
 
-                refreshModuleStats() {
-                    if (typeof Livewire === 'undefined') {
+                // -------------------------------------------------
+                // MAIN FUNCTION — everything goes through here
+                // moduleKey = '' means home
+                // featureKey = '' means module dashboard
+                // changeUrl = true updates the address bar (no reload)
+                // -------------------------------------------------
+                show(moduleKey, featureKey, changeUrl) {
+                    var module;
+                    var i;
+                    var feature;
+
+                    moduleKey = moduleKey || '';
+                    featureKey = featureKey || '';
+
+                    if (changeUrl === undefined) {
+                        changeUrl = true;
+                    }
+
+                    // HOME
+                    if (moduleKey === '' || !this.modules[moduleKey]) {
+                        this.screen = 'home';
+                        this.moduleKey = '';
+                        this.moduleTitle = '';
+                        this.moduleDescription = '';
+                        this.features = [];
+                        this.featureKey = '';
+                        this.featureTitle = '';
+                        this.sidebarOpen = false;
+                        window.scrollTo(0, 0);
+                        this.refreshStats();
+
+                        if (changeUrl) {
+                            this.setUrl();
+                        }
+
                         return;
                     }
 
-                    Livewire.dispatch('refresh-module-stats', { key: this.moduleKey || '' });
+                    module = this.modules[moduleKey];
+
+                    this.moduleKey = moduleKey;
+                    this.moduleTitle = module.title;
+                    this.moduleDescription = module.description;
+                    this.features = module.children ? module.children : [];
+                    this.sidebarOpen = false;
+                    window.scrollTo(0, 0);
+
+                    // MODULE dashboard (no feature)
+                    if (featureKey === '') {
+                        this.screen = 'module';
+                        this.featureKey = '';
+                        this.featureTitle = '';
+                        this.refreshStats();
+
+                        if (changeUrl) {
+                            this.setUrl();
+                        }
+
+                        return;
+                    }
+
+                    // FEATURE screen
+                    feature = null;
+
+                    for (i = 0; i < this.features.length; i++) {
+                        if (this.features[i].key === featureKey) {
+                            feature = this.features[i];
+                            break;
+                        }
+                    }
+
+                    if (!feature) {
+                        // Unknown feature → show module dashboard
+                        this.show(moduleKey, '', changeUrl);
+                        return;
+                    }
+
+                    this.screen = 'feature';
+                    this.featureKey = featureKey;
+                    this.featureTitle = feature.label;
+                    this.refreshStats();
+
+                    if (changeUrl) {
+                        this.setUrl();
+                    }
                 },
 
-                // Change address bar only (page does not reload)
+                // Address bar only (page does NOT reload)
                 setUrl() {
                     var url = '{{ url('/dashboard') }}';
 
@@ -103,22 +190,8 @@
                     history.pushState({}, '', url);
                 },
 
-                // First load: use values from DashboardController
-                startFromServer() {
-                    if (this.startModule === '' || !this.modules[this.startModule]) {
-                        this.goHome(false);
-                        return;
-                    }
-
-                    this.openModule(this.startModule, false);
-
-                    if (this.startFeature !== '') {
-                        this.openFeature(this.startFeature, {}, false);
-                    }
-                },
-
-                // Browser back / forward button
-                startFromBrowserUrl() {
+                // Read /dashboard/clients/list from the browser
+                showFromBrowserUrl() {
                     var parts = window.location.pathname.split('/');
                     var moduleKey = '';
                     var featureKey = '';
@@ -132,15 +205,87 @@
                         }
                     }
 
-                    if (moduleKey === '' || !this.modules[moduleKey]) {
-                        this.goHome(false);
+                    this.show(moduleKey, featureKey, false);
+                    this.readStatusFromUrl();
+                },
+
+                // Tell Livewire to show counts for this module
+                refreshStats() {
+                    if (typeof Livewire === 'undefined') {
                         return;
                     }
 
-                    this.openModule(moduleKey, false);
+                    Livewire.dispatch('refresh-module-stats', { key: this.moduleKey || '' });
+                },
 
-                    if (featureKey !== '') {
-                        this.openFeature(featureKey, {}, false);
+                // Buttons / clicks
+                goHome() {
+                    this.show('', '', true);
+                },
+
+                openModule(key) {
+                    this.show(key, '', true);
+                },
+
+                goModule() {
+                    this.show(this.moduleKey, '', true);
+                },
+
+                openFeature(key, options) {
+                    options = options || {};
+
+                    this.show(this.moduleKey, key, true);
+
+                    // Status card → filter All Clients list
+                    if (this.moduleKey === 'clients' && key === 'list') {
+                        this.filterClients(
+                            options.processStatusId ? String(options.processStatusId) : '',
+                            options.label || ''
+                        );
+                    }
+                },
+
+                openClientStat(stat) {
+                    if (!stat || !stat.clickable) {
+                        return;
+                    }
+
+                    this.openFeature('list', {
+                        processStatusId: stat.process_status_id || '',
+                        label: stat.label || '',
+                    });
+                },
+
+                filterClients(statusId, label) {
+                    if (label) {
+                        this.featureTitle = label;
+                    }
+
+                    this.$nextTick(function () {
+                        window.dispatchEvent(new CustomEvent('clients-filter-status', {
+                            detail: {
+                                id: statusId || '',
+                                label: label || '',
+                            },
+                        }));
+                    });
+                },
+
+                readStatusFromUrl() {
+                    var params;
+                    var statusId;
+                    var label;
+
+                    if (this.moduleKey !== 'clients' || this.featureKey !== 'list') {
+                        return;
+                    }
+
+                    params = new URLSearchParams(window.location.search);
+                    statusId = params.get('status') || '';
+                    label = params.get('label') || '';
+
+                    if (statusId || label) {
+                        this.filterClients(statusId, label);
                     }
                 },
 
@@ -158,7 +303,6 @@
                     try {
                         localStorage.setItem('federal_sidebar_collapsed', this.sidebarCollapsed ? '1' : '0');
                     } catch (error) {
-                        // Preference still applies for this page if storage is unavailable.
                     }
                 },
 
@@ -188,7 +332,6 @@
                         try {
                             localStorage.setItem('federal_theme', theme);
                         } catch (error) {
-                            // The selected theme still applies for this page if storage is unavailable.
                         }
                     }
                 },
@@ -197,131 +340,12 @@
                     if (this.screen === 'feature') {
                         return this.featureTitle;
                     }
+
                     if (this.screen === 'module') {
                         return this.moduleTitle;
                     }
+
                     return 'Operations Overview';
-                },
-
-                // Open a module (example: clients)
-                // changeUrl = false when loading from server / back button
-                openModule(key, changeUrl) {
-                    var module = this.modules[key];
-
-                    if (!module) {
-                        return;
-                    }
-
-                    if (changeUrl === undefined) {
-                        changeUrl = true;
-                    }
-
-                    this.screen = 'module';
-                    this.moduleKey = key;
-                    this.moduleTitle = module.title;
-                    this.moduleDescription = module.description;
-                    this.features = module.children ? module.children : [];
-                    this.featureKey = '';
-                    this.featureTitle = '';
-                    this.sidebarOpen = false;
-                    window.scrollTo(0, 0);
-                    this.refreshModuleStats();
-
-                    if (changeUrl) {
-                        this.setUrl();
-                    }
-                },
-
-                // Open a feature (example: list, create)
-                openFeature(key, options, changeUrl) {
-                    var i;
-                    var feature = null;
-                    var statusId = '';
-
-                    options = options || {};
-
-                    if (changeUrl === undefined) {
-                        changeUrl = true;
-                    }
-
-                    for (i = 0; i < this.features.length; i++) {
-                        if (this.features[i].key === key) {
-                            feature = this.features[i];
-                            break;
-                        }
-                    }
-
-                    if (!feature) {
-                        return;
-                    }
-
-                    this.screen = 'feature';
-                    this.featureKey = key;
-                    this.featureTitle = feature.label;
-                    this.sidebarOpen = false;
-                    window.scrollTo(0, 0);
-
-                    if (changeUrl) {
-                        this.setUrl();
-                    }
-
-                    // Status cards on Clients module → filter All Clients list
-                    if (this.moduleKey === 'clients' && key === 'list') {
-                        statusId = options.processStatusId ? String(options.processStatusId) : '';
-
-                        if (statusId && options.label) {
-                            this.featureTitle = options.label;
-                        }
-
-                        this.$nextTick(function () {
-                            window.dispatchEvent(new CustomEvent('clients-filter-status', {
-                                detail: {
-                                    id: statusId,
-                                    label: statusId ? (options.label || '') : '',
-                                },
-                            }));
-                        });
-                    }
-                },
-
-                openClientStat(stat) {
-                    if (!stat || !stat.clickable) {
-                        return;
-                    }
-
-                    this.openFeature('list', {
-                        processStatusId: stat.process_status_id || '',
-                        label: stat.label || '',
-                    }, true);
-                },
-
-                goHome(changeUrl) {
-                    if (changeUrl === undefined) {
-                        changeUrl = true;
-                    }
-
-                    this.screen = 'home';
-                    this.moduleKey = '';
-                    this.moduleTitle = '';
-                    this.moduleDescription = '';
-                    this.features = [];
-                    this.featureKey = '';
-                    this.featureTitle = '';
-                    this.sidebarOpen = false;
-                    window.scrollTo(0, 0);
-                    this.refreshModuleStats();
-
-                    if (changeUrl) {
-                        this.setUrl();
-                    }
-                },
-
-                goModule() {
-                    this.screen = 'module';
-                    this.featureKey = '';
-                    this.featureTitle = '';
-                    this.refreshModuleStats();
-                    this.setUrl();
                 },
             };
         }

@@ -46,6 +46,12 @@ class ListClients extends Component
         }
 
         $this->canManageClients = $user->canManage('clients', 'list');
+
+        // From URL: /dashboard/clients/list?status=1&label=Applied
+        if (request()->filled('status')) {
+            $this->process_status_id = (string) request('status');
+            $this->statusFilterLabel = (string) request('label', '');
+        }
     }
 
     public function updatedSearch(): void

@@ -7,16 +7,16 @@ use App\Support\PortalModules;
 
 class DashboardController extends Controller
 {
+    // Used on first visit / refresh / shared link
+    // Alpine handles clicks after that (no reload)
     public function index($module = null, $feature = null)
     {
         $modulesMap = PortalModules::mapForUser();
 
-        // If module is wrong, go to home
-        if ($module && ! isset($modulesMap[$module])) {
+        if ($module && empty($modulesMap[$module])) {
             return redirect('/dashboard');
         }
 
-        // If feature is wrong, go to that module page
         if ($module && $feature) {
             $featureOk = false;
 
@@ -35,8 +35,8 @@ class DashboardController extends Controller
         return view('dashboard', [
             'modules' => PortalModules::forUser(),
             'modulesMap' => $modulesMap,
-            'startModule' => $module ? $module : '',
-            'startFeature' => $feature ? $feature : '',
+            'startModule' => $module ?: '',
+            'startFeature' => $feature ?: '',
             'countries' => Country::query()
                 ->where('is_active', true)
                 ->orderBy('name')

@@ -63,7 +63,7 @@ class PortalModules
         // Staff: only features they can view
         $allowedFeatures = [];
 
-        foreach ($module['children'] as $feature) {
+        foreach ($module['children'] ?? [] as $feature) {
             if (! empty($feature['admin_only'])) {
                 continue;
             }
