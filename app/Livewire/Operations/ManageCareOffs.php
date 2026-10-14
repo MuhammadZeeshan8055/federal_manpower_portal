@@ -87,6 +87,7 @@ class ManageCareOffs extends Component
         }
 
         $this->successMessage = 'Care Off deleted.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'danger';
         $this->toastVersion++;
         $this->resetPage('careOffsPage');
@@ -115,9 +116,11 @@ class ManageCareOffs extends Component
         if ($this->editingId) {
             CareOff::query()->whereKey($this->editingId)->update($data);
             $this->successMessage = 'Care Off updated.';
+            $this->dispatch('refresh-module-stats');
         } else {
             CareOff::query()->create($data);
             $this->successMessage = 'Care Off added.';
+            $this->dispatch('refresh-module-stats');
         }
 
         $this->toastType = 'success';

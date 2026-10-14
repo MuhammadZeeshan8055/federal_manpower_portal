@@ -78,6 +78,7 @@ class ManageCompanies extends Component
         }
 
         $this->successMessage = 'Company deleted.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'danger';
         $this->toastVersion++;
     }
@@ -114,9 +115,11 @@ class ManageCompanies extends Component
                 ->whereKey($this->editingId)
                 ->update($data);
             $this->successMessage = 'Company updated.';
+            $this->dispatch('refresh-module-stats');
         } else {
             Company::query()->create($data);
             $this->successMessage = 'Company added.';
+            $this->dispatch('refresh-module-stats');
         }
 
         $this->toastType = 'success';

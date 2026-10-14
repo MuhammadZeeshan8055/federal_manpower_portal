@@ -10,7 +10,7 @@
         <div class="hero-card__orb hero-card__orb--one"></div>
         <div class="hero-card__orb hero-card__orb--two"></div>
         <div class="hero-card__content">
-            <p class="eyebrow"><span></span> MANPOWER OPERATIONS CENTER</p>
+            <p class="eyebrow"><span></span> FEDERAL MANPOWER OPERATIONS CENTER</p>
             <h2>Welcome back, {{ auth()->user()->name }}</h2>
             <!-- <p>Open a module below to manage clients, care offs, accounts, attendance, and more.</p> -->
         </div>
@@ -58,27 +58,7 @@
         <p x-text="moduleDescription"></p>
     </section>
 
-    <section class="module-summary" aria-label="Module record totals">
-        <template x-for="stat in (statsByModule[moduleKey] || [])" :key="stat.key">
-            <button
-                type="button"
-                class="module-summary__card"
-                :class="{ 'module-summary__card--button': stat.clickable }"
-                :style="stat.tone ? { '--summary-tone': stat.tone } : {}"
-                @click="stat.clickable ? openClientStat(stat) : null"
-                :disabled="!stat.clickable"
-            >
-                <span class="module-summary__icon">
-                    @include('partials.icon', ['name' => 'chart'])
-                </span>
-                <span class="module-summary__copy">
-                    <small x-text="stat.label"></small>
-                    <strong x-text="Number(stat.value).toLocaleString()"></strong>
-                    <span>listed</span>
-                </span>
-            </button>
-        </template>
-    </section>
+    <livewire:module-summary-stats />
 
 </div>
 

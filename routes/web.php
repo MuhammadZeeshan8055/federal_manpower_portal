@@ -10,7 +10,20 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login');
 
 Route::middleware('auth')->group(function () {
+    // Home
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Module page  → /dashboard/clients
+    Route::get('/dashboard/{module}', [DashboardController::class, 'index'])
+        ->where('module', '[a-z0-9_\-]+')
+        ->name('dashboard.module');
+
+    // Feature page → /dashboard/clients/list
+    Route::get('/dashboard/{module}/{feature}', [DashboardController::class, 'index'])
+        ->where('module', '[a-z0-9_\-]+')
+        ->where('feature', '[a-z0-9_\-]+')
+        ->name('dashboard.feature');
+
     Route::post('/workspace/country', [WorkspaceCountryController::class, 'update'])->name('workspace.country');
 
     Route::get('/clients/{client}/documents/{docKey}', [ClientDocumentController::class, 'show'])

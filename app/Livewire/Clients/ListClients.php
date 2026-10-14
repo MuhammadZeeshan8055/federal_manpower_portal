@@ -134,6 +134,7 @@ class ListClients extends Component
         $client->delete();
 
         $this->successMessage = 'Client deleted.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'danger';
         $this->toastVersion++;
         $this->resetPage('clientsPage');

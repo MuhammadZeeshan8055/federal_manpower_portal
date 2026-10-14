@@ -314,6 +314,7 @@ class EditClient extends Component
 
         $this->loadClient();
         $this->successMessage = 'Client updated.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'success';
         $this->toastVersion++;
     }

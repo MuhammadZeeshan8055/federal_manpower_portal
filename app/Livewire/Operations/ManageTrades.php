@@ -81,6 +81,7 @@ class ManageTrades extends Component
         }
 
         $this->successMessage = 'Trade deleted.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'danger';
         $this->toastVersion++;
         $this->resetPage('tradesPage');
@@ -105,9 +106,11 @@ class ManageTrades extends Component
         if ($this->editingId) {
             Trade::query()->whereKey($this->editingId)->update($data);
             $this->successMessage = 'Trade updated.';
+            $this->dispatch('refresh-module-stats');
         } else {
             Trade::query()->create($data);
             $this->successMessage = 'Trade added.';
+            $this->dispatch('refresh-module-stats');
         }
 
         $this->toastType = 'success';

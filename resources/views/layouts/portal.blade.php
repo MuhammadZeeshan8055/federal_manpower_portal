@@ -39,12 +39,12 @@
     ></button>
 
     <script>
-        /*
-         * Simple page state (like a tiny router, still on /dashboard):
-         *   screen = 'home'     → overview cards
-         *   screen = 'module'   → one module open (feature buttons)
-         *   screen = 'feature'  → one feature open (table/form later)
-         */
+        // Simple portal app
+        // URLs:
+        //   /dashboard
+        //   /dashboard/clients
+        //   /dashboard/clients/list
+        // Controller: DashboardController@index
         function portalApp() {
             return {
                 sidebarOpen: false,
@@ -61,12 +61,87 @@
                 featureTitle: '',
 
                 modules: @js($modulesMap ?? []),
-                statsByModule: @js($moduleStats ?? []),
+                startModule: @js($startModule ?? ''),
+                startFeature: @js($startFeature ?? ''),
 
                 init() {
+                    var self = this;
+
                     this.applyTheme(this.darkMode ? 'dark' : 'light', false);
                     this.loadSidebarCollapsed();
-                    this.loadSavedScreen();
+                    this.startFromServer();
+
+                    window.addEventListener('popstate', function () {
+                        self.startFromBrowserUrl();
+                    });
+
+                    document.addEventListener('livewire:initialized', function () {
+                        self.refreshModuleStats();
+                    });
+                },
+
+                refreshModuleStats() {
+                    if (typeof Livewire === 'undefined') {
+                        return;
+                    }
+
+                    Livewire.dispatch('refresh-module-stats', { key: this.moduleKey || '' });
+                },
+
+                // Change address bar only (page does not reload)
+                setUrl() {
+                    var url = '{{ url('/dashboard') }}';
+
+                    if (this.moduleKey !== '') {
+                        url = url + '/' + this.moduleKey;
+                    }
+
+                    if (this.screen === 'feature' && this.featureKey !== '') {
+                        url = url + '/' + this.featureKey;
+                    }
+
+                    history.pushState({}, '', url);
+                },
+
+                // First load: use values from DashboardController
+                startFromServer() {
+                    if (this.startModule === '' || !this.modules[this.startModule]) {
+                        this.goHome(false);
+                        return;
+                    }
+
+                    this.openModule(this.startModule, false);
+
+                    if (this.startFeature !== '') {
+                        this.openFeature(this.startFeature, {}, false);
+                    }
+                },
+
+                // Browser back / forward button
+                startFromBrowserUrl() {
+                    var parts = window.location.pathname.split('/');
+                    var moduleKey = '';
+                    var featureKey = '';
+                    var i;
+
+                    for (i = 0; i < parts.length; i++) {
+                        if (parts[i] === 'dashboard') {
+                            moduleKey = parts[i + 1] || '';
+                            featureKey = parts[i + 2] || '';
+                            break;
+                        }
+                    }
+
+                    if (moduleKey === '' || !this.modules[moduleKey]) {
+                        this.goHome(false);
+                        return;
+                    }
+
+                    this.openModule(moduleKey, false);
+
+                    if (featureKey !== '') {
+                        this.openFeature(featureKey, {}, false);
+                    }
                 },
 
                 toggleSidebar() {
@@ -128,10 +203,17 @@
                     return 'Operations Overview';
                 },
 
-                openModule(key) {
+                // Open a module (example: clients)
+                // changeUrl = false when loading from server / back button
+                openModule(key, changeUrl) {
                     var module = this.modules[key];
+
                     if (!module) {
                         return;
+                    }
+
+                    if (changeUrl === undefined) {
+                        changeUrl = true;
                     }
 
                     this.screen = 'module';
@@ -142,16 +224,25 @@
                     this.featureKey = '';
                     this.featureTitle = '';
                     this.sidebarOpen = false;
-                    this.saveScreen();
                     window.scrollTo(0, 0);
+                    this.refreshModuleStats();
+
+                    if (changeUrl) {
+                        this.setUrl();
+                    }
                 },
 
-                openFeature(key, options) {
+                // Open a feature (example: list, create)
+                openFeature(key, options, changeUrl) {
                     var i;
                     var feature = null;
                     var statusId = '';
 
                     options = options || {};
+
+                    if (changeUrl === undefined) {
+                        changeUrl = true;
+                    }
 
                     for (i = 0; i < this.features.length; i++) {
                         if (this.features[i].key === key) {
@@ -168,9 +259,13 @@
                     this.featureKey = key;
                     this.featureTitle = feature.label;
                     this.sidebarOpen = false;
-                    this.saveScreen();
                     window.scrollTo(0, 0);
 
+                    if (changeUrl) {
+                        this.setUrl();
+                    }
+
+                    // Status cards on Clients module → filter All Clients list
                     if (this.moduleKey === 'clients' && key === 'list') {
                         statusId = options.processStatusId ? String(options.processStatusId) : '';
 
@@ -197,10 +292,14 @@
                     this.openFeature('list', {
                         processStatusId: stat.process_status_id || '',
                         label: stat.label || '',
-                    });
+                    }, true);
                 },
 
-                goHome() {
+                goHome(changeUrl) {
+                    if (changeUrl === undefined) {
+                        changeUrl = true;
+                    }
+
                     this.screen = 'home';
                     this.moduleKey = '';
                     this.moduleTitle = '';
@@ -209,49 +308,20 @@
                     this.featureKey = '';
                     this.featureTitle = '';
                     this.sidebarOpen = false;
-                    this.saveScreen();
                     window.scrollTo(0, 0);
+                    this.refreshModuleStats();
+
+                    if (changeUrl) {
+                        this.setUrl();
+                    }
                 },
 
                 goModule() {
                     this.screen = 'module';
                     this.featureKey = '';
                     this.featureTitle = '';
-                    this.saveScreen();
-                },
-
-                saveScreen() {
-                    localStorage.setItem('federal_screen', JSON.stringify({
-                        screen: this.screen,
-                        moduleKey: this.moduleKey,
-                        featureKey: this.featureKey,
-                    }));
-                },
-
-                loadSavedScreen() {
-                    var saved = localStorage.getItem('federal_screen');
-                    var data;
-
-                    if (!saved) {
-                        return;
-                    }
-
-                    try {
-                        data = JSON.parse(saved);
-                    } catch (e) {
-                        localStorage.removeItem('federal_screen');
-                        return;
-                    }
-
-                    if (!data.moduleKey || !this.modules[data.moduleKey]) {
-                        return;
-                    }
-
-                    this.openModule(data.moduleKey);
-
-                    if (data.featureKey) {
-                        this.openFeature(data.featureKey);
-                    }
+                    this.refreshModuleStats();
+                    this.setUrl();
                 },
             };
         }

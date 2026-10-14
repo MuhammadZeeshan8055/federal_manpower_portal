@@ -94,6 +94,7 @@ class ManageCountries extends Component
         }
 
         $this->successMessage = 'Country deleted.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'danger';
         $this->toastVersion++;
         $this->resetPage('countriesPage');
@@ -127,10 +128,12 @@ class ManageCountries extends Component
         if ($this->editingId) {
             Country::query()->whereKey($this->editingId)->update($data);
             $this->successMessage = 'Country updated.';
+            $this->dispatch('refresh-module-stats');
         } else {
             $data['flag_image'] = $flagPath;
             Country::query()->create($data);
             $this->successMessage = 'Country added.';
+            $this->dispatch('refresh-module-stats');
         }
 
         $this->toastType = 'success';

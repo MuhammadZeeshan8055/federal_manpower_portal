@@ -78,6 +78,7 @@ class ManageUniversities extends Component
         }
 
         $this->successMessage = 'University deleted.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'danger';
         $this->toastVersion++;
     }
@@ -114,9 +115,11 @@ class ManageUniversities extends Component
                 ->whereKey($this->editingId)
                 ->update($data);
             $this->successMessage = 'University updated.';
+            $this->dispatch('refresh-module-stats');
         } else {
             Company::query()->create($data);
             $this->successMessage = 'University added.';
+            $this->dispatch('refresh-module-stats');
         }
 
         $this->toastType = 'success';

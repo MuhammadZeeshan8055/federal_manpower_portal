@@ -72,6 +72,7 @@ class ManageProcessStatuses extends Component
         }
 
         $this->successMessage = 'Process status deleted.';
+        $this->dispatch('refresh-module-stats');
         $this->toastType = 'danger';
         $this->toastVersion++;
     }
@@ -97,9 +98,11 @@ class ManageProcessStatuses extends Component
         if ($this->editingId) {
             ProcessStatus::query()->whereKey($this->editingId)->update($data);
             $this->successMessage = 'Process status updated.';
+            $this->dispatch('refresh-module-stats');
         } else {
             ProcessStatus::query()->create($data);
             $this->successMessage = 'Process status added.';
+            $this->dispatch('refresh-module-stats');
         }
 
         $this->toastType = 'success';

@@ -3,179 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
-use App\Models\ProcessStatus;
 use App\Support\PortalModules;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(): View
+    public function index($module = null, $feature = null)
     {
-        $modules = PortalModules::forUser();
+        $modulesMap = PortalModules::mapForUser();
+
+        // If module is wrong, go to home
+        if ($module && ! isset($modulesMap[$module])) {
+            return redirect('/dashboard');
+        }
+
+        // If feature is wrong, go to that module page
+        if ($module && $feature) {
+            $featureOk = false;
+
+            foreach ($modulesMap[$module]['children'] ?? [] as $child) {
+                if ($child['key'] === $feature) {
+                    $featureOk = true;
+                    break;
+                }
+            }
+
+            if (! $featureOk) {
+                return redirect('/dashboard/'.$module);
+            }
+        }
 
         return view('dashboard', [
-            'modules' => $modules,
-            'modulesMap' => PortalModules::mapForUser(),
-            'moduleStats' => $this->moduleStats($modules),
+            'modules' => PortalModules::forUser(),
+            'modulesMap' => $modulesMap,
+            'startModule' => $module ? $module : '',
+            'startFeature' => $feature ? $feature : '',
             'countries' => Country::query()
                 ->where('is_active', true)
                 ->orderBy('name')
                 ->get(['id', 'name', 'code', 'flag_image']),
             'workspaceCountryId' => session('workspace_country_id'),
         ]);
-    }
-
-    private function moduleStats(array $modules): array
-    {
-        $tables = [
-            'clients' => [
-                'list' => 'clients',
-                'documents' => 'client_documents',
-                'import' => 'client_imports',
-            ],
-            'operations' => [
-                'care_offs' => 'care_offs',
-                'companies' => ['table' => 'companies', 'type' => 'employer'],
-                'universities' => ['table' => 'companies', 'type' => 'university'],
-                'countries' => 'countries',
-                'trades' => 'trades',
-                'process_statuses' => 'process_statuses',
-            ],
-            'visitors' => ['list' => 'visitors'],
-            'accounts' => [
-                'payments' => 'payments',
-                'payment_methods' => 'payment_methods',
-                'reports' => 'account_reports',
-            ],
-            'attendance' => [
-                'my-daily-attendance' => 'attendance_records',
-                'apply-leave' => 'leave_requests',
-                'staff-daily-attendance' => 'attendance_records',
-                'leave-approvals' => 'leave_requests',
-                'salary-slips' => 'salary_slips',
-                'office-settings' => 'office_settings',
-                'holidays' => 'holidays',
-            ],
-            'settings' => ['users' => 'users'],
-        ];
-
-        $stats = [];
-        $counts = [];
-
-        foreach ($modules as $module) {
-            $moduleKey = $module['key'];
-
-            if ($moduleKey === 'clients') {
-                $stats[$moduleKey] = $this->clientModuleStats();
-
-                continue;
-            }
-
-            foreach ($module['children'] ?? [] as $feature) {
-                $featureKey = $feature['key'];
-                $source = $tables[$moduleKey][$featureKey] ?? null;
-                $countKey = is_array($source)
-                    ? ($source['table'].':'.($source['type'] ?? ''))
-                    : $source;
-
-                if ($source !== null && ! array_key_exists($countKey, $counts)) {
-                    $table = is_array($source) ? $source['table'] : $source;
-
-                    if (! Schema::hasTable($table)) {
-                        $counts[$countKey] = 0;
-                    } elseif (is_array($source) && isset($source['type'])) {
-                        $counts[$countKey] = DB::table($table)
-                            ->where('type', $source['type'])
-                            ->count();
-                    } else {
-                        $counts[$countKey] = DB::table($table)->count();
-                    }
-                }
-
-                $stats[$moduleKey][] = [
-                    'key' => $featureKey,
-                    'label' => $feature['label'],
-                    'value' => $countKey !== null ? $counts[$countKey] : 0,
-                    'process_status_id' => null,
-                    'clickable' => false,
-                ];
-            }
-        }
-
-        return $stats;
-    }
-
-    private function clientModuleStats(): array
-    {
-        $cards = [];
-
-        $totalClients = Schema::hasTable('clients')
-            ? (int) DB::table('clients')->count()
-            : 0;
-
-        $cards[] = [
-            'key' => 'list',
-            'label' => 'All Clients',
-            'value' => $totalClients,
-            'tone' => '#3397c7',
-            'process_status_id' => null,
-            'clickable' => true,
-        ];
-
-        if (! Schema::hasTable('process_statuses') || ! Schema::hasTable('clients')) {
-            return $cards;
-        }
-
-        $statuses = ProcessStatus::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get(['id', 'name']);
-
-        $statusCounts = DB::table('clients')
-            ->select('process_status_id', DB::raw('count(*) as total'))
-            ->whereNotNull('process_status_id')
-            ->groupBy('process_status_id')
-            ->pluck('total', 'process_status_id');
-
-        foreach ($statuses as $status) {
-            $cards[] = [
-                'key' => 'status_'.$status->id,
-                'label' => $status->name,
-                'value' => (int) ($statusCounts[$status->id] ?? 0),
-                'tone' => $this->clientStatusTone($status->name),
-                'process_status_id' => $status->id,
-                'clickable' => true,
-            ];
-        }
-
-        return $cards;
-    }
-
-    private function clientStatusTone(string $status): string
-    {
-        $status = strtolower($status);
-
-        return match (true) {
-            str_contains($status, 'refus'),
-            str_contains($status, 'reject'),
-            str_contains($status, 'denied'),
-            str_contains($status, 'fail'),
-            str_contains($status, 'cancel') => '#e05d68',
-            str_contains($status, 'issued'),
-            str_contains($status, 'approved'),
-            str_contains($status, 'complete'),
-            str_contains($status, 'success') => '#43b96e',
-            str_contains($status, 'ready'),
-            str_contains($status, 'pending'),
-            str_contains($status, 'waiting'),
-            str_contains($status, 'review') => '#dca139',
-            str_contains($status, 'applied'),
-            str_contains($status, 'submitted'),
-            str_contains($status, 'process') => '#7b79cf',
-            default => '#3397c7',
-        };
     }
 }

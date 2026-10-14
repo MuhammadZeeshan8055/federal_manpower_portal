@@ -6,9 +6,12 @@ use App\Models\User;
 
 class PortalModules
 {
-    public static function forUser(?User $user = null): array
+    // Modules the logged-in user can see (list)
+    public static function forUser($user = null)
     {
-        $user = $user ?? auth()->user();
+        if (! $user) {
+            $user = auth()->user();
+        }
 
         if (! $user) {
             return [];
@@ -17,17 +20,18 @@ class PortalModules
         $result = [];
 
         foreach (config('portal.modules', []) as $module) {
-            $filtered = self::filterModule($module, $user);
+            $allowed = self::moduleForUser($module, $user);
 
-            if ($filtered !== null) {
-                $result[] = $filtered;
+            if ($allowed) {
+                $result[] = $allowed;
             }
         }
 
         return $result;
     }
 
-    public static function mapForUser(?User $user = null): array
+    // Same modules, but keyed by module key (easy lookup)
+    public static function mapForUser($user = null)
     {
         $map = [];
 
@@ -38,10 +42,11 @@ class PortalModules
         return $map;
     }
 
-    private static function filterModule(array $module, User $user): ?array
+    private static function moduleForUser($module, User $user)
     {
-        $moduleKey = $module['key'] ?? '';
+        $moduleKey = $module['key'];
 
+        // Settings only for people who manage users
         if ($moduleKey === 'settings') {
             if ($user->canManageUsers()) {
                 return $module;
@@ -50,20 +55,20 @@ class PortalModules
             return null;
         }
 
+        // Admin sees everything
         if ($user->isAdmin()) {
             return $module;
         }
 
+        // Staff: only features they can view
         $allowedFeatures = [];
 
-        foreach ($module['children'] ?? [] as $feature) {
+        foreach ($module['children'] as $feature) {
             if (! empty($feature['admin_only'])) {
                 continue;
             }
 
-            $featureKey = $feature['key'] ?? '';
-
-            if ($user->canView($moduleKey, $featureKey)) {
+            if ($user->canView($moduleKey, $feature['key'])) {
                 $allowedFeatures[] = $feature;
             }
         }

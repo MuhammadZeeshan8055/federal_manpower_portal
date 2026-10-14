@@ -386,6 +386,7 @@ class ClientBioDataForm extends Component
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();
+        $this->dispatch('refresh-module-stats');
     }
 
     public function getAgeProperty(): string
