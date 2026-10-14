@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\ProcessStatus;
 use App\Models\Trade;
 use App\Support\ClientPrivateFiles;
+use App\Support\WorkspaceCountry;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -151,6 +152,11 @@ class ClientBioDataForm extends Component
 
         if (! $user || (! $user->canView('clients', 'create') && ! $user->canManage('clients', 'create'))) {
             $this->denied = true;
+        }
+
+        $workspaceCountry = WorkspaceCountry::id();
+        if ($workspaceCountry) {
+            $this->country_id = (string) $workspaceCountry;
         }
 
         $this->experiences = Client::emptyExperienceRows();
@@ -419,10 +425,17 @@ class ClientBioDataForm extends Component
 
     public function render()
     {
+        $companies = Company::query()
+            ->where('type', 'employer')
+            ->where('is_active', true)
+            ->orderBy('name');
+
+        WorkspaceCountry::filterCompanies($companies);
+
         return view('livewire.clients.client-bio-data-form', [
             'countries' => Country::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'trades' => Trade::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
-            'companies' => Company::query()->where('type', 'employer')->where('is_active', true)->orderBy('name')->get(['id', 'name']),
+            'companies' => $companies->get(['id', 'name']),
             'careOffs' => CareOff::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'processStatuses' => ProcessStatus::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get(['id', 'name']),
             'documents' => $this->documentRows(),
@@ -442,7 +455,7 @@ class ClientBioDataForm extends Component
     private function resetForm(): void
     {
         $this->trade_id = '';
-        $this->country_id = '';
+        $this->country_id = WorkspaceCountry::id() ? (string) WorkspaceCountry::id() : '';
         $this->full_name = '';
         $this->height = '';
         $this->weight = '';

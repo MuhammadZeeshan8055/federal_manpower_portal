@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\ProcessStatus;
 use App\Models\Trade;
 use App\Support\ClientPrivateFiles;
+use App\Support\WorkspaceCountry;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -349,10 +350,17 @@ class EditClient extends Component
 
     public function render()
     {
+        $companies = Company::query()
+            ->where('type', 'employer')
+            ->where('is_active', true)
+            ->orderBy('name');
+
+        WorkspaceCountry::filterCompanies($companies);
+
         return view('livewire.clients.edit-client', [
             'countries' => Country::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'trades' => Trade::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
-            'companies' => Company::query()->where('type', 'employer')->where('is_active', true)->orderBy('name')->get(['id', 'name']),
+            'companies' => $companies->get(['id', 'name']),
             'careOffs' => CareOff::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'processStatuses' => ProcessStatus::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get(['id', 'name']),
             'documents' => $this->documentRows(),

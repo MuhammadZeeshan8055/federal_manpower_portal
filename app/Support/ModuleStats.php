@@ -24,12 +24,18 @@ class ModuleStats
     private static function clientCards()
     {
         $cards = [];
+        $countryId = WorkspaceCountry::id();
 
-        // Card 1: all clients
+        // Card 1: all clients (for selected country, or all)
+        $allQuery = DB::table('clients');
+        if ($countryId) {
+            $allQuery->where('country_id', $countryId);
+        }
+
         $cards[] = [
             'key' => 'list',
             'label' => 'All Clients',
-            'value' => self::tableCount('clients'),
+            'value' => Schema::hasTable('clients') ? (int) $allQuery->count() : 0,
             'tone' => '#3397c7',
             'process_status_id' => null,
             'clickable' => true,
@@ -47,14 +53,17 @@ class ModuleStats
             ->get(['id', 'name']);
 
         foreach ($statuses as $status) {
-            $count = DB::table('clients')
-                ->where('process_status_id', $status->id)
-                ->count();
+            $statusQuery = DB::table('clients')
+                ->where('process_status_id', $status->id);
+
+            if ($countryId) {
+                $statusQuery->where('country_id', $countryId);
+            }
 
             $cards[] = [
                 'key' => 'status_'.$status->id,
                 'label' => $status->name,
-                'value' => (int) $count,
+                'value' => (int) $statusQuery->count(),
                 'tone' => self::statusColor($status->name),
                 'process_status_id' => $status->id,
                 'clickable' => true,
@@ -147,7 +156,14 @@ class ModuleStats
             return 0;
         }
 
-        return (int) DB::table('companies')->where('type', $type)->count();
+        $query = DB::table('companies')->where('type', $type);
+        $countryId = WorkspaceCountry::id();
+
+        if ($countryId) {
+            $query->where('country_id', $countryId);
+        }
+
+        return (int) $query->count();
     }
 
     private static function statusColor($name)

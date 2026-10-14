@@ -4,6 +4,7 @@ namespace App\Livewire\Clients;
 
 use App\Models\Client;
 use App\Models\ClientDocument;
+use App\Support\WorkspaceCountry;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -77,7 +78,9 @@ class ListClientDocuments extends Component
 
         $query = ClientDocument::query()
             ->with(['client:id,full_name,cnic'])
-            ->whereHas('client')
+            ->whereHas('client', function ($clientQuery) {
+                WorkspaceCountry::filterClients($clientQuery);
+            })
             ->orderByDesc('id');
 
         if ($this->filter === 'uploaded') {
@@ -141,6 +144,8 @@ class ListClientDocuments extends Component
         $clientsQuery = Client::query()
             ->with('documents')
             ->orderByDesc('id');
+
+        WorkspaceCountry::filterClients($clientsQuery);
 
         if (trim($this->search) !== '') {
             $term = '%'.trim($this->search).'%';

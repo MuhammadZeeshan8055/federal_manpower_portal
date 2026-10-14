@@ -4,6 +4,7 @@ namespace App\Livewire\Operations;
 
 use App\Models\Company;
 use App\Models\Country;
+use App\Support\WorkspaceCountry;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
@@ -31,6 +32,11 @@ class ManageCompanies extends Component
 
         if (! $user || ! $user->canManage('operations', 'companies')) {
             $this->denied = true;
+        }
+
+        $workspaceCountry = WorkspaceCountry::id();
+        if ($workspaceCountry) {
+            $this->country_id = (string) $workspaceCountry;
         }
     }
 
@@ -129,12 +135,15 @@ class ManageCompanies extends Component
 
     public function render()
     {
+        $companies = Company::query()
+            ->where('type', 'employer')
+            ->with('country')
+            ->orderBy('name');
+
+        WorkspaceCountry::filterCompanies($companies);
+
         return view('livewire.operations.manage-companies', [
-            'companies' => Company::query()
-                ->where('type', 'employer')
-                ->with('country')
-                ->orderBy('name')
-                ->get(),
+            'companies' => $companies->get(),
             'countryOptions' => Country::query()
                 ->orderByDesc('is_active')
                 ->orderBy('name')
@@ -147,6 +156,12 @@ class ManageCompanies extends Component
         $this->editingId = null;
         $this->reset('name', 'country_id');
         $this->is_active = true;
+
+        $workspaceCountry = WorkspaceCountry::id();
+        if ($workspaceCountry) {
+            $this->country_id = (string) $workspaceCountry;
+        }
+
         $this->resetValidation();
         $this->dispatch('master-form-reset');
     }

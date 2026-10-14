@@ -4,6 +4,7 @@ namespace App\Livewire\Clients;
 
 use App\Models\Client;
 use App\Support\ClientPrivateFiles;
+use App\Support\WorkspaceCountry;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -158,6 +159,8 @@ class ListClients extends Component
             ->with(['country:id,name', 'trade:id,name', 'processStatus:id,name'])
             ->withCount('documents')
             ->orderByDesc('id');
+
+        WorkspaceCountry::filterClients($query);
 
         if ($this->process_status_id !== '') {
             $query->where('process_status_id', (int) $this->process_status_id);

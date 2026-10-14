@@ -66,6 +66,7 @@ alwaysApply: true
   - Permissions: list **view** = View only; list **manage** = View + Edit + Delete
   - Documents desk (`ListClientDocuments`): Uploaded / Missing / N/A filters; View via same protected routes
   - Print BIO DATA PDF (`ClientPrintController`, DomPDF; private photo embed)
+ - Workspace country filter (`WorkspaceCountry` + header session): Clients list/docs/stats + Companies/Universities; HR & Settings global; empty = all countries
 
 ### Not done yet (Phase 1)
 - Public client portal / QR
