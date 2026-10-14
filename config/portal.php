@@ -8,6 +8,7 @@ return [
         'hr' => 'HR',
         'accounts' => 'Accounts',
         'staff' => 'Staff',
+        'client' => 'Client',
     ],
 
     /*

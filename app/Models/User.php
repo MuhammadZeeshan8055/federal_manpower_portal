@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -35,6 +36,21 @@ class User extends Authenticatable
     public function permissions(): HasMany
     {
         return $this->hasMany(UserPermission::class);
+    }
+
+    public function clientProfile(): HasOne
+    {
+        return $this->hasOne(Client::class);
+    }
+
+    public function isClient(): bool
+    {
+        return $this->role === 'client';
+    }
+
+    public function isOfficeUser(): bool
+    {
+        return ! $this->isClient();
     }
 
     public function isSuperAdmin(): bool
@@ -69,6 +85,10 @@ class User extends Authenticatable
 
     public function canView(string $module, string $feature): bool
     {
+        if ($this->isClient()) {
+            return false;
+        }
+
         if ($this->isAdmin()) {
             return true;
         }
@@ -81,6 +101,10 @@ class User extends Authenticatable
 
     public function canManage(string $module, string $feature): bool
     {
+        if ($this->isClient()) {
+            return false;
+        }
+
         if ($this->isAdmin()) {
             return true;
         }

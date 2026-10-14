@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#063d5c">
+    <meta name="theme-color" content="#f4f7f9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Application status — {{ $client->full_name }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,18 +20,6 @@
             --card: #ffffff;
             --ok: #1c9a5a;
             --off: #b04452;
-            --federal-gradient-dark:
-                linear-gradient(
-                    315deg,
-                    rgba(249, 233, 58, 0.38) 0%,
-                    rgba(249, 233, 58, 0) 32%
-                ),
-                linear-gradient(
-                    225deg,
-                    rgba(159, 204, 55, 0.46) 0%,
-                    rgba(159, 204, 55, 0) 46%
-                ),
-                linear-gradient(135deg, #063d5c, #000000);
             --safe-top: env(safe-area-inset-top, 0px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
@@ -48,8 +36,9 @@
             font-family: Manrope, system-ui, sans-serif;
             color: var(--ink);
             background:
-                linear-gradient(rgba(7, 54, 80, 0.2), rgba(7, 54, 80, 0.2)),
-                var(--federal-gradient-dark);
+                radial-gradient(ellipse 80% 50% at 50% -8%, rgba(28, 122, 180, .10), transparent 55%),
+                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(159, 204, 55, .08), transparent 50%),
+                #f4f7f9;
             background-attachment: fixed;
             display: flex;
             align-items: stretch;
@@ -85,12 +74,11 @@
             height: auto;
             max-height: 64px;
             margin: 0 auto 10px;
-            filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .25));
         }
 
         .brand-label {
             margin: 0;
-            color: rgba(255, 255, 255, .78);
+            color: var(--muted);
             font-size: 11px;
             font-weight: 700;
             letter-spacing: .14em;
@@ -99,11 +87,10 @@
 
         .sheet {
             background: var(--card);
+            border: 1px solid var(--line);
             border-radius: 24px;
             padding: 22px 18px 18px;
-            box-shadow:
-                0 24px 48px rgba(8, 12, 48, .28),
-                0 1px 0 rgba(255, 255, 255, .55) inset;
+            box-shadow: 0 12px 28px rgba(23, 50, 74, .06);
             overflow: hidden;
             position: relative;
         }
@@ -233,7 +220,7 @@
         .footer {
             margin-top: 16px;
             text-align: center;
-            color: rgba(255, 255, 255, .62);
+            color: var(--muted);
             font-size: 11px;
             font-weight: 600;
             letter-spacing: .04em;

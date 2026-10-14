@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\ClientDocumentController;
+use App\Http\Controllers\ClientPortal\HomeController as ClientPortalHomeController;
+use App\Http\Controllers\ClientPortal\LoginController as ClientPortalLoginController;
+use App\Http\Controllers\ClientPortal\RegisterController as ClientPortalRegisterController;
+use App\Livewire\ClientPortal\ApplicationForm;
 use App\Http\Controllers\ClientPrintController;
 use App\Http\Controllers\ClientStatusController;
 use App\Http\Controllers\DashboardController;
@@ -15,7 +19,22 @@ Route::get('/status/{token}', [ClientStatusController::class, 'show'])
     ->middleware('throttle:60,1')
     ->name('client.status');
 
-Route::middleware('auth')->group(function () {
+Route::prefix('portal')->name('client-portal.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/register', [ClientPortalRegisterController::class, 'create'])->name('register');
+        Route::post('/register', [ClientPortalRegisterController::class, 'store']);
+        Route::get('/login', [ClientPortalLoginController::class, 'create'])->name('login');
+        Route::post('/login', [ClientPortalLoginController::class, 'store']);
+    });
+
+    Route::middleware(['auth', 'client'])->group(function () {
+        Route::get('/', ClientPortalHomeController::class)->name('home');
+        Route::get('/application', ApplicationForm::class)->name('application');
+        Route::post('/logout', [ClientPortalLoginController::class, 'destroy'])->name('logout');
+    });
+});
+
+Route::middleware(['auth', 'office'])->group(function () {
 
     // Home
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
