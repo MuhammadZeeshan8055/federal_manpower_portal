@@ -3,8 +3,10 @@
 namespace App\Support;
 
 use App\Models\User;
+use Closure;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ClientPrivateFiles
@@ -34,18 +36,103 @@ class ClientPrivateFiles
         return config('portal.client_files.photo_mimes', ['jpg', 'jpeg', 'png']);
     }
 
+    // Read the file bytes (not the name) — jpeg | png | pdf | null
+    public static function detectKind(UploadedFile|TemporaryUploadedFile $file): ?string
+    {
+        $path = $file->getRealPath();
+
+        if (! $path || ! is_file($path)) {
+            return null;
+        }
+
+        $handle = fopen($path, 'rb');
+
+        if (! $handle) {
+            return null;
+        }
+
+        $header = fread($handle, 8);
+        fclose($handle);
+
+        if (! is_string($header) || strlen($header) < 4) {
+            return null;
+        }
+
+        if (str_starts_with($header, '%PDF')) {
+            return 'pdf';
+        }
+
+        if (str_starts_with($header, "\xFF\xD8\xFF")) {
+            return 'jpeg';
+        }
+
+        if (str_starts_with($header, "\x89PNG\r\n\x1a\n")) {
+            return 'png';
+        }
+
+        return null;
+    }
+
+    public static function matchesAllowedContent(UploadedFile|TemporaryUploadedFile $file, bool $photosOnly = false): bool
+    {
+        $kind = self::detectKind($file);
+
+        if ($kind === null) {
+            return false;
+        }
+
+        if ($photosOnly) {
+            return in_array($kind, ['jpeg', 'png'], true);
+        }
+
+        return in_array($kind, ['jpeg', 'png', 'pdf'], true);
+    }
+
+    // Laravel validation rule: reject renamed / fake file types
+    public static function contentRule(bool $photosOnly = false): Closure
+    {
+        return function (string $attribute, mixed $value, Closure $fail) use ($photosOnly) {
+            if ($value === null || $value === '') {
+                return;
+            }
+
+            if (! $value instanceof UploadedFile && ! $value instanceof TemporaryUploadedFile) {
+                return;
+            }
+
+            if (! self::matchesAllowedContent($value, $photosOnly)) {
+                $fail($photosOnly
+                    ? 'Photo must be a real JPG or PNG file.'
+                    : 'File must be a real PDF, JPG, or PNG (not renamed).');
+            }
+        };
+    }
+
+    public static function assertSafeContent(UploadedFile|TemporaryUploadedFile $file, bool $photosOnly = false): void
+    {
+        if (self::matchesAllowedContent($file, $photosOnly)) {
+            return;
+        }
+
+        throw ValidationException::withMessages([
+            'file' => $photosOnly
+                ? 'Photo must be a real JPG or PNG file.'
+                : 'File must be a real PDF, JPG, or PNG (not renamed).',
+        ]);
+    }
+
     public static function storeForClient(int $clientId, string $name, UploadedFile|TemporaryUploadedFile $file): string
     {
-        $ext = strtolower((string) ($file->getClientOriginalExtension() ?: $file->extension() ?: 'bin'));
+        $photosOnly = $name === 'photo';
+        self::assertSafeContent($file, $photosOnly);
 
-        // Compression may rewrite PNG bytes as JPEG — store with matching extension
-        $realPath = $file->getRealPath();
-        if ($realPath && is_file($realPath)) {
-            $header = (string) file_get_contents($realPath, false, null, 0, 3);
-            if ($header === "\xFF\xD8\xFF") {
-                $ext = 'jpg';
-            }
-        }
+        $kind = self::detectKind($file);
+        $ext = match ($kind) {
+            'jpeg' => 'jpg',
+            'png' => 'png',
+            'pdf' => 'pdf',
+            default => 'bin',
+        };
 
         $safeName = preg_replace('/[^a-z0-9_\-]/i', '', $name) ?: 'file';
         $directory = 'clients/'.$clientId;
@@ -57,8 +144,13 @@ class ClientPrivateFiles
      * Shrink large JPG/PNG uploads under the portal size limit (silent).
      * PDF files are left as-is.
      */
-    public static function compressTemporaryIfNeeded(TemporaryUploadedFile $file): TemporaryUploadedFile
+    public static function compressTemporaryIfNeeded(TemporaryUploadedFile $file, bool $photosOnly = false): TemporaryUploadedFile
     {
+        // Caller should validate first; this is a hard stop before rewrite
+        if (! self::matchesAllowedContent($file, $photosOnly)) {
+            return $file;
+        }
+
         $path = $file->getRealPath();
 
         if (! $path || ! is_file($path)) {
@@ -69,20 +161,21 @@ class ClientPrivateFiles
             return $file;
         }
 
-        $ext = strtolower((string) ($file->getClientOriginalExtension() ?: $file->extension() ?: ''));
+        $kind = self::detectKind($file);
 
-        if (! in_array($ext, ['jpg', 'jpeg', 'png'], true)) {
+        if (! in_array($kind, ['jpeg', 'png'], true)) {
             return $file;
         }
+
+        $ext = $kind === 'png' ? 'png' : 'jpg';
 
         if (! function_exists('imagecreatetruecolor')) {
             return $file;
         }
 
-        $source = match ($ext) {
-            'png' => @imagecreatefrompng($path),
-            default => @imagecreatefromjpeg($path),
-        };
+        $source = $ext === 'png'
+            ? @imagecreatefrompng($path)
+            : @imagecreatefromjpeg($path);
 
         if (! $source) {
             return $file;

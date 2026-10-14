@@ -25,7 +25,14 @@ class ClientBioDataForm extends Component
     public function updated($name, $value): void
     {
         if ($name === 'photo' && $value instanceof TemporaryUploadedFile) {
-            $this->photo = ClientPrivateFiles::compressTemporaryIfNeeded($value);
+            if (! ClientPrivateFiles::matchesAllowedContent($value, true)) {
+                $this->photo = null;
+                $this->addError('photo', 'Photo must be a real JPG or PNG file.');
+
+                return;
+            }
+
+            $this->photo = ClientPrivateFiles::compressTemporaryIfNeeded($value, true);
             $this->resetValidation('photo');
 
             return;
@@ -33,6 +40,14 @@ class ClientBioDataForm extends Component
 
         if (str_starts_with($name, 'doc_files.') && $value instanceof TemporaryUploadedFile) {
             $key = substr($name, strlen('doc_files.'));
+
+            if (! ClientPrivateFiles::matchesAllowedContent($value)) {
+                unset($this->doc_files[$key]);
+                $this->addError('doc_files.'.$key, 'File must be a real PDF, JPG, or PNG (not renamed).');
+
+                return;
+            }
+
             $this->doc_files[$key] = ClientPrivateFiles::compressTemporaryIfNeeded($value);
             $this->resetValidation('doc_files.'.$key);
         }
@@ -282,7 +297,7 @@ class ClientBioDataForm extends Component
             'email' => ['nullable', 'email', 'max:255'],
             'photo' => $this->photoRules(),
             'doc_files' => ['array'],
-            'doc_files.*' => ['nullable', 'file', 'max:'.$maxKb, 'mimes:'.$docMimes],
+            'doc_files.*' => ['nullable', 'file', 'max:'.$maxKb, 'mimes:'.$docMimes, ClientPrivateFiles::contentRule()],
         ], [], [
             'full_name' => 'name',
             'father_name' => "father's name",
@@ -449,7 +464,7 @@ class ClientBioDataForm extends Component
         $maxKb = ClientPrivateFiles::maxKilobytes();
         $mimes = implode(',', ClientPrivateFiles::photoMimes());
 
-        return ['nullable', 'image', 'max:'.$maxKb, 'mimes:'.$mimes];
+        return ['nullable', 'image', 'max:'.$maxKb, 'mimes:'.$mimes, ClientPrivateFiles::contentRule(true)];
     }
 
     private function resetForm(): void

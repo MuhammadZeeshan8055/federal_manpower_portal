@@ -130,7 +130,14 @@ class ApplicationForm extends Component
     public function updated($name, $value): void
     {
         if ($name === 'photo' && $value instanceof TemporaryUploadedFile) {
-            $this->photo = ClientPrivateFiles::compressTemporaryIfNeeded($value);
+            if (! ClientPrivateFiles::matchesAllowedContent($value, true)) {
+                $this->photo = null;
+                $this->addError('photo', 'Photo must be a real JPG or PNG file.');
+
+                return;
+            }
+
+            $this->photo = ClientPrivateFiles::compressTemporaryIfNeeded($value, true);
             $this->resetValidation('photo');
 
             return;
@@ -138,6 +145,14 @@ class ApplicationForm extends Component
 
         if (str_starts_with($name, 'doc_files.') && $value instanceof TemporaryUploadedFile) {
             $key = substr($name, strlen('doc_files.'));
+
+            if (! ClientPrivateFiles::matchesAllowedContent($value)) {
+                unset($this->doc_files[$key]);
+                $this->addError('doc_files.'.$key, 'File must be a real PDF, JPG, or PNG (not renamed).');
+
+                return;
+            }
+
             $this->doc_files[$key] = ClientPrivateFiles::compressTemporaryIfNeeded($value);
             $this->resetValidation('doc_files.'.$key);
         }
@@ -273,7 +288,7 @@ class ApplicationForm extends Component
             'email' => ['nullable', 'email', 'max:255'],
             'photo' => $this->photoRules(),
             'doc_files' => ['array'],
-            'doc_files.*' => ['nullable', 'file', 'max:'.$maxKb, 'mimes:'.$docMimes],
+            'doc_files.*' => ['nullable', 'file', 'max:'.$maxKb, 'mimes:'.$docMimes, ClientPrivateFiles::contentRule()],
         ], [], $this->labels());
 
         $allowedDocKeys = collect($this->documentRows())->pluck('key')->all();
@@ -509,9 +524,8 @@ class ApplicationForm extends Component
     {
         $maxKb = ClientPrivateFiles::maxKilobytes();
         $mimes = implode(',', ClientPrivateFiles::photoMimes());
-        $required = $this->clientId && filled($this->photo_path) ? 'nullable' : 'nullable';
 
-        return [$required, 'image', 'max:'.$maxKb, 'mimes:'.$mimes];
+        return ['nullable', 'image', 'max:'.$maxKb, 'mimes:'.$mimes, ClientPrivateFiles::contentRule(true)];
     }
 
     private function labels(): array

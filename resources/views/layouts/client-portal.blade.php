@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f4f7f9">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@isset($title){{ $title }}@else@yield('title', 'Client Portal')@endif — Federal Manpower</title>
+    <title>
+        @isset($title)
+            {{ $title }}
+        @else
+            @yield('title', 'Client Portal')
+        @endif
+        — Federal Manpower
+    </title>
     @livewireStyles
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
