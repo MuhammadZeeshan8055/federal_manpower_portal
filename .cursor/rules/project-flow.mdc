@@ -70,6 +70,7 @@ alwaysApply: true
  - Public status page + QR on BIO DATA (`/status/{token}`, `ClientPublicLink`; no private docs)
  - Client portal auth Step 1: `/portal` register/login/home (`role=client`, `clients.user_id`, office/client middleware)
  - Client portal Step 2: `/portal/application` fill/edit bio data + private docs (`ApplicationForm`; no process status edit)
+ - All Clients: Portal badge + Pending (no process status) + “Portal applications only” filter
 
 ### Not done yet (Phase 1)
 - Daily Visitors

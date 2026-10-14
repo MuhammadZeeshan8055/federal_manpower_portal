@@ -66,17 +66,30 @@
                 <div>
                     <p class="panel__eyebrow">CLIENTS</p>
                     <h3>
-                        @if ($statusFilterLabel !== '')
+                        @if ($sourceFilter === 'portal')
+                            Portal applications
+                        @elseif ($statusFilterLabel !== '')
                             {{ $statusFilterLabel }}
                         @else
                             All clients
                         @endif
                     </h3>
-                    @if ($statusFilterLabel !== '')
-                        <button type="button" class="text-button" wire:click="clearStatusFilter" style="margin-top:6px;">
-                            Clear status filter
-                        </button>
-                    @endif
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+                        @if ($statusFilterLabel !== '')
+                            <button type="button" class="text-button" wire:click="clearStatusFilter">
+                                Clear status filter
+                            </button>
+                        @endif
+                        @if ($sourceFilter === 'portal')
+                            <button type="button" class="text-button" wire:click="clearSourceFilter">
+                                Clear portal filter
+                            </button>
+                        @else
+                            <button type="button" class="text-button" wire:click="showPortalOnly">
+                                Portal applications only
+                            </button>
+                        @endif
+                    </div>
                 </div>
 
                 <label class="master-search">
@@ -110,7 +123,17 @@
                     <tbody>
                         @forelse ($clients as $client)
                             <tr wire:key="client-{{ $client->id }}">
-                                <td>{{ $client->full_name }}</td>
+                                <td>
+                                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                                        <span>{{ $client->full_name }}</span>
+                                        @if ($client->user_id)
+                                            <span class="status status--interview" title="Submitted via client portal">Portal</span>
+                                        @endif
+                                        @if ($client->user_id && ! $client->process_status_id)
+                                            <span class="status status--screening" title="No process status yet">Pending</span>
+                                        @endif
+                                    </div>
+                                </td>
                                 <td>{{ $client->cnic }}</td>
                                 <td>{{ $client->passport_number }}</td>
                                 <td>{{ $client->country?->name ?: '—' }}</td>

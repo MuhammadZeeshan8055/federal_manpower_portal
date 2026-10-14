@@ -3439,7 +3439,17 @@ button.module-summary__card:disabled {
 }
 .search-select {
     position: relative;
+    z-index: 1;
     width: 100%;
+}
+.search-select.is-open {
+    z-index: 40;
+}
+.bio-collapse:has(.search-select.is-open),
+.bio-form__grid:has(.search-select.is-open),
+.bio-toolbar__job:has(.search-select.is-open) {
+    position: relative;
+    z-index: 30;
 }
 .search-select--simple .search-select__button {
     min-height: 34px;
@@ -3568,9 +3578,10 @@ button.module-summary__card:disabled {
     right: 0;
     border: 1px solid var(--line);
     border-radius: 15px;
-    background: #fff;
+    background: #ffffff;
     box-shadow: 0 20px 48px rgba(23, 50, 74, 0.16);
     overflow: hidden;
+    isolation: isolate;
 }
 .search-select__search {
     position: relative;

@@ -12,6 +12,7 @@
 
 <div
     class="search-select search-select--simple"
+    :class="{ 'is-open': open }"
     wire:ignore
     x-data="{
         open: false,

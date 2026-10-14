@@ -30,6 +30,9 @@ class ListClients extends Component
 
     public string $statusFilterLabel = '';
 
+    // '' = all, 'portal' = client portal applications only
+    public string $sourceFilter = '';
+
     public string $successMessage = '';
 
     public int $toastVersion = 0;
@@ -71,6 +74,18 @@ class ListClients extends Component
     {
         $this->process_status_id = '';
         $this->statusFilterLabel = '';
+        $this->resetPage('clientsPage');
+    }
+
+    public function showPortalOnly(): void
+    {
+        $this->sourceFilter = 'portal';
+        $this->resetPage('clientsPage');
+    }
+
+    public function clearSourceFilter(): void
+    {
+        $this->sourceFilter = '';
         $this->resetPage('clientsPage');
     }
 
@@ -164,6 +179,10 @@ class ListClients extends Component
 
         if ($this->process_status_id !== '') {
             $query->where('process_status_id', (int) $this->process_status_id);
+        }
+
+        if ($this->sourceFilter === 'portal') {
+            $query->whereNotNull('user_id');
         }
 
         if (trim($this->search) !== '') {
