@@ -29,15 +29,12 @@ return [
     */
     'modules' => [
         [
-            'key' => 'clients',
-            'title' => 'Clients',
-            'description' => 'Job-seekers, documents, and case status.',
-            'icon' => 'users',
+            'key' => 'visitors',
+            'title' => 'Daily Visitors',
+            'description' => 'Office walk-in log.',
+            'icon' => 'building',
             'children' => [
-                ['key' => 'create', 'label' => 'Add Client'],
-                ['key' => 'list', 'label' => 'All Clients'],
-                ['key' => 'documents', 'label' => 'Documents'],
-                ['key' => 'import', 'label' => 'Excel Import', 'admin_only' => true],
+                ['key' => 'list', 'label' => 'Visitors'],
             ],
         ],
         [
@@ -55,23 +52,15 @@ return [
             ],
         ],
         [
-            'key' => 'visitors',
-            'title' => 'Daily Visitors',
-            'description' => 'Office walk-in log.',
-            'icon' => 'building',
+            'key' => 'clients',
+            'title' => 'Clients',
+            'description' => 'Job-seekers, documents, and case status.',
+            'icon' => 'users',
             'children' => [
-                ['key' => 'list', 'label' => 'Visitors'],
-            ],
-        ],
-        [
-            'key' => 'accounts',
-            'title' => 'Accounts',
-            'description' => 'Payment methods, payments, and reports.',
-            'icon' => 'chart',
-            'children' => [
-                ['key' => 'payments', 'label' => 'Payments'],
-                ['key' => 'payment_methods', 'label' => 'Payment Methods'],
-                ['key' => 'reports', 'label' => 'Reports'],
+                ['key' => 'create', 'label' => 'Add Client'],
+                ['key' => 'list', 'label' => 'All Clients'],
+                ['key' => 'documents', 'label' => 'Documents'],
+                ['key' => 'import', 'label' => 'Excel Import', 'admin_only' => true],
             ],
         ],
         [
@@ -86,6 +75,17 @@ return [
                 ['key' => 'salary-slips', 'label' => 'Salary Slips', 'admin_only' => true],
                 ['key' => 'office-settings', 'label' => 'Office Settings', 'admin_only' => true],
                 ['key' => 'holidays', 'label' => 'Holidays', 'admin_only' => true],
+            ],
+        ],
+        [
+            'key' => 'accounts',
+            'title' => 'Accounts',
+            'description' => 'Payment methods, payments, and reports.',
+            'icon' => 'chart',
+            'children' => [
+                ['key' => 'payments', 'label' => 'Payments'],
+                ['key' => 'payment_methods', 'label' => 'Payment Methods'],
+                ['key' => 'reports', 'label' => 'Reports'],
             ],
         ],
         [
