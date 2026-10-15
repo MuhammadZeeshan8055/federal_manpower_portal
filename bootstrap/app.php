@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'office' => \App\Http\Middleware\EnsureOfficeUser::class,
             'client' => \App\Http\Middleware\EnsureClientUser::class,
+            'attendance.started' => \App\Http\Middleware\EnsureAttendanceStarted::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

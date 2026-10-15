@@ -33,6 +33,8 @@
     </div>
 
     <div class="topbar__actions">
+        <livewire:attendance.end-shift-button />
+
         <button
             type="button"
             class="theme-toggle"

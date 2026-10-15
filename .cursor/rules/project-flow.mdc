@@ -73,9 +73,9 @@ alwaysApply: true
  - All Clients: Portal badge + Pending (no process status) + “Portal applications only” filter
  - Daily Visitors (basic): name, contact, purpose, meet with, status (waiting / in meeting / meeting done / visit complete)
  - **HR Demo A:** attendance tables/models + Office Settings (hours, IPs, grace, leave allowance) + WFH `bypass_attendance` checklist; HR can see attendance `admin_only` features
+ - **HR Demo B:** IP Start Shift gate (`/attendance/start`) + End Shift (header); empty IPs = allow, set IPs = must match; Admin + WFH bypass skip gate
 
 ### Not done yet (Phase 1)
-- HR Demo B: IP Start Shift gate + End Shift
 - HR Demo C: My Daily Attendance month view
 - HR Phase B: leave, notifications, staff attendance, holidays
 - Country-based document checklist rules

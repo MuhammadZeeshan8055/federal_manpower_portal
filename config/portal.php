@@ -76,7 +76,7 @@ return [
         ],
         [
             'key' => 'attendance',
-            'title' => 'HR & Attendance',
+            'title' => 'Attendance for Staff',
             'description' => 'Check-in, leaves, holidays, and salary slips.',
             'icon' => 'clock',
             'children' => [

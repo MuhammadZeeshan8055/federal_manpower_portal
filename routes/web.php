@@ -4,6 +4,7 @@ use App\Http\Controllers\ClientDocumentController;
 use App\Http\Controllers\ClientPortal\HomeController as ClientPortalHomeController;
 use App\Http\Controllers\ClientPortal\LoginController as ClientPortalLoginController;
 use App\Http\Controllers\ClientPortal\RegisterController as ClientPortalRegisterController;
+use App\Livewire\Attendance\StartShift;
 use App\Livewire\ClientPortal\ApplicationForm;
 use App\Http\Controllers\ClientPrintController;
 use App\Http\Controllers\ClientStatusController;
@@ -36,40 +37,46 @@ Route::prefix('portal')->name('client-portal.')->group(function () {
 
 Route::middleware(['auth', 'office'])->group(function () {
 
-    // Home
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Check-in gate (no attendance.started — otherwise loop)
+    Route::get('/attendance/start', StartShift::class)->name('attendance.start');
 
-    // Module  → /dashboard/clients
-    Route::get('/dashboard/{module}', [DashboardController::class, 'index'])
-        ->where('module', '[a-z0-9_\-]+')
-        ->name('dashboard.module');
+    Route::middleware('attendance.started')->group(function () {
 
-    // Feature → /dashboard/clients/list
-    Route::get('/dashboard/{module}/{feature}', [DashboardController::class, 'index'])
-        ->where('module', '[a-z0-9_\-]+')
-        ->where('feature', '[a-z0-9_\-]+')
-        ->name('dashboard.feature');
+        // Home
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::post('/workspace/country', [WorkspaceCountryController::class, 'update'])->name('workspace.country');
+        // Module  → /dashboard/clients
+        Route::get('/dashboard/{module}', [DashboardController::class, 'index'])
+            ->where('module', '[a-z0-9_\-]+')
+            ->name('dashboard.module');
 
-    Route::get('/clients/{client}/documents/{docKey}', [ClientDocumentController::class, 'show'])
-        ->where('docKey', '[a-z0-9_]+')
-        ->middleware('throttle:60,1')
-        ->name('clients.documents.show');
+        // Feature → /dashboard/clients/list
+        Route::get('/dashboard/{module}/{feature}', [DashboardController::class, 'index'])
+            ->where('module', '[a-z0-9_\-]+')
+            ->where('feature', '[a-z0-9_\-]+')
+            ->name('dashboard.feature');
 
-    Route::get('/clients/{client}/photo', [ClientDocumentController::class, 'photo'])
-        ->middleware('throttle:60,1')
-        ->name('clients.photo.show');
+        Route::post('/workspace/country', [WorkspaceCountryController::class, 'update'])->name('workspace.country');
 
-    Route::get('/clients/{client}/print/preview', [ClientPrintController::class, 'preview'])
-        ->name('clients.print.preview');
+        Route::get('/clients/{client}/documents/{docKey}', [ClientDocumentController::class, 'show'])
+            ->where('docKey', '[a-z0-9_]+')
+            ->middleware('throttle:60,1')
+            ->name('clients.documents.show');
 
-    Route::get('/clients/{client}/print', [ClientPrintController::class, 'print'])
-        ->name('clients.print');
+        Route::get('/clients/{client}/photo', [ClientDocumentController::class, 'photo'])
+            ->middleware('throttle:60,1')
+            ->name('clients.photo.show');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        Route::get('/clients/{client}/print/preview', [ClientPrintController::class, 'preview'])
+            ->name('clients.print.preview');
+
+        Route::get('/clients/{client}/print', [ClientPrintController::class, 'print'])
+            ->name('clients.print');
+
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
