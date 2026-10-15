@@ -5,12 +5,12 @@
 >
     @if ($showTimes)
         <div class="end-shift-times" title="Today's shift times">
-            <span class="end-shift-times__slot">
+            <span class="end-shift-times__slot end-shift-times__slot--in">
                 <small>In</small>
                 <strong>{{ $checkInLabel }}</strong>
             </span>
             <span class="end-shift-times__sep" aria-hidden="true"></span>
-            <span class="end-shift-times__slot">
+            <span class="end-shift-times__slot end-shift-times__slot--out">
                 <small>Out</small>
                 <strong>{{ $checkOutLabel }}</strong>
             </span>

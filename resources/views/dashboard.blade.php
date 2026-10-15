@@ -12,7 +12,9 @@
         <div class="hero-card__content">
             <p class="eyebrow"><span></span> FEDERAL MANPOWER OPERATIONS CENTER</p>
             <h2>Welcome back, {{ auth()->user()->name }}</h2>
-            <!-- <p>Open a module below to manage clients, care offs, accounts, attendance, and more.</p> -->
+        </div>
+        <div class="hero-card__workday">
+            <livewire:attendance.workday-card />
         </div>
     </section>
 
@@ -117,9 +119,17 @@
         <livewire:attendance.office-settings />
     </div>
 
+    <div x-show="moduleKey === 'attendance' && featureKey === 'my-daily-attendance'">
+        <livewire:attendance.my-daily-attendance />
+    </div>
+
+    <div x-show="moduleKey === 'attendance' && featureKey === 'staff-daily-attendance'">
+        <livewire:attendance.staff-daily-attendance />
+    </div>
+
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && featureKey === 'list') && !(moduleKey === 'attendance' && featureKey === 'office-settings')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && featureKey === 'list') && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'staff-daily-attendance'].includes(featureKey))"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

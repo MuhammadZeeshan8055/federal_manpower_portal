@@ -4707,6 +4707,228 @@ button.module-summary__card:disabled {
     margin-top: 14px;
     text-align: center;
 }
+.hero-card__workday {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    margin-left: 20px;
+}
+.workday-card {
+    padding: 22px 22px 20px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(7, 54, 80, 0.35);
+    box-shadow: var(--shadow);
+    color: #fff;
+    backdrop-filter: blur(10px);
+}
+.workday-card--small {
+    width: 268px;
+    max-width: 100%;
+    padding: 16px 16px 14px;
+    border-radius: 17px;
+}
+.workday-card__eyebrow {
+    margin: 0 0 4px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--yellow);
+}
+.workday-card__date {
+    margin: 0 0 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #fff;
+}
+.workday-card--small .workday-card__date {
+    font-size: 0.88rem;
+}
+.workday-card__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+.workday-card__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.82rem;
+}
+.workday-card__row strong {
+    color: #fff;
+    font-weight: 700;
+}
+.workday-card__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 40px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--yellow);
+    color: #17324a;
+    font-weight: 800;
+    font-size: 0.88rem;
+    text-decoration: none;
+    box-shadow: 0 8px 18px rgba(249, 233, 58, 0.28);
+    cursor: pointer;
+}
+.workday-card__btn:hover {
+    filter: brightness(1.04);
+}
+.workday-card__badge {
+    padding: 9px 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #fff;
+}
+.workday-card__badge--done {
+    background: rgba(159, 204, 55, 0.22);
+    border-color: rgba(159, 204, 55, 0.45);
+    color: var(--green);
+}
+.workday-card__msg {
+    margin: 0 0 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.workday-card__msg--ok {
+    background: rgba(159, 204, 55, 0.2);
+    color: var(--green);
+}
+.workday-card__msg--error {
+    background: rgba(201, 72, 61, 0.25);
+    color: #ffd4cf;
+}
+[data-theme="dark"] .workday-card {
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(0, 0, 0, 0.45);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+[data-theme="dark"] .workday-card__btn {
+    color: #17324a;
+    background: var(--yellow);
+    box-shadow: 0 8px 20px rgba(249, 233, 58, 0.35);
+}
+[data-theme="dark"] .workday-card__badge--done {
+    color: #c5e86a;
+}
+@media (max-width: 980px) {
+    .hero-card {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 18px;
+    }
+    .hero-card__workday {
+        margin-left: 0;
+        width: 100%;
+    }
+    .hero-card__workday .workday-card--small {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+.staff-att-picker {
+    margin-bottom: 16px;
+}
+.staff-att-selected {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+.staff-att-empty {
+    margin: 12px;
+}
+.attendance-month-head {
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.attendance-month-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.attendance-row--today td {
+    background: rgba(28, 122, 180, 0.06);
+}
+.att-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.att-badge--late {
+    color: #9a3412;
+    background: #ffedd5;
+}
+.att-badge--early {
+    color: #9a3412;
+    background: #ffedd5;
+}
+.att-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.att-status--ok {
+    color: #166534;
+    background: #dcfce7;
+}
+.att-status--running {
+    color: #1d4ed8;
+    background: #dbeafe;
+}
+.att-status--short,
+.att-status--absent {
+    color: #9a3412;
+    background: #ffedd5;
+}
+.att-status--holiday,
+.att-status--off {
+    color: #6b7280;
+    background: #f3f4f6;
+}
+.att-status--exempt {
+    color: #0b4f79;
+    background: #e0f2fe;
+}
+.att-status--muted {
+    color: #92a0aa;
+    background: transparent;
+    padding-left: 0;
+}
+[data-theme="dark"] .attendance-row--today td {
+    background: rgba(28, 122, 180, 0.14);
+}
+[data-theme="dark"] .att-status--off,
+[data-theme="dark"] .att-status--holiday {
+    background: #243442;
+    color: #afbfcb;
+}
+
 .end-shift-wrap {
     display: inline-flex;
     align-items: center;
@@ -4718,37 +4940,58 @@ button.module-summary__card:disabled {
     align-items: stretch;
     gap: 0;
     min-height: 44px;
-    padding: 4px;
+    padding: 0;
+    margin: 0;
     border-radius: 14px;
-    border: 1px solid #b7d7ea;
-    background: linear-gradient(180deg, #f3faff 0%, #e7f3fb 100%);
-    box-shadow: 0 6px 16px rgba(11, 79, 121, 0.12);
+    border: 1px solid var(--line);
+    background: transparent;
+    box-shadow: var(--shadow);
     white-space: nowrap;
+    overflow: hidden;
 }
 .end-shift-times__slot {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1px;
-    padding: 4px 14px;
+    padding: 8px 14px;
+    margin: 0;
     line-height: 1.15;
+}
+.end-shift-times__slot--in {
+    background: rgba(159, 204, 55, 0.18);
+}
+.end-shift-times__slot--out {
+    background: rgba(201, 72, 61, 0.14);
 }
 .end-shift-times__slot small {
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--blue);
+}
+.end-shift-times__slot--in small {
+    color: #6a9420;
+}
+.end-shift-times__slot--in strong {
+    color: #4f7314;
+}
+.end-shift-times__slot--out small {
+    color: #c9483d;
+}
+.end-shift-times__slot--out strong {
+    color: #9f342b;
 }
 .end-shift-times__slot strong {
     font-size: 0.95rem;
     font-weight: 700;
-    color: var(--blue-deep);
 }
 .end-shift-times__sep {
     width: 1px;
-    margin: 6px 0;
-    background: #b7d7ea;
+    margin: 0;
+    align-self: stretch;
+    background: var(--line);
+    flex: 0 0 1px;
 }
 .end-shift-btn {
     height: 44px !important;
@@ -4776,18 +5019,26 @@ button.module-summary__card:disabled {
     color: #b42318;
 }
 [data-theme="dark"] .end-shift-times {
-    border-color: rgba(88, 168, 214, 0.35);
-    background: linear-gradient(180deg, rgba(28, 122, 180, 0.22) 0%, rgba(11, 79, 121, 0.28) 100%);
+    border-color: var(--line);
+    background: var(--surface, #152532);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
-[data-theme="dark"] .end-shift-times__slot small {
-    color: #8ec8e8;
+[data-theme="dark"] .end-shift-times__slot--in {
+    background: rgba(159, 204, 55, 0.16);
 }
-[data-theme="dark"] .end-shift-times__slot strong {
-    color: #f2f7fb;
+[data-theme="dark"] .end-shift-times__slot--out {
+    background: rgba(201, 72, 61, 0.16);
+}
+[data-theme="dark"] .end-shift-times__slot--in small,
+[data-theme="dark"] .end-shift-times__slot--in strong {
+    color: var(--green);
+}
+[data-theme="dark"] .end-shift-times__slot--out small,
+[data-theme="dark"] .end-shift-times__slot--out strong {
+    color: #f29a91;
 }
 [data-theme="dark"] .end-shift-times__sep {
-    background: rgba(88, 168, 214, 0.35);
+    background: var(--line);
 }
 
 @media (prefers-reduced-motion: reduce) {

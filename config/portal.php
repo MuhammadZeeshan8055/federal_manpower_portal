@@ -77,11 +77,10 @@ return [
         [
             'key' => 'attendance',
             'title' => 'Attendance for Staff',
-            'description' => 'Check-in, leaves, holidays, and salary slips.',
+            'description' => 'Check-in, attendance, holidays, and office settings.',
             'icon' => 'clock',
             'children' => [
                 ['key' => 'my-daily-attendance', 'label' => 'My Daily Attendance'],
-                ['key' => 'apply-leave', 'label' => 'Apply Leave'],
                 ['key' => 'staff-daily-attendance', 'label' => 'Staff Attendance', 'admin_only' => true],
                 ['key' => 'leave-approvals', 'label' => 'Leave Approvals', 'admin_only' => true],
                 ['key' => 'salary-slips', 'label' => 'Salary Slips', 'admin_only' => true],
