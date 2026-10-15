@@ -73,19 +73,19 @@
                     this.applyTheme(this.darkMode ? 'dark' : 'light', false);
                     this.loadSidebarCollapsed();
 
-                    // Open whatever the server URL said (or home)
-                    this.show(this.startModule, this.startFeature, false);
-                    this.readStatusFromUrl();
+                    // Dashboard SPA only — profile page keeps its own URL
+                    if (document.querySelector('.dashboard-view')) {
+                        this.show(this.startModule, this.startFeature, false);
+                        this.readStatusFromUrl();
 
-                    // Browser back / forward
-                    window.addEventListener('popstate', function () {
-                        self.showFromBrowserUrl();
-                    });
+                        window.addEventListener('popstate', function () {
+                            self.showFromBrowserUrl();
+                        });
 
-                    // When Livewire is ready, load count cards
-                    document.addEventListener('livewire:initialized', function () {
-                        self.refreshStats();
-                    });
+                        document.addEventListener('livewire:initialized', function () {
+                            self.refreshStats();
+                        });
+                    }
                 },
 
                 // -------------------------------------------------
@@ -98,12 +98,26 @@
                     var module;
                     var i;
                     var feature;
+                    var path;
 
                     moduleKey = moduleKey || '';
                     featureKey = featureKey || '';
 
                     if (changeUrl === undefined) {
                         changeUrl = true;
+                    }
+
+                    // Profile (and other non-dashboard pages): full load into SPA
+                    if (! document.querySelector('.dashboard-view')) {
+                        path = '/dashboard';
+                        if (moduleKey) {
+                            path = path + '/' + moduleKey;
+                            if (featureKey) {
+                                path = path + '/' + featureKey;
+                            }
+                        }
+                        window.location.href = path;
+                        return;
                     }
 
                     // HOME
@@ -337,6 +351,10 @@
                 },
 
                 pageTitle() {
+                    if (window.location.pathname.indexOf('/profile') === 0) {
+                        return 'My profile';
+                    }
+
                     if (this.screen === 'feature') {
                         return this.featureTitle;
                     }

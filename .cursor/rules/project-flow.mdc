@@ -77,6 +77,7 @@ alwaysApply: true
  - **HR Demo C:** My Daily Attendance — today workday card + month table (Late / Running / Hours met / Short / Holiday / Sunday / Exempt WFH)
  - **Staff Attendance:** Admin/HR pick staff + same month table
  - **Manage Users:** Admin CRUD + DIG-style feature access (module check + View/Manage); WFH exempt flag
+ - Profile page restyled to portal shell (info / password / delete)
 
 ### Not done yet (Phase 1)
 - HR Phase B: leave, notifications, holidays

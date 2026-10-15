@@ -5041,6 +5041,117 @@ button.module-summary__card:disabled {
     background: var(--line);
 }
 
+.profile-page {
+    max-width: 720px;
+}
+.profile-page__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.profile-card {
+    padding: 20px 22px;
+}
+.profile-card__head {
+    margin-bottom: 16px;
+}
+.profile-card__head h3 {
+    margin: 4px 0 6px;
+    font-size: 1.15rem;
+    color: var(--ink);
+}
+.profile-card__head .muted {
+    margin: 0;
+    font-size: 0.85rem;
+}
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 420px;
+}
+.profile-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+.profile-form input {
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-weight: 500;
+}
+.profile-form input:focus {
+    outline: none;
+    border-color: rgba(28, 122, 180, 0.45);
+    box-shadow: 0 0 0 3px rgba(28, 122, 180, 0.08);
+}
+.profile-form__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+}
+.profile-form__ok {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #1c9a5a;
+}
+.profile-form__note {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+}
+.profile-card--danger {
+    border-color: rgba(201, 72, 61, 0.28);
+}
+.profile-delete-btn {
+    color: #fff !important;
+    background: #c9483d !important;
+    border-color: #c9483d !important;
+}
+.profile-delete-btn:hover {
+    filter: brightness(0.95);
+}
+.profile-delete-form {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.profile-delete-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: left;
+}
+.profile-delete-form input {
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+}
+[data-theme="dark"] .profile-form input,
+[data-theme="dark"] .profile-delete-form input {
+    background: var(--surface-soft);
+    border-color: var(--line);
+    color: var(--ink);
+}
+
 .users-toolbar {
     padding: 0 16px 12px;
 }
