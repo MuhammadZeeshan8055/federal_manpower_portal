@@ -113,9 +113,13 @@
         <livewire:visitors.manage-visitors />
     </div>
 
+    <div x-show="moduleKey === 'attendance' && featureKey === 'office-settings'">
+        <livewire:attendance.office-settings />
+    </div>
+
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && featureKey === 'list')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && featureKey === 'list') && !(moduleKey === 'attendance' && featureKey === 'office-settings')"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

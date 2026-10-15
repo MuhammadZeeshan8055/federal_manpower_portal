@@ -107,7 +107,7 @@ class ModuleStats
             'staff-daily-attendance' => 'attendance_records',
             'leave-approvals' => 'leave_requests',
             'salary-slips' => 'salary_slips',
-            'office-settings' => 'office_settings',
+            'office-settings' => 'attendance_settings',
             'holidays' => 'holidays',
         ];
 

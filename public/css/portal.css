@@ -3412,6 +3412,7 @@ button.module-summary__card:disabled {
 .master-form input[type="email"],
 .master-form input[type="tel"],
 .master-form input[type="number"],
+.master-form input[type="time"],
 .master-form select {
     width: 100%;
     min-height: 42px;
@@ -3931,6 +3932,16 @@ button.module-summary__card:disabled {
     align-items: center;
     gap: 10px !important;
     grid-column: 1 / -1;
+}
+.office-exempt-list {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.office-exempt-list .master-check {
+    grid-column: auto;
 }
 .master-form__actions {
     grid-column: 1 / -1;

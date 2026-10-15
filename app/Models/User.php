@@ -18,6 +18,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'bypass_attendance',
     ];
 
     protected $hidden = [
@@ -30,6 +31,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'bypass_attendance' => 'boolean',
         ];
     }
 
@@ -66,6 +68,12 @@ class User extends Authenticatable
     public function isHr(): bool
     {
         return $this->role === 'hr';
+    }
+
+    // WFH / remote — skip IP check-in gate
+    public function bypassesAttendance(): bool
+    {
+        return (bool) $this->bypass_attendance;
     }
 
     public function isAccounts(): bool

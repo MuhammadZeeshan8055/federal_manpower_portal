@@ -94,6 +94,7 @@ class DatabaseSeeder extends Seeder
             ['attendance', 'staff-daily-attendance', 'manage'],
             ['attendance', 'leave-approvals', 'manage'],
             ['attendance', 'salary-slips', 'manage'],
+            ['attendance', 'office-settings', 'manage'],
             ['attendance', 'holidays', 'manage'],
         ]);
 

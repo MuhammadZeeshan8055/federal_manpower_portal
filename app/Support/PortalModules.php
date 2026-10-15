@@ -60,12 +60,15 @@ class PortalModules
             return $module;
         }
 
-        // Staff: only features they can view
+        // Staff / HR: only features they can view
         $allowedFeatures = [];
 
         foreach ($module['children'] ?? [] as $feature) {
+            // admin_only: skip for normal staff; HR may see attendance ones
             if (! empty($feature['admin_only'])) {
-                continue;
+                if ($moduleKey !== 'attendance' || ! $user->isHr()) {
+                    continue;
+                }
             }
 
             if ($user->canView($moduleKey, $feature['key'])) {
