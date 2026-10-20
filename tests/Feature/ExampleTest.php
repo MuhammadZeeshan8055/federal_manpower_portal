@@ -16,7 +16,9 @@ class ExampleTest extends TestCase
 
         $response->assertOk()
             ->assertSee('Your next chapter starts')
-            ->assertSee('Latest Overseas Vacancies');
+            ->assertSee('Latest Overseas Vacancies')
+            ->assertSee('Meet our team of professionals')
+            ->assertSee('Candidate Success Manager');
     }
 
     public function test_the_login_design_renders_successfully(): void
@@ -42,5 +44,20 @@ class ExampleTest extends TestCase
         foreach ($pages as $url => $text) {
             $this->get($url)->assertOk()->assertSee($text);
         }
+    }
+
+    public function test_the_applicant_authentication_pages_render_successfully(): void
+    {
+        $this->get('/portal/login')
+            ->assertOk()
+            ->assertSee('Welcome back to your journey.')
+            ->assertSee('Sign in to your account')
+            ->assertSee('Register as employer');
+
+        $this->get('/portal/register')
+            ->assertOk()
+            ->assertSee('Build a profile that opens doors.')
+            ->assertSee('Create applicant account')
+            ->assertSee('Register as employer');
     }
 }

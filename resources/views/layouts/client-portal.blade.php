@@ -16,7 +16,7 @@
     @livewireStyles
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <style>
         :root {
             --navy: #0b4f79;
@@ -468,11 +468,259 @@
             from { transform: scaleX(1); }
             to { transform: scaleX(0); }
         }
+
+        .cp-shell--auth {
+            width: 100%;
+            max-width: none;
+            padding: 0;
+            font-family: "Plus Jakarta Sans", Manrope, sans-serif;
+        }
+
+        .cp-shell--auth .cp-footer {
+            margin: 0;
+            padding: 15px 24px;
+            color: #7890a0;
+            background: #f5f9fb;
+            border-top: 1px solid #e1ebf0;
+        }
+
+        .cp-auth {
+            min-height: calc(100dvh - 44px);
+            display: grid;
+            grid-template-columns: minmax(0, 1.08fr) minmax(500px, .92fr);
+            background: #f7fafc;
+        }
+
+        .cp-auth__visual {
+            position: relative;
+            min-height: 720px;
+            padding: 48px clamp(36px, 5vw, 82px);
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            color: white;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .cp-auth__visual::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(3,39,62,.12), rgba(3,39,62,.28) 45%, rgba(3,39,62,.96) 100%), linear-gradient(90deg, rgba(3,39,62,.34), transparent 68%);
+        }
+
+        .cp-auth__home {
+            position: absolute;
+            z-index: 2;
+            top: 38px;
+            left: clamp(36px, 5vw, 82px);
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .cp-auth__home span { font-size: 18px; }
+
+        .cp-auth__visual-copy {
+            position: relative;
+            z-index: 1;
+            max-width: 660px;
+            padding-bottom: 48px;
+        }
+
+        .cp-auth__eyebrow {
+            display: block;
+            margin-bottom: 15px;
+            color: #dff46b;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .cp-auth__visual h1 {
+            max-width: 610px;
+            margin: 0;
+            font-size: clamp(2.8rem, 4vw, 4.8rem);
+            line-height: 1.04;
+            letter-spacing: -.055em;
+        }
+
+        .cp-auth__visual-copy > p {
+            max-width: 570px;
+            margin: 22px 0 0;
+            color: rgba(255,255,255,.76);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .cp-auth__benefits {
+            margin: 28px 0 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            list-style: none;
+        }
+
+        .cp-auth__benefits li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,.86);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .cp-auth__benefits li::before {
+            content: "✓";
+            width: 19px;
+            height: 19px;
+            display: grid;
+            place-items: center;
+            color: white;
+            background: #159563;
+            border-radius: 50%;
+            font-size: 11px;
+        }
+
+        .cp-auth__panel {
+            padding: 54px clamp(36px, 5vw, 84px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .cp-auth__form-wrap { width: min(100%, 500px); }
+
+        .cp-auth__brand {
+            margin-bottom: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .cp-auth__brand img { width: 185px; height: auto; }
+
+        .cp-auth__brand span {
+            padding: 7px 11px;
+            color: #087fc2;
+            background: #eaf7fc;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .cp-auth__form-head { margin-bottom: 28px; }
+        .cp-auth__form-head .cp-auth__eyebrow { margin-bottom: 10px; color: #0885c7; }
+
+        .cp-auth__form-head h2 {
+            margin: 0;
+            color: #052b46;
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            line-height: 1.1;
+            letter-spacing: -.045em;
+        }
+
+        .cp-auth__form-head p {
+            margin: 12px 0 0;
+            color: #637b8d;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .cp-auth .cp-field { gap: 7px; margin-bottom: 17px; }
+        .cp-auth .cp-field label { color: #36566c; font-size: 10px; letter-spacing: .08em; }
+
+        .cp-auth .cp-field input {
+            min-height: 54px;
+            padding: 13px 15px;
+            color: #15354d;
+            background: #f8fbfd;
+            border: 1px solid #d8e6ee;
+            border-radius: 9px;
+            transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .cp-auth .cp-field input:focus {
+            outline: 0;
+            background: white;
+            border-color: #0885c7;
+            box-shadow: 0 0 0 4px rgba(8,133,199,.1);
+        }
+
+        .cp-auth .cp-check { margin: 2px 0 20px; font-size: 12px; }
+        .cp-auth .cp-check input { width: 16px; height: 16px; accent-color: #159563; }
+
+        .cp-auth .cp-btn {
+            min-height: 54px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0787ca 0%, #24a46d 62%, #78bd3d 100%);
+            box-shadow: 0 12px 25px rgba(20,126,125,.2);
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .cp-auth .cp-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 30px rgba(20,126,125,.27); }
+        .cp-auth .cp-switch { margin-top: 22px; font-size: 12px; }
+        .cp-auth .cp-switch a { color: #0885c7; }
+        .cp-auth__employer {
+            margin-top: 20px;
+            padding: 15px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            color: #36566c;
+            background: linear-gradient(135deg, #f0f8fb, #f2f9ee);
+            border: 1px solid #d8e8e9;
+            border-radius: 10px;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+        .cp-auth__employer strong { display: block; margin-bottom: 2px; color: #052b46; font-size: 12px; }
+        .cp-auth__employer a { flex: 0 0 auto; color: #087fc2; font-weight: 800; text-decoration: none; white-space: nowrap; }
+        .cp-auth__employer a:hover { color: #159563; }
+        .cp-auth__secure { margin: 24px 0 0; color: #8094a2; text-align: center; font-size: 10px; line-height: 1.6; }
+
+        @media (max-width: 960px) {
+            .cp-auth { grid-template-columns: 1fr; }
+            .cp-auth__visual { min-height: 370px; padding: 34px 34px; }
+            .cp-auth__home { top: 28px; left: 34px; }
+            .cp-auth__visual-copy { padding-bottom: 5px; }
+            .cp-auth__visual h1 { max-width: 570px; font-size: 3.2rem; }
+            .cp-auth__panel { padding: 48px 30px 58px; }
+        }
+
+        @media (max-width: 600px) {
+            .cp-auth__visual { min-height: 300px; padding: 28px 22px; background-position: 68% center; }
+            .cp-auth__home { top: 22px; left: 22px; }
+            .cp-auth__visual-copy { padding-top: 60px; }
+            .cp-auth__visual h1 { font-size: 2.35rem; }
+            .cp-auth__visual-copy > p { margin-top: 14px; font-size: 12px; }
+            .cp-auth__benefits { margin-top: 18px; gap: 8px 14px; }
+            .cp-auth__benefits li { font-size: 9px; }
+            .cp-auth__panel { padding: 34px 20px 46px; align-items: flex-start; }
+            .cp-auth__brand { margin-bottom: 28px; }
+            .cp-auth__brand img { width: 155px; }
+            .cp-auth__brand span { font-size: 7px; }
+            .cp-auth__form-head h2 { font-size: 2rem; }
+            .cp-auth .cp-field input { min-height: 50px; }
+            .cp-auth__employer { align-items: flex-start; flex-direction: column; gap: 8px; }
+        }
     </style>
     @stack('head')
 </head>
 <body>
-    <div class="cp-shell">
+    <div class="cp-shell @yield('shell-class')">
         @isset($slot)
             {{ $slot }}
         @else

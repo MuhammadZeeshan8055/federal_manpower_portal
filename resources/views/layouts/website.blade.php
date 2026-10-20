@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Find verified overseas employment opportunities and apply online with Federal Manpower.">
     <title>@yield('title', 'Home') &mdash; Federal Manpower</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
@@ -117,6 +118,7 @@
             '.info-card',
             '.service-detail',
             '.contact-card',
+            '.team-card',
             '.split-content > *'
         ].join(','))];
         const counters = [...document.querySelectorAll('[data-count]')];

@@ -220,6 +220,39 @@
     </div>
 </section>
 
+<section class="agency-section team-section" aria-labelledby="team-title">
+    <div class="site-wrap">
+        <div class="section-heading section-heading--center">
+            <span class="section-kicker">Our Team</span>
+            <h2 id="team-title">Meet our team of professionals</h2>
+            <p>Experienced people working together to guide candidates and employers through every stage of overseas recruitment.</p>
+        </div>
+        @php
+            $teamMembers = [
+                ['team-director.webp', 'Recruitment Director', 'Leading responsible recruitment strategies and international workforce partnerships.'],
+                ['team-talent-lead.webp', 'Talent Acquisition Lead', 'Connecting skilled professionals with roles that match their experience and ambitions.'],
+                ['team-employer-relations.webp', 'Employer Relations Manager', 'Building trusted relationships and translating workforce needs into clear hiring plans.'],
+                ['team-candidate-success.webp', 'Candidate Success Manager', 'Supporting candidates with clear guidance from registration through deployment.'],
+            ];
+        @endphp
+        <div class="team-grid">
+            @foreach ($teamMembers as [$image, $role, $description])
+                <article class="team-card">
+                    <div class="team-card__photo">
+                        <img src="{{ asset('images/website/' . $image) }}" alt="{{ $role }}" width="900" height="1125" loading="lazy">
+                        <span aria-hidden="true">0{{ $loop->iteration }}</span>
+                    </div>
+                    <div class="team-card__content">
+                        <span>Federal Manpower</span>
+                        <h3>{{ $role }}</h3>
+                        <p>{{ $description }}</p>
+                    </div>
+                </article>
+            @endforeach
+        </div>
+    </div>
+</section>
+
 <section class="employer-cta" id="employers">
     <div class="site-wrap employer-cta__inner"><div><span class="section-kicker">For overseas employers</span><h2>Build the workforce your business needs.</h2><p>Share your manpower requirements with our recruitment team and connect with suitable skilled candidates.</p></div><a href="#contact" class="btn btn-light">Discuss Your Requirements <span>&rarr;</span></a></div>
 </section>
