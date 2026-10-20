@@ -10,10 +10,17 @@ use App\Http\Controllers\ClientPrintController;
 use App\Http\Controllers\ClientStatusController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkspaceCountryController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login');
+Route::get('/', [WebsiteController::class, 'home'])->name('website.home');
+Route::get('/about-us', [WebsiteController::class, 'about'])->name('website.about');
+Route::get('/contact-us', [WebsiteController::class, 'contact'])->name('website.contact');
+Route::get('/jobs', [WebsiteController::class, 'jobs'])->name('website.jobs');
+Route::get('/countries', [WebsiteController::class, 'countries'])->name('website.countries');
+Route::get('/services', [WebsiteController::class, 'services'])->name('website.services');
+Route::get('/employers', [WebsiteController::class, 'employers'])->name('website.employers');
 
 Route::get('/status/{token}', [ClientStatusController::class, 'show'])
     ->where('token', '[A-Za-z0-9]{32,64}')

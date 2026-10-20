@@ -1,0 +1,8 @@
+@extends('layouts.website')
+
+@section('title', 'Contact Us')
+
+@section('content')
+<section class="page-hero"><div class="site-wrap page-hero__inner"><span class="section-kicker">Contact us</span><h1>Let’s talk about your next step.</h1><p>Contact our team for candidate support, overseas vacancies or employer recruitment requirements.</p></div></section>
+<section class="page-section"><div class="site-wrap contact-layout"><div class="contact-details"><span class="section-kicker">Get in touch</span><h2>We’re here to help</h2><p>Reach us during office hours or send an enquiry and our team will respond as soon as possible.</p><a href="tel:+923004340666" class="contact-card"><strong>Call us</strong><span>+92 300 434 0666</span></a><a href="mailto:info@federalmanpower.com" class="contact-card"><strong>Email us</strong><span>info@federalmanpower.com</span></a><div class="contact-card"><strong>Visit our office</strong><span>Office No. 12, Blue Area, Islamabad, Pakistan</span></div></div><form class="contact-form" action="mailto:info@federalmanpower.com" method="post" enctype="text/plain"><h2>Send an enquiry</h2><div class="form-row"><label>Full name<input type="text" name="name" required></label><label>Email address<input type="email" name="email" required></label></div><div class="form-row"><label>Phone number<input type="tel" name="phone"></label><label>Enquiry type<select name="type"><option>Candidate support</option><option>Employer recruitment</option><option>General enquiry</option></select></label></div><label>Message<textarea name="message" rows="6" required></textarea></label><button class="btn btn-accent" type="submit">Send enquiry <span>&rarr;</span></button></form></div></section>
+@endsection

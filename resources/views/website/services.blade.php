@@ -1,0 +1,9 @@
+@extends('layouts.website')
+
+@section('title', 'Our Services')
+
+@section('content')
+<section class="page-hero"><div class="site-wrap page-hero__inner"><span class="section-kicker">Our services</span><h1>Support throughout the recruitment journey.</h1><p>Our service information is outlined below and can be updated as your final service offering is confirmed.</p></div></section>
+<section class="page-section"><div class="site-wrap"><div class="services-page-grid"><article class="service-detail"><span>01</span><h2>Candidate Registration</h2><p>We help candidates create a complete profile with their skills, experience and preferred opportunities.</p></article><article class="service-detail"><span>02</span><h2>Job Matching</h2><p>Candidate profiles are reviewed against employer requirements to identify suitable roles and destinations.</p></article><article class="service-detail"><span>03</span><h2>Document Guidance</h2><p>Our team provides clear information about the documents required during the recruitment process.</p></article><article class="service-detail"><span>04</span><h2>Interview Coordination</h2><p>We coordinate candidate screening and interviews based on employer selection requirements.</p></article><article class="service-detail"><span>05</span><h2>Pre-Departure Support</h2><p>Candidates receive practical guidance to help them prepare for travel and their overseas assignment.</p></article><article class="service-detail"><span>06</span><h2>Employer Recruitment</h2><p>We support employers with sourcing, screening and coordinating suitable manpower for genuine vacancies.</p></article></div></div></section>
+<section class="page-cta"><div class="site-wrap page-cta__inner"><div><span class="section-kicker">Need more information?</span><h2>Speak with our recruitment team.</h2></div><a href="{{ route('website.contact') }}" class="btn btn-accent">Contact us <span>&rarr;</span></a></div></section>
+@endsection
