@@ -30,10 +30,6 @@ class OfficeSettings extends Component
 
     public string $office_ip_3 = '';
 
-    public int $monthly_full_days = 1;
-
-    public int $monthly_half_days = 2;
-
     // User ids marked WFH / attendance exempt
     public array $exemptUserIds = [];
 
@@ -73,8 +69,6 @@ class OfficeSettings extends Component
             'office_ip_1' => ['nullable', 'string', 'max:45'],
             'office_ip_2' => ['nullable', 'string', 'max:45'],
             'office_ip_3' => ['nullable', 'string', 'max:45'],
-            'monthly_full_days' => ['required', 'integer', 'min:0', 'max:31'],
-            'monthly_half_days' => ['required', 'integer', 'min:0', 'max:31'],
             'exemptUserIds' => ['array'],
             'exemptUserIds.*' => ['integer'],
         ]);
@@ -91,8 +85,6 @@ class OfficeSettings extends Component
         $row->office_ip_1 = $this->cleanIp($this->office_ip_1);
         $row->office_ip_2 = $this->cleanIp($this->office_ip_2);
         $row->office_ip_3 = $this->cleanIp($this->office_ip_3);
-        $row->monthly_full_days = $this->monthly_full_days;
-        $row->monthly_half_days = $this->monthly_half_days;
         $row->save();
 
         $this->saveExemptUsers();
@@ -132,8 +124,6 @@ class OfficeSettings extends Component
         $this->office_ip_1 = (string) ($row->office_ip_1 ?? '');
         $this->office_ip_2 = (string) ($row->office_ip_2 ?? '');
         $this->office_ip_3 = (string) ($row->office_ip_3 ?? '');
-        $this->monthly_full_days = (int) $row->monthly_full_days;
-        $this->monthly_half_days = (int) $row->monthly_half_days;
 
         $this->exemptUserIds = [];
 

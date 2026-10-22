@@ -3,6 +3,10 @@
     x-data="{ confirmOpen: false }"
     @keydown.escape.window="if (confirmOpen) confirmOpen = false"
 >
+    @if ($onLeave)
+        <span class="end-shift-on-leave" title="Approved leave today">On leave</span>
+    @endif
+
     @if ($showTimes)
         <div class="end-shift-times" title="Today's shift times">
             <span class="end-shift-times__slot end-shift-times__slot--in">

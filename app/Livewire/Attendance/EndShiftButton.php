@@ -3,6 +3,7 @@
 namespace App\Livewire\Attendance;
 
 use App\Support\AttendancePunch;
+use App\Support\StaffLeave;
 use Livewire\Component;
 
 class EndShiftButton extends Component
@@ -44,19 +45,25 @@ class EndShiftButton extends Component
         $checkInLabel = '—';
         $checkOutLabel = '—';
 
+        $onLeave = false;
+
         if ($user && ! $user->isAdmin() && ! $user->bypassesAttendance()) {
-            $row = AttendancePunch::todayRecord($user);
+            $onLeave = StaffLeave::hasApprovedLeaveOn($user);
 
-            if ($row && $row->check_in_at) {
-                $showTimes = true;
-                $checkInLabel = $row->check_in_at->format('h:i A');
+            if (! $onLeave) {
+                $row = AttendancePunch::todayRecord($user);
 
-                if ($row->check_out_at) {
-                    $checkOutLabel = $row->check_out_at->format('h:i A');
+                if ($row && $row->check_in_at) {
+                    $showTimes = true;
+                    $checkInLabel = $row->check_in_at->format('h:i A');
+
+                    if ($row->check_out_at) {
+                        $checkOutLabel = $row->check_out_at->format('h:i A');
+                    }
                 }
-            }
 
-            $showButton = AttendancePunch::shiftIsOpen($user);
+                $showButton = AttendancePunch::shiftIsOpen($user);
+            }
         }
 
         return view('livewire.attendance.end-shift-button', [
@@ -64,6 +71,7 @@ class EndShiftButton extends Component
             'showTimes' => $showTimes,
             'checkInLabel' => $checkInLabel,
             'checkOutLabel' => $checkOutLabel,
+            'onLeave' => $onLeave,
         ]);
     }
 }

@@ -126,6 +126,10 @@ class ModuleStats
                     $count = self::companyCount('university');
                 } elseif ($featureKey === 'reminders') {
                     $count = self::pendingReminderCount();
+                } elseif ($featureKey === 'leave-approvals') {
+                    $count = self::pendingLeaveCount();
+                } elseif ($featureKey === 'holidays') {
+                    $count = self::tableCount('holidays');
                 } else {
                     $count = self::tableCount($table);
                 }
@@ -162,6 +166,17 @@ class ModuleStats
         return (int) DB::table('visitors')
             ->whereNotNull('remind_on')
             ->where('follow_up_status', 'pending')
+            ->count();
+    }
+
+    private static function pendingLeaveCount()
+    {
+        if (! Schema::hasTable('leave_requests')) {
+            return 0;
+        }
+
+        return (int) DB::table('leave_requests')
+            ->where('status', 'pending')
             ->count();
     }
 

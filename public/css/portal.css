@@ -5066,6 +5066,18 @@ button.module-summary__card:disabled {
     gap: 10px;
     flex-wrap: wrap;
 }
+.end-shift-on-leave {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, #dca139 45%, var(--line));
+    background: color-mix(in srgb, #dca139 14%, transparent);
+    color: #b45309;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
 .end-shift-times {
     display: inline-flex;
     align-items: stretch;

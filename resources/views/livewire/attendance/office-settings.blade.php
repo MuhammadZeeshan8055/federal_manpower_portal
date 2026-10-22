@@ -112,20 +112,6 @@
                         @error('office_ip_3') <span class="master-error">{{ $message }}</span> @enderror
                     </label>
 
-                    <p class="muted">Monthly leave allowance (used later for Apply Leave)</p>
-
-                    <label>
-                        Full days per month
-                        <input type="number" wire:model="monthly_full_days" min="0" max="31" step="1">
-                        @error('monthly_full_days') <span class="master-error">{{ $message }}</span> @enderror
-                    </label>
-
-                    <label>
-                        Half days per month
-                        <input type="number" wire:model="monthly_half_days" min="0" max="31" step="1">
-                        @error('monthly_half_days') <span class="master-error">{{ $message }}</span> @enderror
-                    </label>
-
                     <p class="muted">Attendance exempt (WFH) — these users skip the check-in gate</p>
 
                     <div class="office-exempt-list">

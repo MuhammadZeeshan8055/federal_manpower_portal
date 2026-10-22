@@ -131,13 +131,25 @@
         <livewire:attendance.staff-daily-attendance />
     </div>
 
+    <div x-show="moduleKey === 'attendance' && featureKey === 'apply-leave'">
+        <livewire:attendance.apply-leave />
+    </div>
+
+    <div x-show="moduleKey === 'attendance' && featureKey === 'leave-approvals'">
+        <livewire:attendance.leave-approvals />
+    </div>
+
+    <div x-show="moduleKey === 'attendance' && featureKey === 'holidays'">
+        <livewire:attendance.manage-holidays />
+    </div>
+
     <div x-show="moduleKey === 'settings' && featureKey === 'users'">
         <livewire:settings.manage-users />
     </div>
 
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'staff-daily-attendance'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'staff-daily-attendance', 'apply-leave', 'leave-approvals', 'holidays'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

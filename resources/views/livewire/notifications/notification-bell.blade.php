@@ -1,4 +1,10 @@
-<div class="notify-bell" @click.outside="$wire.close()">
+<div
+    class="notify-bell"
+    wire:poll.5s
+    @click.outside="$wire.close()"
+    @portal-feature-shown.window="$wire.$refresh()"
+    @portal-notify-refresh.window="$wire.$refresh()"
+>
     <button
         type="button"
         class="notify-bell__button"

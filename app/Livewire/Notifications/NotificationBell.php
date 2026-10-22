@@ -80,7 +80,7 @@ class NotificationBell extends Component
 
         $this->open = false;
 
-        // Visitor reminders → open Reminders list
+        // Visitor reminders → Reminders list
         if (in_array($row->type, ['visitor_reminder', 'visitor_reminder_due'], true)) {
             $visitorId = (int) explode('-', (string) $row->feature_key)[0];
 
@@ -89,6 +89,30 @@ class NotificationBell extends Component
                 .' module: "visitors",'
                 .' feature: "reminders",'
                 .' visitorId: '.($visitorId > 0 ? $visitorId : 'null')
+                .' }}));'
+            );
+
+            return;
+        }
+
+        // New leave request → Leave Approvals (for HR / admin)
+        if ($row->type === 'leave_request') {
+            $this->js(
+                'window.dispatchEvent(new CustomEvent("portal-go", { detail: {'
+                .' module: "attendance",'
+                .' feature: "leave-approvals"'
+                .' }}));'
+            );
+
+            return;
+        }
+
+        // Leave approved / rejected → Apply Leave (own history)
+        if (in_array($row->type, ['leave_approved', 'leave_rejected'], true)) {
+            $this->js(
+                'window.dispatchEvent(new CustomEvent("portal-go", { detail: {'
+                .' module: "attendance",'
+                .' feature: "apply-leave"'
                 .' }}));'
             );
         }

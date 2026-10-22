@@ -75,6 +75,13 @@ class AttendancePunch
             ];
         }
 
+        if (StaffLeave::hasApprovedLeaveOn($user)) {
+            return [
+                'ok' => false,
+                'message' => 'You are on leave today. Check-in is not available.',
+            ];
+        }
+
         if (self::hasStartedToday($user)) {
             return [
                 'ok' => false,

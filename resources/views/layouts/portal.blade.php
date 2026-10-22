@@ -205,6 +205,16 @@
                     if (changeUrl) {
                         this.setUrl();
                     }
+
+                    // Livewire screens stay mounted (Alpine x-show) — tell them to reload data
+                    this.$nextTick(function () {
+                        window.dispatchEvent(new CustomEvent('portal-feature-shown', {
+                            detail: {
+                                module: moduleKey,
+                                feature: featureKey,
+                            },
+                        }));
+                    });
                 },
 
                 // Address bar only (page does NOT reload)

@@ -29,6 +29,30 @@ class LeaveRequest extends Model
         ];
     }
 
+    public static function statusOptions(): array
+    {
+        return [
+            'pending' => 'Pending',
+            'approved' => 'Approved',
+            'rejected' => 'Rejected',
+            'cancelled' => 'Cancelled',
+        ];
+    }
+
+    public function statusLabel(): string
+    {
+        return self::statusOptions()[$this->status] ?? $this->status;
+    }
+
+    public function leaveTypeLabel(): string
+    {
+        if ($this->leave_type === 'half') {
+            return 'Half day';
+        }
+
+        return 'Full day';
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
