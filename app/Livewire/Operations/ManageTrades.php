@@ -3,6 +3,7 @@
 namespace App\Livewire\Operations;
 
 use App\Models\Trade;
+use App\Support\PortalRefresh;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -82,6 +83,7 @@ class ManageTrades extends Component
 
         $this->successMessage = 'Trade deleted.';
         $this->dispatch('refresh-module-stats');
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'danger';
         $this->toastVersion++;
         $this->resetPage('tradesPage');
@@ -113,6 +115,7 @@ class ManageTrades extends Component
             $this->dispatch('refresh-module-stats');
         }
 
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();

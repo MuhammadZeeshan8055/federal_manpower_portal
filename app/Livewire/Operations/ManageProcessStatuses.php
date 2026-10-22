@@ -3,6 +3,7 @@
 namespace App\Livewire\Operations;
 
 use App\Models\ProcessStatus;
+use App\Support\PortalRefresh;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
@@ -73,6 +74,7 @@ class ManageProcessStatuses extends Component
 
         $this->successMessage = 'Process status deleted.';
         $this->dispatch('refresh-module-stats');
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'danger';
         $this->toastVersion++;
     }
@@ -105,6 +107,7 @@ class ManageProcessStatuses extends Component
             $this->dispatch('refresh-module-stats');
         }
 
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();

@@ -127,6 +127,10 @@
         <livewire:attendance.my-daily-attendance />
     </div>
 
+    <div x-show="moduleKey === 'attendance' && featureKey === 'my-loans'">
+        <livewire:attendance.my-staff-loans />
+    </div>
+
     <div x-show="moduleKey === 'attendance' && featureKey === 'staff-daily-attendance'">
         <livewire:attendance.staff-daily-attendance />
     </div>
@@ -143,13 +147,21 @@
         <livewire:attendance.manage-holidays />
     </div>
 
+    <div x-show="moduleKey === 'attendance' && featureKey === 'salary-slips'">
+        <livewire:attendance.manage-salary-slips />
+    </div>
+
+    <div x-show="moduleKey === 'attendance' && featureKey === 'staff-loans'">
+        <livewire:attendance.manage-staff-loans />
+    </div>
+
     <div x-show="moduleKey === 'settings' && featureKey === 'users'">
         <livewire:settings.manage-users />
     </div>
 
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'staff-daily-attendance', 'apply-leave', 'leave-approvals', 'holidays'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'my-loans', 'staff-daily-attendance', 'apply-leave', 'leave-approvals', 'holidays', 'salary-slips', 'staff-loans'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

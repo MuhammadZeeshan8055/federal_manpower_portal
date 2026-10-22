@@ -3,6 +3,7 @@
 namespace App\Livewire\Operations;
 
 use App\Models\CareOff;
+use App\Support\PortalRefresh;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -88,6 +89,7 @@ class ManageCareOffs extends Component
 
         $this->successMessage = 'Care Off deleted.';
         $this->dispatch('refresh-module-stats');
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'danger';
         $this->toastVersion++;
         $this->resetPage('careOffsPage');
@@ -123,6 +125,7 @@ class ManageCareOffs extends Component
             $this->dispatch('refresh-module-stats');
         }
 
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();

@@ -75,7 +75,8 @@ alwaysApply: true
  - Daily Visitors (desk log): name, contact, purpose, meet with, outcome (mature / immature), remarks, optional remind_on, follow_up_status / follow_up_remarks
  - Reminders list (`ManageReminders`); bell click opens that screen
  - Header notification bell (`NotificationBell`) + `visitors:send-reminders` daily schedule
- - **HR Phase B:** Holidays CRUD, Apply Leave (multi-day OK), Leave Approvals (paid/unpaid / reject) + notifications; unpaid leave → salary slip deduction in Step 5
+ - **HR Phase B:** Holidays CRUD, Apply Leave (multi-day OK), Leave Approvals (paid/unpaid / reject) + notifications
+ - **HR Step 5:** Salary slips (unpaid leave auto-days + per-day deduction) + Staff loans ledger (taken / paid / remaining) + My Loans (staff self-view)
  - **HR Demo A:** attendance tables/models + Office Settings (hours, IPs, grace, leave allowance) + WFH `bypass_attendance` checklist; HR can see attendance `admin_only` features
  - **HR Demo B:** IP Start Shift gate (`/attendance/start`) + End Shift (header); empty IPs = allow, set IPs = must match; Admin + WFH bypass skip gate
  - **HR Demo C:** My Daily Attendance — today workday card + month table (Late / Running / Hours met / Short / Holiday / Sunday / Exempt WFH)

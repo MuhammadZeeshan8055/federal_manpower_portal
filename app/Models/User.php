@@ -19,6 +19,7 @@ class User extends Authenticatable
         'password',
         'role',
         'bypass_attendance',
+        'monthly_salary',
     ];
 
     protected $hidden = [
@@ -32,6 +33,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'bypass_attendance' => 'boolean',
+            'monthly_salary' => 'decimal:2',
         ];
     }
 

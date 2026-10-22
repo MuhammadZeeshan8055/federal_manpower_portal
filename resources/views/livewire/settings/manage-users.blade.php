@@ -170,6 +170,13 @@
                                 </select>
                                 @error('role') <span class="master-error">{{ $message }}</span> @enderror
                             </label>
+
+                            <label>
+                                Monthly salary
+                                <input type="number" wire:model="monthly_salary" min="0" step="0.01" placeholder="e.g. 50000">
+                                <small class="muted">Used as gross amount when creating salary slips</small>
+                                @error('monthly_salary') <span class="master-error">{{ $message }}</span> @enderror
+                            </label>
                         </div>
 
                         @if ($showPermissionGrid)

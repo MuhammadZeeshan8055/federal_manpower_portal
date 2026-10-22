@@ -98,10 +98,12 @@ class DatabaseSeeder extends Seeder
 
         $this->syncPermissions($hr, [
             ['attendance', 'my-daily-attendance', 'manage'],
+            ['attendance', 'my-loans', 'manage'],
             ['attendance', 'apply-leave', 'manage'],
             ['attendance', 'staff-daily-attendance', 'manage'],
             ['attendance', 'leave-approvals', 'manage'],
             ['attendance', 'salary-slips', 'manage'],
+            ['attendance', 'staff-loans', 'manage'],
             ['attendance', 'office-settings', 'manage'],
             ['attendance', 'holidays', 'manage'],
         ]);
@@ -117,6 +119,7 @@ class DatabaseSeeder extends Seeder
             ['clients', 'list', 'view'],
             ['clients', 'documents', 'view'],
             ['attendance', 'my-daily-attendance', 'manage'],
+            ['attendance', 'my-loans', 'view'],
             ['attendance', 'apply-leave', 'manage'],
         ]);
     }

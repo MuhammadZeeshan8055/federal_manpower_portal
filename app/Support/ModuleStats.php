@@ -104,10 +104,12 @@ class ModuleStats
             'reports' => 'account_reports',
             'users' => 'users',
             'my-daily-attendance' => 'attendance_records',
+            'my-loans' => 'staff_loans',
             'apply-leave' => 'leave_requests',
             'staff-daily-attendance' => 'attendance_records',
             'leave-approvals' => 'leave_requests',
             'salary-slips' => 'salary_slips',
+            'staff-loans' => 'staff_loans',
             'office-settings' => 'attendance_settings',
             'holidays' => 'holidays',
         ];
@@ -130,6 +132,10 @@ class ModuleStats
                     $count = self::pendingLeaveCount();
                 } elseif ($featureKey === 'holidays') {
                     $count = self::tableCount('holidays');
+                } elseif ($featureKey === 'staff-loans') {
+                    $count = self::openLoanCount();
+                } elseif ($featureKey === 'my-loans') {
+                    $count = self::myOpenLoanCount();
                 } else {
                     $count = self::tableCount($table);
                 }
@@ -177,6 +183,29 @@ class ModuleStats
 
         return (int) DB::table('leave_requests')
             ->where('status', 'pending')
+            ->count();
+    }
+
+    private static function openLoanCount()
+    {
+        if (! Schema::hasTable('staff_loans')) {
+            return 0;
+        }
+
+        return (int) DB::table('staff_loans')
+            ->where('status', 'open')
+            ->count();
+    }
+
+    private static function myOpenLoanCount()
+    {
+        if (! Schema::hasTable('staff_loans') || ! auth()->id()) {
+            return 0;
+        }
+
+        return (int) DB::table('staff_loans')
+            ->where('user_id', auth()->id())
+            ->where('status', 'open')
             ->count();
     }
 

@@ -1,8 +1,11 @@
+@php
+    $toggleVar = $openVar ?? 'formOpen';
+@endphp
 <button
     type="button"
     class="panel__header master-form-toggle"
-    @click="formOpen = !formOpen"
-    :aria-expanded="formOpen.toString()"
+    @click="{{ $toggleVar }} = !{{ $toggleVar }}"
+    :aria-expanded="{{ $toggleVar }}.toString()"
     aria-controls="{{ $targetId }}"
 >
     <span>
@@ -11,10 +14,10 @@
     </span>
     <span class="master-form-toggle__action">
         <span>
-            <span x-show="!formOpen" x-cloak>{{ $actionLabel }}</span>
-            <span x-show="formOpen" x-cloak>Close form</span>
+            <span x-show="!{{ $toggleVar }}" x-cloak>{{ $actionLabel }}</span>
+            <span x-show="{{ $toggleVar }}" x-cloak>Close form</span>
         </span>
-        <span class="master-form-toggle__icon" :class="{ 'master-form-toggle__icon--open': formOpen }">
+        <span class="master-form-toggle__icon" :class="{ 'master-form-toggle__icon--open': {{ $toggleVar }} }">
             @include('partials.icon', ['name' => 'plus'])
         </span>
     </span>

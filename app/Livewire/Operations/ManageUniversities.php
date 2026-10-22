@@ -4,6 +4,7 @@ namespace App\Livewire\Operations;
 
 use App\Models\Company;
 use App\Models\Country;
+use App\Support\PortalRefresh;
 use App\Support\WorkspaceCountry;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -85,6 +86,7 @@ class ManageUniversities extends Component
 
         $this->successMessage = 'University deleted.';
         $this->dispatch('refresh-module-stats');
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'danger';
         $this->toastVersion++;
     }
@@ -128,6 +130,7 @@ class ManageUniversities extends Component
             $this->dispatch('refresh-module-stats');
         }
 
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();

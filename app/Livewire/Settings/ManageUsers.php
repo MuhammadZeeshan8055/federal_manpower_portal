@@ -5,6 +5,7 @@ namespace App\Livewire\Settings;
 use App\Models\User;
 use App\Models\UserPermission;
 use App\Support\GrantableModules;
+use App\Support\PortalRefresh;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -31,6 +32,8 @@ class ManageUsers extends Component
     public string $role = 'staff';
 
     public bool $bypass_attendance = false;
+
+    public string $monthly_salary = '';
 
     public bool $allowAll = false;
 
@@ -104,6 +107,7 @@ class ManageUsers extends Component
         $this->password = '';
         $this->role = $user->role;
         $this->bypass_attendance = (bool) $user->bypass_attendance;
+        $this->monthly_salary = $user->monthly_salary !== null ? (string) $user->monthly_salary : '';
         $this->fillModuleAccessFromUser($user);
         $this->formOpen = true;
         $this->successMessage = '';
@@ -211,6 +215,7 @@ class ManageUsers extends Component
             'role' => ['required', Rule::in($roles)],
             'password' => $passwordRule,
             'bypass_attendance' => ['boolean'],
+            'monthly_salary' => ['nullable', 'numeric', 'min:0'],
             'allowAll' => ['boolean'],
             'moduleAccess' => ['array'],
         ];
@@ -224,6 +229,7 @@ class ManageUsers extends Component
             'password' => Hash::make($this->password),
             'role' => $this->role,
             'bypass_attendance' => $this->wfhValue(),
+            'monthly_salary' => $this->salaryValue(),
             'email_verified_at' => now(),
         ]);
     }
@@ -247,6 +253,7 @@ class ManageUsers extends Component
         $user->email = $this->email;
         $user->role = $this->role;
         $user->bypass_attendance = $this->wfhValue();
+        $user->monthly_salary = $this->salaryValue();
 
         if ($this->password !== '') {
             $user->password = Hash::make($this->password);
@@ -265,6 +272,15 @@ class ManageUsers extends Component
         }
 
         return (bool) $this->bypass_attendance;
+    }
+
+    private function salaryValue(): ?float
+    {
+        if (trim($this->monthly_salary) === '') {
+            return null;
+        }
+
+        return (float) $this->monthly_salary;
     }
 
     private function writePermissions(User $user): void
@@ -408,6 +424,7 @@ class ManageUsers extends Component
         $this->password = '';
         $this->role = 'staff';
         $this->bypass_attendance = false;
+        $this->monthly_salary = '';
         $this->allowAll = false;
         $this->successMessage = '';
         $this->clearModuleAccess();
@@ -431,5 +448,6 @@ class ManageUsers extends Component
         $this->toastType = $type;
         $this->successMessage = $message;
         $this->toastVersion++;
+        $this->js(PortalRefresh::jsNotifyListsChanged());
     }
 }

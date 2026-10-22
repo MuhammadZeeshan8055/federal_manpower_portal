@@ -3,6 +3,7 @@
 namespace App\Livewire\Operations;
 
 use App\Models\Country;
+use App\Support\PortalRefresh;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -95,6 +96,7 @@ class ManageCountries extends Component
 
         $this->successMessage = 'Country deleted.';
         $this->dispatch('refresh-module-stats');
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'danger';
         $this->toastVersion++;
         $this->resetPage('countriesPage');
@@ -136,6 +138,7 @@ class ManageCountries extends Component
             $this->dispatch('refresh-module-stats');
         }
 
+        $this->js(PortalRefresh::jsNotifyListsChanged());
         $this->toastType = 'success';
         $this->toastVersion++;
         $this->resetForm();

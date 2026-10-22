@@ -103,7 +103,29 @@
                                 });
                             }
                         });
+
+                        // After add/edit user, trade, company, etc. — refresh all selects
+                        window.addEventListener('portal-data-changed', function () {
+                            self.refreshAllLivewire();
+                        });
                     }
+                },
+
+                // Livewire screens stay mounted; reload them so dropdown lists stay fresh
+                refreshAllLivewire() {
+                    if (! window.Livewire || typeof Livewire.all !== 'function') {
+                        return;
+                    }
+
+                    Livewire.all().forEach(function (component) {
+                        try {
+                            if (component && typeof component.$refresh === 'function') {
+                                component.$refresh();
+                            }
+                        } catch (error) {
+                            // ignore single-component refresh errors
+                        }
+                    });
                 },
 
                 // -------------------------------------------------
@@ -206,7 +228,8 @@
                         this.setUrl();
                     }
 
-                    // Livewire screens stay mounted (Alpine x-show) — tell them to reload data
+                    // Livewire screens stay mounted (Alpine x-show) — reload lists on open
+                    var app = this;
                     this.$nextTick(function () {
                         window.dispatchEvent(new CustomEvent('portal-feature-shown', {
                             detail: {
@@ -214,6 +237,7 @@
                                 feature: featureKey,
                             },
                         }));
+                        app.refreshAllLivewire();
                     });
                 },
 
