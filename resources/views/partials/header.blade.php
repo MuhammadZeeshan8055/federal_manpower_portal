@@ -35,6 +35,8 @@
     <div class="topbar__actions">
         <livewire:attendance.end-shift-button />
 
+        <livewire:notifications.notification-bell />
+
         <button
             type="button"
             class="theme-toggle"

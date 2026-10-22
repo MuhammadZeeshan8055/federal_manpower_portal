@@ -48,6 +48,14 @@ class DatabaseSeeder extends Seeder
             );
         }
 
+        // Master lists for Operations (safe to re-run)
+        $this->call([
+            ProcessStatusSeeder::class,
+            TradeSeeder::class,
+            CareOffSeeder::class,
+            CompanySeeder::class,
+        ]);
+
         User::query()->updateOrCreate(
             ['email' => 'admin@federal.com'],
             [

@@ -40,6 +40,11 @@ class User extends Authenticatable
         return $this->hasMany(UserPermission::class);
     }
 
+    public function portalNotifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class);
+    }
+
     public function clientProfile(): HasOne
     {
         return $this->hasOne(Client::class);
