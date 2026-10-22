@@ -71,7 +71,7 @@ alwaysApply: true
  - Client portal auth Step 1: `/portal` register/login/home (`role=client`, `clients.user_id`, office/client middleware)
  - Client portal Step 2: `/portal/application` fill/edit bio data + private docs (`ApplicationForm`; no process status edit)
  - All Clients: Portal badge + Pending (no process status) + “Portal applications only” filter
- - Daily Visitors (basic): name, contact, purpose, meet with, status (waiting / in meeting / meeting done / visit complete)
+ - Daily Visitors (desk log): name, contact, purpose, meet with, outcome (mature / immature), remarks, optional remind_on (+ user_notifications row; header bell UI next)
  - **HR Demo A:** attendance tables/models + Office Settings (hours, IPs, grace, leave allowance) + WFH `bypass_attendance` checklist; HR can see attendance `admin_only` features
  - **HR Demo B:** IP Start Shift gate (`/attendance/start`) + End Shift (header); empty IPs = allow, set IPs = must match; Admin + WFH bypass skip gate
  - **HR Demo C:** My Daily Attendance — today workday card + month table (Late / Running / Hours met / Short / Holiday / Sunday / Exempt WFH)

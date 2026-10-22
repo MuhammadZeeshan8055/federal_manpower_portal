@@ -100,13 +100,26 @@
                     </label>
 
                     <label>
-                        Status
-                        <select wire:model="status">
-                            @foreach ($statusOptions as $value => $label)
+                        Outcome
+                        <select wire:model="outcome">
+                            @foreach ($outcomeOptions as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('status') <span class="master-error">{{ $message }}</span> @enderror
+                        @error('outcome') <span class="master-error">{{ $message }}</span> @enderror
+                    </label>
+
+                    <label>
+                        Remarks
+                        <textarea class="visitor-textarea" wire:model="remarks" rows="3" placeholder="Meeting notes (optional)" maxlength="2000"></textarea>
+                        @error('remarks') <span class="master-error">{{ $message }}</span> @enderror
+                    </label>
+
+                    <label>
+                        Reminder date
+                        <input type="date" wire:model="remind_on">
+                        <small class="muted">Optional — a reminder will be saved for this date</small>
+                        @error('remind_on') <span class="master-error">{{ $message }}</span> @enderror
                     </label>
 
                     <div class="master-form__actions">
@@ -166,9 +179,9 @@
                         </button>
                     @endunless
 
-                    <select class="visitors-toolbar__select" wire:model.live="statusFilter" aria-label="Status filter">
-                        <option value="">All statuses</option>
-                        @foreach ($statusOptions as $value => $label)
+                    <select class="visitors-toolbar__select" wire:model.live="outcomeFilter" aria-label="Outcome filter">
+                        <option value="">All outcomes</option>
+                        @foreach ($outcomeOptions as $value => $label)
                             <option value="{{ $value }}">{{ $label }}</option>
                         @endforeach
                     </select>
@@ -188,7 +201,7 @@
             </div>
 
             <div class="table-wrap visitors-table-wrap">
-                <table class="data-table visitors-table">
+                <table class="data-table visitors-table visitors-table--desk">
                     <thead>
                         <tr>
                             <th>Check-in</th>
@@ -196,7 +209,9 @@
                             <th>Contact</th>
                             <th>Purpose</th>
                             <th>Meet with</th>
-                            <th>Status</th>
+                            <th>Outcome</th>
+                            <th>Remarks</th>
+                            <th>Reminder</th>
                             <th class="master-actions-heading">Actions</th>
                         </tr>
                     </thead>
@@ -209,30 +224,30 @@
                                 <td><span class="visitors-table__clamp" title="{{ $visitor->purpose }}">{{ $visitor->purpose }}</span></td>
                                 <td><span class="visitors-table__clamp" title="{{ $visitor->meet_with }}">{{ $visitor->meet_with }}</span></td>
                                 <td>
-                                    @if ($visitor->status === 'visit_complete' || $visitor->status === 'meeting_done')
-                                        <span class="status status--ready">{{ $visitor->statusLabel() }}</span>
-                                    @elseif ($visitor->status === 'in_meeting')
-                                        <span class="status status--interview">{{ $visitor->statusLabel() }}</span>
+                                    @if ($visitor->outcome === 'mature')
+                                        <span class="status status--ready">Mature</span>
                                     @else
-                                        <span class="status status--screening">{{ $visitor->statusLabel() }}</span>
+                                        <span class="status status--screening">Immature</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($visitor->remarks)
+                                        <span class="visitors-table__clamp" title="{{ $visitor->remarks }}">{{ $visitor->remarks }}</span>
+                                    @else
+                                        <span class="muted">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($visitor->remind_on)
+                                        <span class="visitors-remind {{ $visitor->remind_on->isToday() || $visitor->remind_on->isPast() ? 'visitors-remind--due' : '' }}">
+                                            {{ $visitor->remind_on->format('d M Y') }}
+                                        </span>
+                                    @else
+                                        <span class="muted">—</span>
                                     @endif
                                 </td>
                                 <td class="master-row-actions">
                                     @if ($canManage)
-                                        @if (in_array($visitor->status, ['waiting', 'in_meeting'], true))
-                                            <select
-                                                class="visitors-status-select"
-                                                wire:change="markStatus({{ $visitor->id }}, $event.target.value)"
-                                                aria-label="Update status"
-                                            >
-                                                <option value="">Status…</option>
-                                                @if ($visitor->status === 'waiting')
-                                                    <option value="in_meeting">In meeting</option>
-                                                @endif
-                                                <option value="meeting_done">Meeting done</option>
-                                                <option value="visit_complete">Visit complete</option>
-                                            </select>
-                                        @endif
                                         <button
                                             type="button"
                                             class="row-action row-action--edit"
@@ -259,7 +274,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="muted">No visitors logged yet.</td>
+                                <td colspan="9" class="muted">No visitors logged yet.</td>
                             </tr>
                         @endforelse
                     </tbody>

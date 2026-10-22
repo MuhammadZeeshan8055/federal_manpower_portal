@@ -3,6 +3,7 @@
 namespace App\Livewire\Visitors;
 
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Models\Visitor;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -27,13 +28,16 @@ class ManageVisitors extends Component
 
     public string $meet_with = '';
 
-    public string $status = 'waiting';
+    public string $outcome = 'immature';
+
+    public string $remarks = '';
+
+    public string $remind_on = '';
 
     public string $search = '';
 
-    public string $statusFilter = '';
+    public string $outcomeFilter = '';
 
-    // Y-m-d — always filter by one day (default today)
     public string $filterDate = '';
 
     public string $successMessage = '';
@@ -61,7 +65,7 @@ class ManageVisitors extends Component
         $this->resetPage('visitorsPage');
     }
 
-    public function updatedStatusFilter(): void
+    public function updatedOutcomeFilter(): void
     {
         $this->resetPage('visitorsPage');
     }
@@ -98,7 +102,9 @@ class ManageVisitors extends Component
         $this->contact_no = $visitor->contact_no;
         $this->purpose = $visitor->purpose;
         $this->meet_with = $visitor->meet_with;
-        $this->status = $visitor->status;
+        $this->outcome = $visitor->outcome;
+        $this->remarks = $visitor->remarks ?? '';
+        $this->remind_on = $visitor->remind_on?->toDateString() ?? '';
         $this->successMessage = '';
         $this->resetValidation();
     }
@@ -107,28 +113,6 @@ class ManageVisitors extends Component
     {
         $this->successMessage = '';
         $this->resetForm();
-    }
-
-    public function markStatus(int $id, string $status): void
-    {
-        if ($this->denied || ! $this->canManage) {
-            return;
-        }
-
-        if (! array_key_exists($status, Visitor::statusOptions())) {
-            return;
-        }
-
-        Visitor::query()->whereKey($id)->update(['status' => $status]);
-
-        if ($this->editingId === $id) {
-            $this->status = $status;
-        }
-
-        $this->successMessage = 'Status updated.';
-        $this->toastType = 'success';
-        $this->toastVersion++;
-        $this->dispatch('refresh-module-stats');
     }
 
     public function deleteVisitor(int $id): void
@@ -161,10 +145,13 @@ class ManageVisitors extends Component
             'contact_no' => ['required', 'string', 'max:40'],
             'purpose' => ['required', 'string', 'max:255'],
             'meet_with' => ['required', 'string', 'max:160'],
-            'status' => ['required', 'in:'.implode(',', array_keys(Visitor::statusOptions()))],
+            'outcome' => ['required', 'in:mature,immature'],
+            'remarks' => ['nullable', 'string', 'max:2000'],
+            'remind_on' => ['nullable', 'date'],
         ], [], [
             'contact_no' => 'contact no',
             'meet_with' => 'meet with',
+            'remind_on' => 'reminder date',
         ]);
 
         $data = [
@@ -172,20 +159,29 @@ class ManageVisitors extends Component
             'contact_no' => trim($this->contact_no),
             'purpose' => trim($this->purpose),
             'meet_with' => trim($this->meet_with),
-            'status' => $this->status,
+            'outcome' => $this->outcome,
+            'remarks' => trim($this->remarks) !== '' ? trim($this->remarks) : null,
+            'remind_on' => $this->remind_on !== '' ? $this->remind_on : null,
         ];
 
         if ($this->editingId) {
-            // Check-in time stays as registered — never overwrite on edit
-            Visitor::query()->whereKey($this->editingId)->update($data);
+            $visitor = Visitor::query()->find($this->editingId);
+
+            if (! $visitor) {
+                return;
+            }
+
+            $visitor->update($data);
             $this->successMessage = 'Visitor updated.';
         } else {
             $data['visited_at'] = now();
             $data['created_by'] = auth()->id();
-            Visitor::query()->create($data);
+            $visitor = Visitor::query()->create($data);
             $this->filterDate = now()->toDateString();
-            $this->successMessage = 'Visitor checked in.';
+            $this->successMessage = 'Visitor logged.';
         }
+
+        $this->saveReminderNotification($visitor);
 
         $this->dispatch('refresh-module-stats');
         $this->toastType = 'success';
@@ -205,8 +201,8 @@ class ManageVisitors extends Component
             ->orderByDesc('visited_at')
             ->orderByDesc('id');
 
-        if ($this->statusFilter !== '') {
-            $query->where('status', $this->statusFilter);
+        if ($this->outcomeFilter !== '') {
+            $query->where('outcome', $this->outcomeFilter);
         }
 
         if (trim($this->search) !== '') {
@@ -215,13 +211,14 @@ class ManageVisitors extends Component
                 $q->where('name', 'like', $term)
                     ->orWhere('contact_no', 'like', $term)
                     ->orWhere('purpose', 'like', $term)
-                    ->orWhere('meet_with', 'like', $term);
+                    ->orWhere('meet_with', 'like', $term)
+                    ->orWhere('remarks', 'like', $term);
             });
         }
 
         return view('livewire.visitors.manage-visitors', [
             'visitors' => $this->denied ? null : $query->paginate(12, ['*'], 'visitorsPage'),
-            'statusOptions' => Visitor::statusOptions(),
+            'outcomeOptions' => Visitor::outcomeOptions(),
             'staffNames' => User::query()
                 ->where('role', '!=', 'client')
                 ->orderBy('name')
@@ -231,11 +228,57 @@ class ManageVisitors extends Component
         ]);
     }
 
+    private function saveReminderNotification(Visitor $visitor): void
+    {
+        if (! $visitor->remind_on) {
+            return;
+        }
+
+        $remindDate = $visitor->remind_on->toDateString();
+        $title = 'Visitor reminder: '.$visitor->name;
+        $body = 'Follow up on '.$remindDate
+            .' — '.$visitor->purpose
+            .' (meet with '.$visitor->meet_with.')';
+
+        $userIds = [];
+
+        if ($visitor->created_by) {
+            $userIds[] = (int) $visitor->created_by;
+        }
+
+        $meetUser = User::query()
+            ->where('role', '!=', 'client')
+            ->where('name', $visitor->meet_with)
+            ->first();
+
+        if ($meetUser) {
+            $userIds[] = (int) $meetUser->id;
+        }
+
+        $userIds = array_unique($userIds);
+
+        foreach ($userIds as $userId) {
+            UserNotification::query()->updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'type' => 'visitor_reminder',
+                    'module_key' => 'visitors',
+                    'feature_key' => (string) $visitor->id,
+                ],
+                [
+                    'title' => $title,
+                    'body' => $body,
+                    'read_at' => null,
+                ]
+            );
+        }
+    }
+
     private function resetForm(): void
     {
         $this->editingId = null;
-        $this->reset('name', 'contact_no', 'purpose', 'meet_with');
-        $this->status = 'waiting';
+        $this->reset('name', 'contact_no', 'purpose', 'meet_with', 'remarks', 'remind_on');
+        $this->outcome = 'immature';
         $this->resetValidation();
         $this->dispatch('master-form-reset');
     }

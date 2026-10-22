@@ -12,7 +12,9 @@ class Visitor extends Model
         'contact_no',
         'purpose',
         'meet_with',
-        'status',
+        'outcome',
+        'remarks',
+        'remind_on',
         'visited_at',
         'created_by',
     ];
@@ -21,22 +23,21 @@ class Visitor extends Model
     {
         return [
             'visited_at' => 'datetime',
+            'remind_on' => 'date',
         ];
     }
 
-    public static function statusOptions(): array
+    public static function outcomeOptions(): array
     {
         return [
-            'waiting' => 'Waiting',
-            'in_meeting' => 'In meeting',
-            'meeting_done' => 'Meeting done',
-            'visit_complete' => 'Visit complete',
+            'mature' => 'Mature',
+            'immature' => 'Immature',
         ];
     }
 
-    public function statusLabel(): string
+    public function outcomeLabel(): string
     {
-        return self::statusOptions()[$this->status] ?? $this->status;
+        return self::outcomeOptions()[$this->outcome] ?? $this->outcome;
     }
 
     public function creator(): BelongsTo
