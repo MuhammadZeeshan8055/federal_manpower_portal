@@ -71,6 +71,15 @@ class PortalModules
                 }
             }
 
+            // Reminders list uses the same access as Visitors list
+            if ($moduleKey === 'visitors' && $feature['key'] === 'reminders') {
+                if ($user->canView('visitors', 'list') || $user->canView('visitors', 'reminders')) {
+                    $allowedFeatures[] = $feature;
+                }
+
+                continue;
+            }
+
             if ($user->canView($moduleKey, $feature['key'])) {
                 $allowedFeatures[] = $feature;
             }

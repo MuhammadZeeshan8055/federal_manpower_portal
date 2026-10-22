@@ -56,6 +56,44 @@ class NotificationBell extends Component
             ->update(['read_at' => now()]);
     }
 
+    public function openNotification(int $id): void
+    {
+        $user = auth()->user();
+
+        if (! $user) {
+            return;
+        }
+
+        $row = UserNotification::query()
+            ->where('user_id', $user->id)
+            ->whereKey($id)
+            ->first();
+
+        if (! $row) {
+            return;
+        }
+
+        if (! $row->read_at) {
+            $row->read_at = now();
+            $row->save();
+        }
+
+        $this->open = false;
+
+        // Visitor reminders → open Reminders list
+        if (in_array($row->type, ['visitor_reminder', 'visitor_reminder_due'], true)) {
+            $visitorId = (int) explode('-', (string) $row->feature_key)[0];
+
+            $this->js(
+                'window.dispatchEvent(new CustomEvent("portal-go", { detail: {'
+                .' module: "visitors",'
+                .' feature: "reminders",'
+                .' visitorId: '.($visitorId > 0 ? $visitorId : 'null')
+                .' }}));'
+            );
+        }
+    }
+
     public function render()
     {
         $user = auth()->user();

@@ -85,6 +85,24 @@
                         document.addEventListener('livewire:initialized', function () {
                             self.refreshStats();
                         });
+
+                        // Bell / other screens → navigate without reload
+                        window.addEventListener('portal-go', function (event) {
+                            var detail = event.detail || {};
+                            var moduleKey = detail.module || '';
+                            var featureKey = detail.feature || '';
+                            var visitorId = detail.visitorId || null;
+
+                            self.show(moduleKey, featureKey, true);
+
+                            if (moduleKey === 'visitors' && featureKey === 'reminders' && visitorId) {
+                                self.$nextTick(function () {
+                                    window.dispatchEvent(new CustomEvent('open-visitor-reminder', {
+                                        detail: { visitorId: visitorId },
+                                    }));
+                                });
+                            }
+                        });
                     }
                 },
 

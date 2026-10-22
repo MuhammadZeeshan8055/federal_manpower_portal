@@ -35,6 +35,7 @@ return [
             'icon' => 'building',
             'children' => [
                 ['key' => 'list', 'label' => 'Visitors'],
+                ['key' => 'reminders', 'label' => 'Reminders'],
             ],
         ],
         [

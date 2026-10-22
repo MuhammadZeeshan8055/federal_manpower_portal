@@ -115,6 +115,10 @@
         <livewire:visitors.manage-visitors />
     </div>
 
+    <div x-show="moduleKey === 'visitors' && featureKey === 'reminders'">
+        <livewire:visitors.manage-reminders />
+    </div>
+
     <div x-show="moduleKey === 'attendance' && featureKey === 'office-settings'">
         <livewire:attendance.office-settings />
     </div>
@@ -133,7 +137,7 @@
 
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && featureKey === 'list') && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'staff-daily-attendance'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'staff-daily-attendance'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

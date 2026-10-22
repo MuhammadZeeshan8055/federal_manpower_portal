@@ -3556,6 +3556,17 @@ button.module-summary__card:disabled {
 .visitors-remind--due {
     color: #b45309;
 }
+.visitors-row--focus {
+    background: color-mix(in srgb, var(--blue) 10%, transparent);
+}
+.visitors-table--reminders th:nth-child(1),
+.visitors-table--reminders td:nth-child(1) {
+    width: 6.5rem;
+}
+.visitors-table--reminders th:nth-child(8),
+.visitors-table--reminders td:nth-child(8) {
+    width: 12%;
+}
 .search-select {
     position: relative;
     z-index: 1;

@@ -29,7 +29,7 @@
                     <button
                         type="button"
                         class="notify-bell__item {{ $item->read_at ? '' : 'notify-bell__item--unread' }}"
-                        wire:click="markAsRead({{ $item->id }})"
+                        wire:click="openNotification({{ $item->id }})"
                         wire:key="notify-{{ $item->id }}"
                     >
                         <span class="notify-bell__item-title">{{ $item->title }}</span>

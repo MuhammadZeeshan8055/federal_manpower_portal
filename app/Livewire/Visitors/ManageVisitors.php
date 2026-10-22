@@ -164,11 +164,21 @@ class ManageVisitors extends Component
             'remind_on' => $this->remind_on !== '' ? $this->remind_on : null,
         ];
 
+        // New reminder date → follow-up starts as pending again
+        if ($data['remind_on']) {
+            $data['follow_up_status'] = 'pending';
+        }
+
         if ($this->editingId) {
             $visitor = Visitor::query()->find($this->editingId);
 
             if (! $visitor) {
                 return;
+            }
+
+            // Keep follow-up status if reminder date did not change
+            if ($visitor->remind_on?->toDateString() === $data['remind_on']) {
+                unset($data['follow_up_status']);
             }
 
             $visitor->update($data);

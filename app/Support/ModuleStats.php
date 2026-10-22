@@ -98,6 +98,7 @@ class ModuleStats
             'trades' => 'trades',
             'process_statuses' => 'process_statuses',
             'list' => 'visitors',
+            'reminders' => 'visitors',
             'payments' => 'payments',
             'payment_methods' => 'payment_methods',
             'reports' => 'account_reports',
@@ -123,6 +124,8 @@ class ModuleStats
                     $count = self::companyCount('employer');
                 } elseif ($featureKey === 'universities') {
                     $count = self::companyCount('university');
+                } elseif ($featureKey === 'reminders') {
+                    $count = self::pendingReminderCount();
                 } else {
                     $count = self::tableCount($table);
                 }
@@ -148,6 +151,18 @@ class ModuleStats
         }
 
         return (int) DB::table($table)->count();
+    }
+
+    private static function pendingReminderCount()
+    {
+        if (! Schema::hasTable('visitors')) {
+            return 0;
+        }
+
+        return (int) DB::table('visitors')
+            ->whereNotNull('remind_on')
+            ->where('follow_up_status', 'pending')
+            ->count();
     }
 
     private static function companyCount($type)
