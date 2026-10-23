@@ -159,6 +159,9 @@
                                 <td>{{ number_format((float) $slip->other_deductions, 2) }}</td>
                                 <td><strong>{{ number_format((float) $slip->net_amount, 2) }}</strong></td>
                                 <td class="master-row-actions">
+                                    <a class="row-action row-action--edit" href="{{ route('attendance.salary-slips.print', $slip) }}" target="_blank" rel="noopener">
+                                        <span>Print</span>
+                                    </a>
                                     @if ($canManage)
                                         <button type="button" class="row-action row-action--edit" wire:click="editSlip({{ $slip->id }})" @click="formOpen = true">
                                             @include('partials.icon', ['name' => 'pencil'])
@@ -168,8 +171,6 @@
                                             @include('partials.icon', ['name' => 'trash'])
                                             <span>Delete</span>
                                         </button>
-                                    @else
-                                        <span class="muted">View only</span>
                                     @endif
                                 </td>
                             </tr>

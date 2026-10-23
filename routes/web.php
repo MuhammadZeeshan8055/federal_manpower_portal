@@ -9,6 +9,7 @@ use App\Http\Controllers\ClientStatusController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentReceiptController;
 use App\Http\Controllers\PaymentScreenshotController;
+use App\Http\Controllers\SalarySlipPrintController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkspaceCountryController;
@@ -83,6 +84,10 @@ Route::middleware(['auth', 'office'])->group(function () {
         Route::get('/payments/{payment}/receipt', [PaymentReceiptController::class, 'print'])
             ->middleware('throttle:60,1')
             ->name('accounts.payments.receipt');
+
+        Route::get('/salary-slips/{salarySlip}/print', [SalarySlipPrintController::class, 'print'])
+            ->middleware('throttle:60,1')
+            ->name('attendance.salary-slips.print');
 
         Route::get('/clients/{client}/print/preview', [ClientPrintController::class, 'preview'])
             ->name('clients.print.preview');
