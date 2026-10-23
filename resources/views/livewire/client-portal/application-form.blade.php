@@ -30,6 +30,14 @@
         <div class="site-wrap cp-app">
             <div class="contact-form cp-app__intro">
                 <h2>Preferred role</h2>
+
+                @if ($appliedJobTitle)
+                    <div class="cp-app-applied">
+                        <strong>Applying for</strong>
+                        <span>{{ $appliedJobTitle }}@if ($appliedJobCompany) · {{ $appliedJobCompany }}@endif</span>
+                    </div>
+                @endif
+
                 <div class="form-row">
                     <label>
                         Job title

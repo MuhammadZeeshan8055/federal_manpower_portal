@@ -102,6 +102,7 @@ class WebsiteController extends Controller
                     $job->salary_text ?: 'Negotiable',
                     'Open',
                     'images/website/job-cards-strip.png',
+                    $job->id,
                 ];
             })
             ->all();

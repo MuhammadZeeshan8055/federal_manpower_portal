@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientDocumentController;
+use App\Http\Controllers\ClientPortal\ApplyJobController as ClientPortalApplyJobController;
 use App\Http\Controllers\ClientPortal\HomeController as ClientPortalHomeController;
 use App\Http\Controllers\ClientPortal\LoginController as ClientPortalLoginController;
 use App\Http\Controllers\ClientPortal\RegisterController as ClientPortalRegisterController;
@@ -35,6 +36,10 @@ Route::get('/status/{token}', [ClientStatusController::class, 'show'])
     ->name('client.status');
 
 Route::prefix('portal')->name('client-portal.')->group(function () {
+    Route::get('/apply/{job}', ClientPortalApplyJobController::class)
+        ->whereNumber('job')
+        ->name('apply');
+
     Route::middleware('guest')->group(function () {
         Route::get('/register', [ClientPortalRegisterController::class, 'create'])->name('register');
         Route::post('/register', [ClientPortalRegisterController::class, 'store']);

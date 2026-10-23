@@ -12,7 +12,12 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         $client = $user->clientProfile()
-            ->with(['processStatus:id,name', 'country:id,name', 'trade:id,name'])
+            ->with([
+                'processStatus:id,name',
+                'country:id,name',
+                'trade:id,name',
+                'jobPost.employer',
+            ])
             ->first();
 
         return view('client-portal.home', [

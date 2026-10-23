@@ -34,6 +34,7 @@ class ViewClient extends Component
                 'company:id,name',
                 'careOff:id,name',
                 'processStatus:id,name',
+                'jobPost.employer',
                 'documents',
             ])
             ->find($clientId);

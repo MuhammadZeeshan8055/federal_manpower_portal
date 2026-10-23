@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ClientPortal;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\JobApplyPrefill;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,10 @@ use Illuminate\View\View;
 
 class RegisterController extends Controller
 {
-    public function create(): View
+    public function create(Request $request): View
     {
+        $this->rememberJobFromRequest($request);
+
         return view('client-portal.register');
     }
 
@@ -36,6 +39,19 @@ class RegisterController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
+        if ($request->session()->has('apply_job_id')) {
+            return redirect()->route('client-portal.application');
+        }
+
         return redirect()->route('client-portal.home');
+    }
+
+    private function rememberJobFromRequest(Request $request): void
+    {
+        $jobId = (int) $request->query('job', 0);
+
+        if ($jobId > 0 && JobApplyPrefill::approvedJob($jobId)) {
+            session(['apply_job_id' => $jobId]);
+        }
     }
 }

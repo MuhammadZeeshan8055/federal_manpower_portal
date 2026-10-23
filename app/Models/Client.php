@@ -14,6 +14,7 @@ class Client extends Model
         'country_id',
         'trade_id',
         'company_id',
+        'job_post_id',
         'care_off_id',
         'process_status_id',
         'created_by',
@@ -157,6 +158,11 @@ class Client extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function jobPost(): BelongsTo
+    {
+        return $this->belongsTo(JobPost::class);
     }
 
     public function careOff(): BelongsTo

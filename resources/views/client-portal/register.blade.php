@@ -19,7 +19,7 @@
                 <div class="cp-field"><label for="password_confirmation">Confirm password</label><input id="password_confirmation" type="password" name="password_confirmation" placeholder="Repeat your password" required autocomplete="new-password"></div>
                 <button class="cp-btn" type="submit">Create applicant account</button>
             </form>
-            <p class="cp-switch">Already registered? <a href="{{ route('client-portal.login') }}">Sign in to your account</a></p>
+            <p class="cp-switch">Already registered? <a href="{{ route('client-portal.login') }}{{ session('apply_job_id') ? '?job='.session('apply_job_id') : '' }}">Sign in to your account</a></p>
             <div class="cp-auth__employer"><span><strong>Are you an employer?</strong>Join our recruitment network and submit job requirements.</span><a href="{{ route('employer.register') }}">Register as employer &rarr;</a></div>
             <p class="cp-auth__secure">By registering, you can securely save and manage your application information.</p>
         </div></section>

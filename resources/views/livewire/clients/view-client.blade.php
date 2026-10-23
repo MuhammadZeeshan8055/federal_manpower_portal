@@ -27,6 +27,32 @@
                     <dl class="bio-view-grid">
                         <div><dt>Trade</dt><dd>{{ $client->trade?->name ?: '—' }}</dd></div>
                         <div><dt>Country</dt><dd>{{ $client->country?->name ?: '—' }}</dd></div>
+                        <div class="bio-view-grid__full">
+                            <dt>Applied vacancy</dt>
+                            <dd>
+                                @if ($client->jobPost)
+                                    <strong>{{ $client->jobPost->title }}</strong>
+                                    <div class="muted">
+                                        {{ $client->jobPost->employer?->company_name ?: '—' }}
+                                        @if ($client->jobPost->country)
+                                            · {{ $client->jobPost->country }}
+                                        @endif
+                                        @if ($client->jobPost->category)
+                                            · {{ $client->jobPost->category }}
+                                        @endif
+                                        · {{ ucfirst($client->jobPost->status) }}
+                                    </div>
+                                    @if ($client->jobPost->salary_text)
+                                        <div class="muted">Salary: {{ $client->jobPost->salary_text }}</div>
+                                    @endif
+                                    @if ($client->jobPost->description)
+                                        <div class="muted" style="margin-top:6px; white-space:pre-wrap;">{{ $client->jobPost->description }}</div>
+                                    @endif
+                                @else
+                                    —
+                                @endif
+                            </dd>
+                        </div>
                     </dl>
                 </fieldset>
 

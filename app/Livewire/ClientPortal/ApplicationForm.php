@@ -10,6 +10,7 @@ use App\Models\Country;
 use App\Models\Trade;
 use App\Support\ClientPrivateFiles;
 use App\Support\ClientPublicLink;
+use App\Support\JobApplyPrefill;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -91,6 +92,12 @@ class ApplicationForm extends Component
 
     public string $company_id = '';
 
+    public string $job_post_id = '';
+
+    public ?string $appliedJobTitle = null;
+
+    public ?string $appliedJobCompany = null;
+
     /** @var mixed */
     public $photo = null;
 
@@ -161,7 +168,7 @@ class ApplicationForm extends Component
     public function mount(): void
     {
         $user = auth()->user();
-        $client = $user->clientProfile()->with('documents')->first();
+        $client = $user->clientProfile()->with(['documents', 'jobPost.employer'])->first();
 
         $this->experiences = Client::emptyExperienceRows();
         $this->resetDocumentChecks();
@@ -169,22 +176,22 @@ class ApplicationForm extends Component
         $this->full_name = $user->name ?? '';
         $this->email = $user->email ?? '';
 
-        if (! $client) {
-            return;
+        if ($client) {
+            $this->clientId = $client->id;
+            $this->loadClient($client);
+
+            $this->unlockedPassport = true;
+            $this->unlockedEducation = true;
+            $this->unlockedCase = true;
+            $this->unlockedDocuments = true;
+            $this->openPersonal = true;
+            $this->openPassport = false;
+            $this->openEducation = false;
+            $this->openCase = false;
+            $this->openDocuments = false;
         }
 
-        $this->clientId = $client->id;
-        $this->loadClient($client);
-
-        $this->unlockedPassport = true;
-        $this->unlockedEducation = true;
-        $this->unlockedCase = true;
-        $this->unlockedDocuments = true;
-        $this->openPersonal = true;
-        $this->openPassport = false;
-        $this->openEducation = false;
-        $this->openCase = false;
-        $this->openDocuments = false;
+        $this->applyJobFromSession();
     }
 
     public function toggleSection(string $section): void
@@ -285,6 +292,7 @@ class ApplicationForm extends Component
             'country_id' => ['nullable', 'exists:countries,id'],
             'trade_id' => ['nullable', 'exists:trades,id'],
             'company_id' => ['nullable', 'exists:companies,id'],
+            'job_post_id' => ['nullable', 'exists:job_posts,id'],
             'email' => ['nullable', 'email', 'max:255'],
             'photo' => $this->photoRules(),
             'doc_files' => ['array'],
@@ -308,6 +316,7 @@ class ApplicationForm extends Component
                 'country_id' => $this->idOrNull($this->country_id),
                 'trade_id' => $this->idOrNull($this->trade_id),
                 'company_id' => $this->idOrNull($this->company_id),
+                'job_post_id' => $this->idOrNull($this->job_post_id),
                 'care_off_id' => $careOffId,
                 'full_name' => $this->full_name,
                 'height' => $this->nullIfEmpty($this->height),
@@ -423,6 +432,7 @@ class ApplicationForm extends Component
             }
         });
 
+        session()->forget('apply_job_id');
         $this->successMessage = 'Application saved. You can track status from your portal home.';
         $this->toastVersion++;
         $this->doc_files = [];
@@ -471,6 +481,41 @@ class ApplicationForm extends Component
         ]);
     }
 
+    private function applyJobFromSession(): void
+    {
+        $jobId = (int) session('apply_job_id', 0);
+
+        if ($jobId <= 0) {
+            return;
+        }
+
+        $job = JobApplyPrefill::approvedJob($jobId);
+
+        if (! $job) {
+            session()->forget('apply_job_id');
+
+            return;
+        }
+
+        $this->job_post_id = (string) $job->id;
+        $this->appliedJobTitle = $job->title;
+        $this->appliedJobCompany = $job->employer?->company_name;
+
+        $matched = JobApplyPrefill::matchIds($job);
+
+        if ($this->trade_id === '' && $matched['trade_id']) {
+            $this->trade_id = (string) $matched['trade_id'];
+        }
+
+        if ($this->country_id === '' && $matched['country_id']) {
+            $this->country_id = (string) $matched['country_id'];
+        }
+
+        if ($this->company_id === '' && $matched['company_id']) {
+            $this->company_id = (string) $matched['company_id'];
+        }
+    }
+
     private function loadClient(Client $client): void
     {
         $this->trade_id = (string) ($client->trade_id ?? '');
@@ -507,6 +552,12 @@ class ApplicationForm extends Component
         $this->source = $client->source ?: 'direct';
         $this->care_off_id = (string) ($client->care_off_id ?? '');
         $this->company_id = (string) ($client->company_id ?? '');
+        $this->job_post_id = (string) ($client->job_post_id ?? '');
+
+        if ($client->jobPost) {
+            $this->appliedJobTitle = $client->jobPost->title;
+            $this->appliedJobCompany = $client->jobPost->employer?->company_name;
+        }
 
         $this->existing_docs = [];
         $this->doc_not_required = [];

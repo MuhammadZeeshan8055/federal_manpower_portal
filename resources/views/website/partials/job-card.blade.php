@@ -1,5 +1,5 @@
 @php
-    [$visual, $title, $category, $country, $countryName, $experience, $experienceLevel, $type, $typeSlug, $salary, $badge, $image] = $job;
+    [$visual, $title, $category, $country, $countryName, $experience, $experienceLevel, $type, $typeSlug, $salary, $badge, $image, $jobId] = $job;
 @endphp
 <article class="vacancy-card" data-title="{{ strtolower($title) }}" data-category="{{ $category }}" data-country="{{ $country }}" data-experience="{{ $experienceLevel }}" data-type="{{ $typeSlug }}">
     <div class="vacancy-card__visual vacancy-card__visual--{{ $visual }}" style="background-image:url('{{ asset($image) }}')">
@@ -11,6 +11,6 @@
         <h3>{{ $title }}</h3>
         <ul><li>{{ $countryName }}</li><li>{{ $experience }} experience</li></ul>
         <p><span>{{ $type }}</span><strong>{{ $salary }}</strong></p>
-        <a href="{{ route('client-portal.register') }}" class="btn btn-accent">Apply now <span>&rarr;</span></a>
+        <a href="{{ route('client-portal.apply', $jobId) }}" class="btn btn-accent">Apply now <span>&rarr;</span></a>
     </div>
 </article>

@@ -38,6 +38,12 @@
                         <strong>Country</strong>
                         <span>{{ $client->country?->name ?: '—' }}</span>
                     </div>
+                    @if ($client->jobPost)
+                        <div class="contact-card">
+                            <strong>Applied vacancy</strong>
+                            <span>{{ $client->jobPost->title }}@if ($client->jobPost->employer) · {{ $client->jobPost->employer->company_name }}@endif</span>
+                        </div>
+                    @endif
                 @else
                     <div class="contact-card">
                         <strong>Step 1</strong>
