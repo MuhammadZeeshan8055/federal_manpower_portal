@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#075676">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="Find verified overseas employment opportunities and apply online with Federal Manpower.">
+    <meta name="description" content="Federal Manpower Promoter (Licence OP&HRD/4749/RWP) — trusted overseas employment promoters under Federal Group of Companies. Apply online for overseas jobs.">
     <title>@yield('title', 'Home') &mdash; Federal Manpower</title>
     <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,38 +57,38 @@
             <div class="footer-feature__wash"></div>
             <div class="site-wrap footer-feature__inner">
                 <div class="footer-feature__copy">
-                    <span class="footer-eyebrow">Why choose us</span>
-                    <h2 id="footer-feature-title">Your trusted overseas employment partner</h2>
-                    <p>Practical recruitment support for candidates and employers, delivered through a clear and responsible process.</p>
+                    <span class="footer-eyebrow">Federal Manpower Promoter</span>
+                    <h2 id="footer-feature-title">Licensed overseas employment promoters</h2>
+                    <p>Licence No. OP&amp;HRD/4749/RWP · Under Federal Group of Companies. For 17+ years we have strengthened people through proper overseas roles across the Middle East and beyond — now with online apply and office staff follow-up.</p>
                     <div class="footer-feature__services">
-                        <div><span>01</span><p><strong>Job guidance</strong><small>Find roles suited to your skills</small></p></div>
-                        <div><span>02</span><p><strong>Employer recruitment</strong><small>Suitable manpower for real needs</small></p></div>
-                        <div><span>03</span><p><strong>Document support</strong><small>Clear application requirements</small></p></div>
-                        <div><span>04</span><p><strong>Candidate preparation</strong><small>Support through each stage</small></p></div>
-                        <div><span>05</span><p><strong>Travel guidance</strong><small>Prepare confidently for departure</small></p></div>
-                        <div><span>06</span><p><strong>Ongoing communication</strong><small>Know what comes next</small></p></div>
+                        <div><span>01</span><p><strong>Online application</strong><small>Register and submit bio data securely</small></p></div>
+                        <div><span>02</span><p><strong>Approved vacancies</strong><small>Jobs go live after office review</small></p></div>
+                        <div><span>03</span><p><strong>Document uploads</strong><small>Submit required files with your application</small></p></div>
+                        <div><span>04</span><p><strong>Status tracking</strong><small>Know your stage with a shareable link</small></p></div>
+                        <div><span>05</span><p><strong>Employer posting</strong><small>Companies register and submit roles</small></p></div>
+                        <div><span>06</span><p><strong>Office coordination</strong><small>Our team manages matching and process</small></p></div>
                     </div>
                     <a href="{{ route('website.services') }}" class="btn btn-navy">Explore our services <span>&rarr;</span></a>
                 </div>
                 <div class="footer-feature__promise">
-                    <div><strong>Clear</strong><span>Recruitment steps</span></div>
-                    <div><strong>Prepared</strong><span>Candidate profiles</span></div>
-                    <div><strong>Supported</strong><span>Employment journey</span></div>
+                    <div><strong>Licensed</strong><span>Trusted employment company</span></div>
+                    <div><strong>Proper roles</strong><span>Skills matched to jobs</span></div>
+                    <div><strong>Supported</strong><span>Office staff follow-up</span></div>
                 </div>
             </div>
         </section>
 
         <div class="footer-journey">
             <div class="site-wrap footer-journey__inner">
-                <div class="footer-journey__copy"><span class="footer-journey__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-3.1a15.7 15.7 0 0 0-1.4-3.5A8.1 8.1 0 0 1 18.9 8ZM12 4c.8 1 1.5 2.3 1.9 4h-3.8c.4-1.7 1.1-3 1.9-4ZM4.3 14a7 7 0 0 1 0-4h3.4a16 16 0 0 0 0 4H4.3Zm.8 2h3.1c.3 1.3.8 2.5 1.4 3.5A8.1 8.1 0 0 1 5.1 16Zm3.1-8H5.1a8.1 8.1 0 0 1 4.5-3.5A15.7 15.7 0 0 0 8.2 8Zm3.8 12c-.8-1-1.5-2.3-1.9-4h3.8c-.4 1.7-1.1 3-1.9 4Zm2.3-6H9.7a14 14 0 0 1 0-4h4.6a14 14 0 0 1 0 4Zm.1 5.5c.6-1 1.1-2.2 1.4-3.5h3.1a8.1 8.1 0 0 1-4.5 3.5ZM16.3 14a16 16 0 0 0 0-4h3.4a7 7 0 0 1 0 4h-3.4Z"/></svg></span><span><strong>Start your overseas journey today</strong><small>Create your profile and be ready for suitable opportunities.</small></span></div>
+                <div class="footer-journey__copy"><span class="footer-journey__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm6.9 6h-3.1a15.7 15.7 0 0 0-1.4-3.5A8.1 8.1 0 0 1 18.9 8ZM12 4c.8 1 1.5 2.3 1.9 4h-3.8c.4-1.7 1.1-3 1.9-4ZM4.3 14a7 7 0 0 1 0-4h3.4a16 16 0 0 0 0 4H4.3Zm.8 2h3.1c.3 1.3.8 2.5 1.4 3.5A8.1 8.1 0 0 1 5.1 16Zm3.1-8H5.1a8.1 8.1 0 0 1 4.5-3.5A15.7 15.7 0 0 0 8.2 8Zm3.8 12c-.8-1-1.5-2.3-1.9-4h3.8c-.4 1.7-1.1 3-1.9 4Zm2.3-6H9.7a14 14 0 0 1 0-4h4.6a14 14 0 0 1 0 4Zm.1 5.5c.6-1 1.1-2.2 1.4-3.5h3.1a8.1 8.1 0 0 1-4.5 3.5ZM16.3 14a16 16 0 0 0 0-4h3.4a7 7 0 0 1 0 4h-3.4Z"/></svg></span><span><strong>Ready to apply for an overseas role?</strong><small>Create your applicant account, fill bio data, and apply to approved vacancies.</small></span></div>
                 <a href="{{ route('client-portal.register') }}" class="btn btn-accent">Apply online <span>&rarr;</span></a>
             </div>
         </div>
 
         <div class="site-wrap site-footer__inner">
-            <div class="site-footer__brand"><a href="{{ route('website.home') }}" class="site-logo site-logo--group"><img src="{{ asset('images/federal-group-logo.png') }}" alt="Federal Group of Companies" width="846" height="295"></a><p>Connecting skilled professionals with international employers through a transparent overseas recruitment process.</p></div>
+            <div class="site-footer__brand"><a href="{{ route('website.home') }}" class="site-logo site-logo--group"><img src="{{ asset('images/federal-group-logo.png') }}" alt="Federal Group of Companies" width="846" height="295"></a><p>Federal Manpower Promoter · Overseas Employment Promoters · Licence No. OP&amp;HRD/4749/RWP. Serving Pakistan’s overseas employment needs with trusted placement and proper job roles.</p></div>
             <div><h4>Quick links</h4><a href="{{ route('website.home') }}">Home</a><a href="{{ route('website.about') }}">About us</a><a href="{{ route('website.jobs') }}">Vacancies</a><a href="{{ route('website.countries') }}">Countries</a></div>
-            <div><h4>Our services</h4><a href="{{ route('client-portal.register') }}">Candidate registration</a><a href="{{ route('website.services') }}">Job matching</a><a href="{{ route('website.services') }}">Document guidance</a><a href="{{ route('employer.register') }}">Register as employer</a></div>
+            <div><h4>Our services</h4><a href="{{ route('client-portal.register') }}">Candidate portal</a><a href="{{ route('website.jobs') }}">Browse jobs</a><a href="{{ route('website.services') }}">How we work</a><a href="{{ route('employer.register') }}">Register as employer</a></div>
             <div><h4>Contact us</h4><p>+92 300 434 0666</p><p>info@federalmanpower.com</p><p>Office No. 12, Blue Area,<br>Islamabad, Pakistan</p><div class="site-footer__social"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Instagram">ig</a></div></div>
         </div>
         <div class="site-footer__bar"><div class="site-wrap"><span>&copy; {{ date('Y') }} Federal Manpower. All rights reserved.</span><span><a href="#">Privacy policy</a><a href="#">Terms &amp; conditions</a></span></div></div>
