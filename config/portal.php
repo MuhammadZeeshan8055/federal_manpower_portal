@@ -9,6 +9,7 @@ return [
         'accounts' => 'Accounts',
         'staff' => 'Staff',
         'client' => 'Client',
+        'employer' => 'Employer',
     ],
 
     /*
@@ -90,6 +91,16 @@ return [
                 ['key' => 'payments', 'label' => 'Payments'],
                 ['key' => 'payment_methods', 'label' => 'Payment Methods'],
                 ['key' => 'reports', 'label' => 'Reports'],
+            ],
+        ],
+        [
+            'key' => 'employers',
+            'title' => 'Employers',
+            'description' => 'Approve employer accounts and job posts.',
+            'icon' => 'briefcase',
+            'children' => [
+                ['key' => 'approvals', 'label' => 'Employer Approvals', 'admin_only' => true],
+                ['key' => 'job-approvals', 'label' => 'Job Approvals', 'admin_only' => true],
             ],
         ],
         [

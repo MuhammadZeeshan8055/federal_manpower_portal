@@ -20,7 +20,7 @@
                 <button class="cp-btn" type="submit">Create applicant account</button>
             </form>
             <p class="cp-switch">Already registered? <a href="{{ route('client-portal.login') }}">Sign in to your account</a></p>
-            <div class="cp-auth__employer"><span><strong>Are you an employer?</strong>Join our recruitment network and submit job requirements.</span><a href="{{ route('website.employers') }}">Register as employer &rarr;</a></div>
+            <div class="cp-auth__employer"><span><strong>Are you an employer?</strong>Join our recruitment network and submit job requirements.</span><a href="{{ route('employer.register') }}">Register as employer &rarr;</a></div>
             <p class="cp-auth__secure">By registering, you can securely save and manage your application information.</p>
         </div></section>
     </main>

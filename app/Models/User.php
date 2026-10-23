@@ -52,14 +52,24 @@ class User extends Authenticatable
         return $this->hasOne(Client::class);
     }
 
+    public function employerProfile(): HasOne
+    {
+        return $this->hasOne(EmployerProfile::class);
+    }
+
     public function isClient(): bool
     {
         return $this->role === 'client';
     }
 
+    public function isEmployer(): bool
+    {
+        return $this->role === 'employer';
+    }
+
     public function isOfficeUser(): bool
     {
-        return ! $this->isClient();
+        return ! $this->isClient() && ! $this->isEmployer();
     }
 
     public function isSuperAdmin(): bool
@@ -100,7 +110,7 @@ class User extends Authenticatable
 
     public function canView(string $module, string $feature): bool
     {
-        if ($this->isClient()) {
+        if ($this->isClient() || $this->isEmployer()) {
             return false;
         }
 
@@ -116,7 +126,7 @@ class User extends Authenticatable
 
     public function canManage(string $module, string $feature): bool
     {
-        if ($this->isClient()) {
+        if ($this->isClient() || $this->isEmployer()) {
             return false;
         }
 

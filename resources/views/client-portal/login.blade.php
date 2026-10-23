@@ -19,7 +19,7 @@
                 <button class="cp-btn" type="submit">Sign in to your account</button>
             </form>
             <p class="cp-switch">New applicant? <a href="{{ route('client-portal.register') }}">Create your profile</a></p>
-            <div class="cp-auth__employer"><span><strong>Hiring international talent?</strong>Register your company and share your manpower needs.</span><a href="{{ route('website.employers') }}">Register as employer &rarr;</a></div>
+            <div class="cp-auth__employer"><span><strong>Hiring international talent?</strong>Register your company and share your manpower needs.</span><a href="{{ route('employer.register') }}">Register as employer &rarr;</a></div>
             <p class="cp-auth__secure">Your account and application documents are kept private and secure.</p>
         </div></section>
     </main>

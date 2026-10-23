@@ -13,7 +13,11 @@ class EnsureClientUser
         $user = $request->user();
 
         if (! $user || ! $user->isClient()) {
-            if ($user && ! $user->isClient()) {
+            if ($user?->isEmployer()) {
+                return redirect()->route('employer.home');
+            }
+
+            if ($user?->isOfficeUser()) {
                 return redirect()->route('dashboard');
             }
 

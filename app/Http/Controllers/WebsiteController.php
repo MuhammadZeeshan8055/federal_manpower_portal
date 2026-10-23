@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobPost;
+use Illuminate\Support\Str;
+
 class WebsiteController extends Controller
 {
     public function home()
@@ -44,18 +47,75 @@ class WebsiteController extends Controller
         return [
             'jobs' => $this->jobsData(),
             'destinations' => $this->destinationsData(),
+            'jobFilterCountries' => $this->approvedJobOptions('country'),
+            'jobFilterCategories' => $this->approvedJobOptions('category'),
+            'jobFilterExperiences' => $this->approvedJobOptions('experience'),
+            'jobFilterTypes' => $this->approvedJobOptions('employment_type'),
         ];
+    }
+
+    /** @return array<string, string> slug => label from approved jobs only */
+    private function approvedJobOptions(string $column): array
+    {
+        return JobPost::query()
+            ->approved()
+            ->whereNotNull($column)
+            ->where($column, '!=', '')
+            ->distinct()
+            ->orderBy($column)
+            ->pluck($column)
+            ->mapWithKeys(function (string $label) {
+                $slug = Str::slug($label);
+
+                return $slug !== '' ? [$slug => $label] : [];
+            })
+            ->all();
     }
 
     private function jobsData(): array
     {
-        return [
-            ['construction', 'Construction Worker', 'construction', 'uae', 'United Arab Emirates', '2+ years', 'junior', 'Full time', 'full-time', '$500 - $700 / month', 'Featured', 'images/website/job-cards-strip.png'],
-            ['healthcare', 'Staff Nurse', 'healthcare', 'saudi-arabia', 'Saudi Arabia', '3+ years', 'mid', 'Full time', 'full-time', '$900 - $1,200 / month', 'New', 'images/website/job-cards-strip.png'],
-            ['driving', 'Heavy Vehicle Driver', 'driving', 'qatar', 'Qatar', '3+ years', 'mid', 'Contract', 'contract', '$700 - $850 / month', 'Popular', 'images/website/job-cards-strip.png'],
-            ['engineering', 'Mechanical Engineer', 'engineering', 'kuwait', 'Kuwait', '4+ years', 'senior', 'Full time', 'full-time', '$1,200 - $1,600 / month', 'Featured', 'images/website/job-cards-strip.png'],
-            ['hospitality', 'Hotel Supervisor', 'hospitality', 'oman', 'Oman', '3+ years', 'mid', 'Contract', 'contract', '$750 - $950 / month', 'New', 'images/website/recruitment-team-banner.png'],
-        ];
+        return JobPost::query()
+            ->approved()
+            ->with('employer')
+            ->orderByDesc('approved_at')
+            ->orderByDesc('id')
+            ->limit(24)
+            ->get()
+            ->map(function (JobPost $job) {
+                $category = $job->category ?: 'General';
+                $categorySlug = Str::slug($category) ?: 'general';
+                $country = $job->country ?: 'Overseas';
+                $type = $job->employment_type ?: 'Full time';
+                $experience = $job->experience ?: '—';
+                $experienceSlug = Str::slug($experience) ?: 'any';
+
+                return [
+                    $this->visualForCategory($categorySlug),
+                    $job->title,
+                    $categorySlug,
+                    Str::slug($country) ?: 'overseas',
+                    $country,
+                    $experience,
+                    $experienceSlug,
+                    $type,
+                    Str::slug($type) ?: 'full-time',
+                    $job->salary_text ?: 'Negotiable',
+                    'Open',
+                    'images/website/job-cards-strip.png',
+                ];
+            })
+            ->all();
+    }
+
+    private function visualForCategory(string $categorySlug): string
+    {
+        $known = ['construction', 'healthcare', 'driving', 'engineering', 'hospitality'];
+
+        if (in_array($categorySlug, $known, true)) {
+            return $categorySlug;
+        }
+
+        return 'construction';
     }
 
     private function destinationsData(): array

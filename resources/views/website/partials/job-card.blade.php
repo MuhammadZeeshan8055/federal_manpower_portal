@@ -7,7 +7,7 @@
         <button type="button" class="vacancy-card__save" aria-label="Save {{ $title }}">&#9825;</button>
     </div>
     <div class="vacancy-card__body">
-        <span class="vacancy-card__type">{{ $category }}</span>
+        <span class="vacancy-card__type">{{ \Illuminate\Support\Str::headline($category) }}</span>
         <h3>{{ $title }}</h3>
         <ul><li>{{ $countryName }}</li><li>{{ $experience }} experience</li></ul>
         <p><span>{{ $type }}</span><strong>{{ $salary }}</strong></p>

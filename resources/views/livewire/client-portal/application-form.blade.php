@@ -1,20 +1,7 @@
 <div>
-    <div class="cp-topbar">
-        <a href="{{ route('client-portal.home') }}" style="color:#fff;text-decoration:none;font-weight:800;">← Home</a>
-        <form method="POST" action="{{ route('client-portal.logout') }}">
-            @csrf
-            <button class="cp-link-btn" type="submit">Sign out</button>
-        </form>
-    </div>
-
-    <header class="cp-brand">
-        <img src="{{ asset('images/federal-group-logo.png') }}" alt="Federal Group of Companies">
-        <p>{{ $clientId ? 'Edit application' : 'New application' }}</p>
-    </header>
-
     @if ($successMessage !== '')
         <div
-            class="cp-toast"
+            class="cp-app-toast"
             wire:key="portal-toast-{{ $toastVersion }}"
             x-data="{ show: true }"
             x-init="setTimeout(() => show = false, 4500)"
@@ -23,334 +10,371 @@
             role="status"
             aria-live="polite"
         >
-            <div class="cp-toast__copy">
-                <small>Success</small>
+            <div>
+                <small>Saved</small>
                 <strong>{{ $successMessage }}</strong>
             </div>
-            <button type="button" class="cp-toast__close" @click="show = false" aria-label="Dismiss">&times;</button>
-            <span class="cp-toast__progress" aria-hidden="true"></span>
+            <button type="button" class="cp-app-toast__close" @click="show = false" aria-label="Dismiss">&times;</button>
         </div>
     @endif
 
-    <main class="cp-card cp-app">
-        <h1 class="cp-title">{{ $clientId ? 'Update your bio data' : 'Fill your bio data' }}</h1>
-        <p class="cp-intro">Complete each section. Office staff will set your process status after review.</p>
-
-        <div class="cp-job">
-            <div class="cp-field">
-                <label for="trade_id">Job title</label>
-                <select id="trade_id" wire:model="trade_id">
-                    <option value="">Select trade</option>
-                    @foreach ($trades as $trade)
-                        <option value="{{ $trade->id }}">{{ $trade->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="cp-field">
-                <label for="country_id">Country</label>
-                <select id="country_id" wire:model="country_id">
-                    <option value="">Select country</option>
-                    @foreach ($countries as $country)
-                        <option value="{{ $country->id }}">{{ $country->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+    <section class="page-hero page-hero--candidates">
+        <div class="site-wrap page-hero__inner">
+            <span class="section-kicker">Applicant portal</span>
+            <h1>{{ $clientId ? 'Update your bio data.' : 'Fill your bio data.' }}</h1>
+            <p>Complete each section below. Office staff will set your process status after review.</p>
         </div>
+    </section>
 
-        {{-- Personal --}}
-        <section class="cp-section {{ $openPersonal ? 'is-open' : '' }}">
-            <button type="button" class="cp-section__toggle" wire:click="toggleSection('personal')">
-                <span>1. Personal details</span>
-                <span class="cp-chevron"></span>
-            </button>
-            @if ($openPersonal)
-                <div class="cp-section__body">
-                    <div class="cp-field">
-                        <label>Name *</label>
-                        <input type="text" wire:model="full_name" placeholder="As on passport">
-                        @error('full_name') <p class="cp-error">{{ $message }}</p> @enderror
-                    </div>
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Height</label>
-                            <input type="text" wire:model="height" placeholder="e.g. 5'8&quot;">
-                        </div>
-                        <div class="cp-field">
-                            <label>Weight</label>
-                            <input type="text" wire:model="weight" placeholder="e.g. 70 kg">
-                        </div>
-                    </div>
-                    <div class="cp-field">
-                        <label>Father's name *</label>
-                        <input type="text" wire:model="father_name">
-                        @error('father_name') <p class="cp-error">{{ $message }}</p> @enderror
-                    </div>
-                    <div class="cp-field">
-                        <label>Mother's name *</label>
-                        <input type="text" wire:model="mother_name">
-                        @error('mother_name') <p class="cp-error">{{ $message }}</p> @enderror
-                    </div>
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Gender *</label>
-                            <select wire:model="gender">
-                                <option value="">Select</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                            @error('gender') <p class="cp-error">{{ $message }}</p> @enderror
-                        </div>
-                        <div class="cp-field">
-                            <label>Marital status *</label>
-                            <select wire:model="marital_status">
-                                <option value="">Select</option>
-                                <option value="single">Single</option>
-                                <option value="married">Married</option>
-                                <option value="divorced">Divorced</option>
-                                <option value="widowed">Widowed</option>
-                            </select>
-                            @error('marital_status') <p class="cp-error">{{ $message }}</p> @enderror
-                        </div>
-                    </div>
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Date of birth *</label>
-                            <input type="date" wire:model.live="date_of_birth">
-                            @error('date_of_birth') <p class="cp-error">{{ $message }}</p> @enderror
-                        </div>
-                        <div class="cp-field">
-                            <label>Age</label>
-                            <input type="text" value="{{ $age }}" readonly tabindex="-1">
-                        </div>
-                    </div>
-                    <div class="cp-field">
-                        <label>Religion *</label>
-                        <input type="text" wire:model="religion">
-                        @error('religion') <p class="cp-error">{{ $message }}</p> @enderror
-                    </div>
-                    <div class="cp-field">
-                        <label>ID number (CNIC) *</label>
-                        <input type="text" wire:model="cnic" placeholder="e.g. 35202-1234567-1">
-                        @error('cnic') <p class="cp-error">{{ $message }}</p> @enderror
-                    </div>
-                    <div class="cp-field">
-                        <label>Place of birth</label>
-                        <input type="text" wire:model="place_of_birth">
-                    </div>
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Phone</label>
-                            <input type="tel" wire:model="phone">
-                        </div>
-                        <div class="cp-field">
-                            <label>Email</label>
-                            <input type="email" wire:model="email">
-                        </div>
-                    </div>
-                    <div class="cp-field">
-                        <label>Permanent address</label>
-                        <input type="text" wire:model="address">
-                    </div>
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Police station</label>
-                            <input type="text" wire:model="police_station">
-                        </div>
-                        <div class="cp-field">
-                            <label>District</label>
-                            <input type="text" wire:model="district">
-                        </div>
-                    </div>
-                    <div class="cp-field">
-                        <label>Medical fitness</label>
-                        <select wire:model="medical_fitness">
-                            <option value="">Select</option>
-                            <option value="fit">Fit</option>
-                            <option value="unfit">Unfit</option>
-                            <option value="pending">Pending</option>
-                        </select>
-                    </div>
-                    <div class="cp-field">
-                        <label>Photo</label>
-                        <input type="file" wire:model="photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
-                        <small class="cp-hint">JPG/PNG · max {{ $maxUploadMb }} MB
-                            @if ($photo_path) · current photo on file @endif
-                        </small>
-                        <div wire:loading wire:target="photo" class="cp-hint">Uploading…</div>
-                        @error('photo') <p class="cp-error">{{ $message }}</p> @enderror
-                    </div>
-                    <button type="button" class="cp-btn" wire:click="continuePersonal">Continue</button>
+    <section class="page-section page-section--soft">
+        <div class="site-wrap cp-app">
+            <div class="contact-form cp-app__intro">
+                <h2>Preferred role</h2>
+                <div class="form-row">
+                    <label>
+                        Job title
+                        @include('partials.searchable-select', [
+                            'options' => $trades,
+                            'wireModel' => 'trade_id',
+                            'selectedId' => $trade_id,
+                            'placeholder' => 'Select trade',
+                            'searchPlaceholder' => 'Search trade...',
+                            'emptyText' => 'No trade found',
+                        ])
+                    </label>
+                    <label>
+                        Country
+                        @include('partials.searchable-select', [
+                            'options' => $countries,
+                            'wireModel' => 'country_id',
+                            'selectedId' => $country_id,
+                            'placeholder' => 'Select country',
+                            'searchPlaceholder' => 'Search country...',
+                            'emptyText' => 'No country found',
+                        ])
+                    </label>
                 </div>
-            @endif
-        </section>
+            </div>
 
-        {{-- Passport --}}
-        <section class="cp-section {{ $openPassport ? 'is-open' : '' }} {{ $unlockedPassport ? '' : 'is-locked' }}">
-            <button type="button" class="cp-section__toggle" wire:click="toggleSection('passport')" @disabled(! $unlockedPassport)>
-                <span>2. Passport details</span>
-                <span class="cp-chevron"></span>
-            </button>
-            @if ($openPassport)
-                <div class="cp-section__body">
-                    <div class="cp-field">
-                        <label>Passport no. *</label>
-                        <input type="text" wire:model="passport_number">
-                        @error('passport_number') <p class="cp-error">{{ $message }}</p> @enderror
-                    </div>
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Date of issue *</label>
-                            <input type="date" wire:model="passport_issue_date">
-                            @error('passport_issue_date') <p class="cp-error">{{ $message }}</p> @enderror
-                        </div>
-                        <div class="cp-field">
-                            <label>Date of expiry *</label>
-                            <input type="date" wire:model="passport_expiry">
-                            @error('passport_expiry') <p class="cp-error">{{ $message }}</p> @enderror
-                        </div>
-                    </div>
-                    <button type="button" class="cp-btn" wire:click="continuePassport">Continue</button>
-                </div>
-            @endif
-        </section>
-
-        {{-- Education --}}
-        <section class="cp-section {{ $openEducation ? 'is-open' : '' }} {{ $unlockedEducation ? '' : 'is-locked' }}">
-            <button type="button" class="cp-section__toggle" wire:click="toggleSection('education')" @disabled(! $unlockedEducation)>
-                <span>3. Education & experience</span>
-                <span class="cp-chevron"></span>
-            </button>
-            @if ($openEducation)
-                <div class="cp-section__body">
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Degree</label>
-                            <input type="text" wire:model="degree">
-                        </div>
-                        <div class="cp-field">
-                            <label>Year</label>
-                            <input type="text" wire:model="degree_year" maxlength="4" placeholder="2018">
-                        </div>
-                    </div>
-                    <div class="cp-grid">
-                        <div class="cp-field">
-                            <label>Certification</label>
-                            <input type="text" wire:model="certification">
-                        </div>
-                        <div class="cp-field">
-                            <label>Year</label>
-                            <input type="text" wire:model="certification_year" maxlength="4" placeholder="2019">
-                        </div>
-                    </div>
-                    <div class="cp-field">
-                        <label>Board / University</label>
-                        <input type="text" wire:model="board_university">
-                    </div>
-                    <div class="cp-field">
-                        <label>Languages</label>
-                        <input type="text" wire:model="languages" placeholder="e.g. Urdu, English">
-                    </div>
-                    <div class="cp-field">
-                        <label>Total experience</label>
-                        <input type="text" wire:model="total_experience" placeholder="e.g. 5 years">
-                    </div>
-
-                    <p class="cp-hint" style="margin:4px 0 10px;">Work history (up to 5 rows)</p>
-                    @foreach ($experiences as $index => $row)
-                        <div class="cp-exp" wire:key="portal-exp-{{ $index }}">
-                            <input type="text" wire:model="experiences.{{ $index }}.from_to" placeholder="From - To">
-                            <input type="text" wire:model="experiences.{{ $index }}.company" placeholder="Company">
-                            <input type="text" wire:model="experiences.{{ $index }}.project" placeholder="Project">
-                            <input type="text" wire:model="experiences.{{ $index }}.country" placeholder="Country">
-                            <input type="text" wire:model="experiences.{{ $index }}.job_title" placeholder="Job title">
-                        </div>
-                    @endforeach
-
-                    <button type="button" class="cp-btn" wire:click="continueEducation">Continue</button>
-                </div>
-            @endif
-        </section>
-
-        {{-- Case --}}
-        <section class="cp-section {{ $openCase ? 'is-open' : '' }} {{ $unlockedCase ? '' : 'is-locked' }}">
-            <button type="button" class="cp-section__toggle" wire:click="toggleSection('case')" @disabled(! $unlockedCase)>
-                <span>4. Application details</span>
-                <span class="cp-chevron"></span>
-            </button>
-            @if ($openCase)
-                <div class="cp-section__body">
-                    <div class="cp-field">
-                        <label>Source</label>
-                        <select wire:model.live="source">
-                            <option value="direct">Direct</option>
-                            <option value="referred">Referred (Care Off)</option>
-                        </select>
-                    </div>
-                    @if ($source === 'referred')
-                        <div class="cp-field">
-                            <label>Care Off *</label>
-                            <select wire:model="care_off_id">
-                                <option value="">Select care off</option>
-                                @foreach ($careOffs as $careOff)
-                                    <option value="{{ $careOff->id }}">{{ $careOff->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('care_off_id') <p class="cp-error">{{ $message }}</p> @enderror
-                        </div>
-                    @endif
-                    <div class="cp-field">
-                        <label>Preferred company</label>
-                        <select wire:model="company_id">
-                            <option value="">Select company</option>
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->id }}">{{ $company->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="button" class="cp-btn" wire:click="continueCase">Continue</button>
-                </div>
-            @endif
-        </section>
-
-        {{-- Documents --}}
-        <section class="cp-section {{ $openDocuments ? 'is-open' : '' }} {{ $unlockedDocuments ? '' : 'is-locked' }}">
-            <button type="button" class="cp-section__toggle" wire:click="toggleSection('documents')" @disabled(! $unlockedDocuments)>
-                <span>5. Documents</span>
-                <span class="cp-chevron"></span>
-            </button>
-            @if ($openDocuments)
-                <div class="cp-section__body">
-                    <p class="cp-hint" style="margin-bottom:12px;">Upload a file or mark N/A. Max {{ $maxUploadMb }} MB each (PDF/JPG/PNG).</p>
-
-                    @foreach ($documents as $doc)
-                        <div class="cp-doc" wire:key="portal-doc-{{ $doc['key'] }}">
-                            <strong>{{ $doc['label'] }}</strong>
-                            @if (! empty($existing_docs[$doc['key']]))
-                                <small class="cp-hint">On file: {{ $existing_docs[$doc['key']] }}</small>
-                            @endif
-                            <label class="cp-check" style="margin:8px 0;">
-                                <input type="checkbox" wire:model.live="doc_not_required.{{ $doc['key'] }}">
-                                Not applicable
+            <section class="cp-app-section {{ $openPersonal ? 'is-open' : '' }}">
+                <button type="button" class="cp-app-section__toggle" wire:click="toggleSection('personal')">
+                    <span><strong>01</strong> Personal details</span>
+                    <span class="cp-app-chevron" aria-hidden="true"></span>
+                </button>
+                @if ($openPersonal)
+                    <div class="cp-app-section__body contact-form">
+                        <label>
+                            Name *
+                            <input type="text" wire:model="full_name" placeholder="As on passport">
+                            @error('full_name') <span class="ep-field-error">{{ $message }}</span> @enderror
+                        </label>
+                        <div class="form-row">
+                            <label>
+                                Height
+                                <input type="text" wire:model="height" placeholder="e.g. 5'8&quot;">
                             </label>
-                            @if (! ($doc_not_required[$doc['key']] ?? false))
-                                <input type="file" wire:model="doc_files.{{ $doc['key'] }}" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
-                                <div wire:loading wire:target="doc_files.{{ $doc['key'] }}" class="cp-hint">Uploading…</div>
-                                @error('doc_files.'.$doc['key']) <p class="cp-error">{{ $message }}</p> @enderror
-                            @endif
+                            <label>
+                                Weight
+                                <input type="text" wire:model="weight" placeholder="e.g. 70 kg">
+                            </label>
                         </div>
-                    @endforeach
+                        <div class="form-row">
+                            <label>
+                                Father's name *
+                                <input type="text" wire:model="father_name">
+                                @error('father_name') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                            <label>
+                                Mother's name *
+                                <input type="text" wire:model="mother_name">
+                                @error('mother_name') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                Gender *
+                                <select wire:model="gender">
+                                    <option value="">Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                                @error('gender') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                            <label>
+                                Marital status *
+                                <select wire:model="marital_status">
+                                    <option value="">Select</option>
+                                    <option value="single">Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="divorced">Divorced</option>
+                                    <option value="widowed">Widowed</option>
+                                </select>
+                                @error('marital_status') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                Date of birth *
+                                <input type="date" wire:model.live="date_of_birth">
+                                @error('date_of_birth') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                            <label>
+                                Age
+                                <input type="text" value="{{ $age }}" readonly tabindex="-1">
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                Religion *
+                                <input type="text" wire:model="religion">
+                                @error('religion') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                            <label>
+                                ID number (CNIC) *
+                                <input type="text" wire:model="cnic" placeholder="e.g. 35202-1234567-1">
+                                @error('cnic') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                        </div>
+                        <label>
+                            Place of birth
+                            <input type="text" wire:model="place_of_birth">
+                        </label>
+                        <div class="form-row">
+                            <label>
+                                Phone
+                                <input type="tel" wire:model="phone">
+                            </label>
+                            <label>
+                                Email
+                                <input type="email" wire:model="email">
+                            </label>
+                        </div>
+                        <label>
+                            Permanent address
+                            <input type="text" wire:model="address">
+                        </label>
+                        <div class="form-row">
+                            <label>
+                                Police station
+                                <input type="text" wire:model="police_station">
+                            </label>
+                            <label>
+                                District
+                                <input type="text" wire:model="district">
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                Medical fitness
+                                <select wire:model="medical_fitness">
+                                    <option value="">Select</option>
+                                    <option value="fit">Fit</option>
+                                    <option value="unfit">Unfit</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </label>
+                            <label>
+                                Photo
+                                <input type="file" wire:model="photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                                <span class="cp-app-hint">JPG/PNG · max {{ $maxUploadMb }} MB
+                                    @if ($photo_path) · current photo on file @endif
+                                </span>
+                                <span wire:loading wire:target="photo" class="cp-app-hint">Uploading…</span>
+                                @error('photo') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                        </div>
+                        <button type="button" class="btn btn-accent" wire:click="continuePersonal">Continue <span>&rarr;</span></button>
+                    </div>
+                @endif
+            </section>
 
-                    <button
-                        type="button"
-                        class="cp-btn"
-                        wire:click="saveApplication"
-                        wire:loading.attr="disabled"
-                    >
-                        <span wire:loading.remove wire:target="saveApplication">Save application</span>
-                        <span wire:loading wire:target="saveApplication">Saving…</span>
-                    </button>
-                </div>
-            @endif
-        </section>
-    </main>
+            <section class="cp-app-section {{ $openPassport ? 'is-open' : '' }} {{ $unlockedPassport ? '' : 'is-locked' }}">
+                <button type="button" class="cp-app-section__toggle" wire:click="toggleSection('passport')" @disabled(! $unlockedPassport)>
+                    <span><strong>02</strong> Passport details</span>
+                    <span class="cp-app-chevron" aria-hidden="true"></span>
+                </button>
+                @if ($openPassport)
+                    <div class="cp-app-section__body contact-form">
+                        <label>
+                            Passport no. *
+                            <input type="text" wire:model="passport_number">
+                            @error('passport_number') <span class="ep-field-error">{{ $message }}</span> @enderror
+                        </label>
+                        <div class="form-row">
+                            <label>
+                                Date of issue *
+                                <input type="date" wire:model="passport_issue_date">
+                                @error('passport_issue_date') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                            <label>
+                                Date of expiry *
+                                <input type="date" wire:model="passport_expiry">
+                                @error('passport_expiry') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                        </div>
+                        <button type="button" class="btn btn-accent" wire:click="continuePassport">Continue <span>&rarr;</span></button>
+                    </div>
+                @endif
+            </section>
+
+            <section class="cp-app-section {{ $openEducation ? 'is-open' : '' }} {{ $unlockedEducation ? '' : 'is-locked' }}">
+                <button type="button" class="cp-app-section__toggle" wire:click="toggleSection('education')" @disabled(! $unlockedEducation)>
+                    <span><strong>03</strong> Education &amp; experience</span>
+                    <span class="cp-app-chevron" aria-hidden="true"></span>
+                </button>
+                @if ($openEducation)
+                    <div class="cp-app-section__body contact-form">
+                        <div class="form-row">
+                            <label>
+                                Degree
+                                <input type="text" wire:model="degree">
+                            </label>
+                            <label>
+                                Year
+                                <input type="text" wire:model="degree_year" maxlength="4" placeholder="2018">
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                Certification
+                                <input type="text" wire:model="certification">
+                            </label>
+                            <label>
+                                Year
+                                <input type="text" wire:model="certification_year" maxlength="4" placeholder="2019">
+                            </label>
+                        </div>
+                        <div class="form-row">
+                            <label>
+                                Board / University
+                                <input type="text" wire:model="board_university">
+                            </label>
+                            <label>
+                                Languages
+                                <input type="text" wire:model="languages" placeholder="e.g. Urdu, English">
+                            </label>
+                        </div>
+                        <label>
+                            Total experience
+                            <input type="text" wire:model="total_experience" placeholder="e.g. 5 years">
+                        </label>
+
+                        <p class="cp-app-hint cp-app-hint--block">Work history (up to 5 rows)</p>
+                        @foreach ($experiences as $index => $row)
+                            <div class="cp-app-exp" wire:key="portal-exp-{{ $index }}">
+                                <div class="form-row">
+                                    <label>
+                                        From – To
+                                        <input type="text" wire:model="experiences.{{ $index }}.from_to" placeholder="From - To">
+                                    </label>
+                                    <label>
+                                        Company
+                                        <input type="text" wire:model="experiences.{{ $index }}.company" placeholder="Company">
+                                    </label>
+                                </div>
+                                <div class="form-row">
+                                    <label>
+                                        Project
+                                        <input type="text" wire:model="experiences.{{ $index }}.project" placeholder="Project">
+                                    </label>
+                                    <label>
+                                        Country
+                                        <input type="text" wire:model="experiences.{{ $index }}.country" placeholder="Country">
+                                    </label>
+                                </div>
+                                <label>
+                                    Job title
+                                    <input type="text" wire:model="experiences.{{ $index }}.job_title" placeholder="Job title">
+                                </label>
+                            </div>
+                        @endforeach
+
+                        <button type="button" class="btn btn-accent" wire:click="continueEducation">Continue <span>&rarr;</span></button>
+                    </div>
+                @endif
+            </section>
+
+            <section class="cp-app-section {{ $openCase ? 'is-open' : '' }} {{ $unlockedCase ? '' : 'is-locked' }}">
+                <button type="button" class="cp-app-section__toggle" wire:click="toggleSection('case')" @disabled(! $unlockedCase)>
+                    <span><strong>04</strong> Application details</span>
+                    <span class="cp-app-chevron" aria-hidden="true"></span>
+                </button>
+                @if ($openCase)
+                    <div class="cp-app-section__body contact-form">
+                        <div class="form-row">
+                            <label>
+                                Source
+                                <select wire:model.live="source">
+                                    <option value="direct">Direct</option>
+                                    <option value="referred">Referred (Care Off)</option>
+                                </select>
+                            </label>
+                            <label>
+                                Preferred company
+                                <select wire:model="company_id">
+                                    <option value="">Select company</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </div>
+                        @if ($source === 'referred')
+                            <label>
+                                Care Off *
+                                <select wire:model="care_off_id">
+                                    <option value="">Select care off</option>
+                                    @foreach ($careOffs as $careOff)
+                                        <option value="{{ $careOff->id }}">{{ $careOff->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('care_off_id') <span class="ep-field-error">{{ $message }}</span> @enderror
+                            </label>
+                        @endif
+                        <button type="button" class="btn btn-accent" wire:click="continueCase">Continue <span>&rarr;</span></button>
+                    </div>
+                @endif
+            </section>
+
+            <section class="cp-app-section {{ $openDocuments ? 'is-open' : '' }} {{ $unlockedDocuments ? '' : 'is-locked' }}">
+                <button type="button" class="cp-app-section__toggle" wire:click="toggleSection('documents')" @disabled(! $unlockedDocuments)>
+                    <span><strong>05</strong> Documents</span>
+                    <span class="cp-app-chevron" aria-hidden="true"></span>
+                </button>
+                @if ($openDocuments)
+                    <div class="cp-app-section__body contact-form">
+                        <p class="cp-app-hint cp-app-hint--block">Upload a file or mark N/A. Max {{ $maxUploadMb }} MB each (PDF/JPG/PNG).</p>
+
+                        @foreach ($documents as $doc)
+                            <div class="cp-app-doc" wire:key="portal-doc-{{ $doc['key'] }}">
+                                <strong>{{ $doc['label'] }}</strong>
+                                @if (! empty($existing_docs[$doc['key']]))
+                                    <span class="cp-app-hint">On file: {{ $existing_docs[$doc['key']] }}</span>
+                                @endif
+                                <label class="cp-app-check">
+                                    <input type="checkbox" wire:model.live="doc_not_required.{{ $doc['key'] }}">
+                                    Not applicable
+                                </label>
+                                @if (! ($doc_not_required[$doc['key']] ?? false))
+                                    <input type="file" wire:model="doc_files.{{ $doc['key'] }}" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+                                    <span wire:loading wire:target="doc_files.{{ $doc['key'] }}" class="cp-app-hint">Uploading…</span>
+                                    @error('doc_files.'.$doc['key']) <span class="ep-field-error">{{ $message }}</span> @enderror
+                                @endif
+                            </div>
+                        @endforeach
+
+                        <button
+                            type="button"
+                            class="btn btn-accent"
+                            wire:click="saveApplication"
+                            wire:loading.attr="disabled"
+                        >
+                            <span wire:loading.remove wire:target="saveApplication">Save application <span>&rarr;</span></span>
+                            <span wire:loading wire:target="saveApplication">Saving…</span>
+                        </button>
+                    </div>
+                @endif
+            </section>
+        </div>
+    </section>
 </div>

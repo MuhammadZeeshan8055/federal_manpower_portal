@@ -115,6 +115,19 @@ class NotificationBell extends Component
                 .' feature: "apply-leave"'
                 .' }}));'
             );
+
+            return;
+        }
+
+        if (in_array($row->type, ['employer_job_pending', 'employer_pending'], true)) {
+            $feature = $row->feature_key ?: ($row->type === 'employer_job_pending' ? 'job-approvals' : 'approvals');
+
+            $this->js(
+                'window.dispatchEvent(new CustomEvent("portal-go", { detail: {'
+                .' module: "employers",'
+                .' feature: '.json_encode($feature)
+                .' }}));'
+            );
         }
     }
 

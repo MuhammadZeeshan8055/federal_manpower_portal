@@ -5661,3 +5661,42 @@ button.module-summary__card:disabled {
         transition: none;
     }
 }
+
+.employers-approvals-table {
+    white-space: normal;
+    table-layout: fixed;
+}
+.employers-approvals-table th,
+.employers-approvals-table td {
+    vertical-align: top;
+}
+.employers-approvals-table th:nth-child(1),
+.employers-approvals-table td:nth-child(1) {
+    width: 34%;
+}
+.employers-approvals-table th:nth-child(2),
+.employers-approvals-table td:nth-child(2) {
+    width: 22%;
+}
+.employers-approvals-table th:nth-child(3),
+.employers-approvals-table td:nth-child(3) {
+    width: 12%;
+}
+.employers-approvals-table th:nth-child(4),
+.employers-approvals-table td:nth-child(4) {
+    width: 10%;
+}
+.employers-approvals-table th:nth-child(5),
+.employers-approvals-table td:nth-child(5) {
+    width: 22%;
+}
+.employers-approvals-table__text {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.4;
+}
+.employers-approvals-table .master-row-actions {
+    white-space: normal;
+    flex-wrap: wrap;
+}

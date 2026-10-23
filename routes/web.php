@@ -7,14 +7,18 @@ use App\Http\Controllers\ClientPortal\RegisterController as ClientPortalRegister
 use App\Http\Controllers\ClientPrintController;
 use App\Http\Controllers\ClientStatusController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Employer\HomeController as EmployerHomeController;
+use App\Http\Controllers\Employer\LoginController as EmployerLoginController;
+use App\Http\Controllers\Employer\RegisterController as EmployerRegisterController;
 use App\Http\Controllers\PaymentReceiptController;
 use App\Http\Controllers\PaymentScreenshotController;
-use App\Http\Controllers\SalarySlipPrintController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SalarySlipPrintController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkspaceCountryController;
 use App\Livewire\Attendance\StartShift;
 use App\Livewire\ClientPortal\ApplicationForm;
+use App\Livewire\Employer\ManageEmployerJobs;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteController::class, 'home'])->name('website.home');
@@ -42,6 +46,21 @@ Route::prefix('portal')->name('client-portal.')->group(function () {
         Route::get('/', ClientPortalHomeController::class)->name('home');
         Route::get('/application', ApplicationForm::class)->name('application');
         Route::post('/logout', [ClientPortalLoginController::class, 'destroy'])->name('logout');
+    });
+});
+
+Route::prefix('employer')->name('employer.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/register', [EmployerRegisterController::class, 'create'])->name('register');
+        Route::post('/register', [EmployerRegisterController::class, 'store']);
+        Route::get('/login', [EmployerLoginController::class, 'create'])->name('login');
+        Route::post('/login', [EmployerLoginController::class, 'store']);
+    });
+
+    Route::middleware(['auth', 'employer'])->group(function () {
+        Route::get('/', EmployerHomeController::class)->name('home');
+        Route::get('/jobs', ManageEmployerJobs::class)->name('jobs');
+        Route::post('/logout', [EmployerLoginController::class, 'destroy'])->name('logout');
     });
 });
 

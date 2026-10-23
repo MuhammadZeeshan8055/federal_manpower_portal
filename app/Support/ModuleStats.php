@@ -112,6 +112,8 @@ class ModuleStats
             'staff-loans' => 'staff_loans',
             'office-settings' => 'attendance_settings',
             'holidays' => 'holidays',
+            'approvals' => 'employer_profiles',
+            'job-approvals' => 'job_posts',
         ];
 
         $cards = [];
@@ -136,6 +138,10 @@ class ModuleStats
                     $count = self::openLoanCount();
                 } elseif ($featureKey === 'my-loans') {
                     $count = self::myOpenLoanCount();
+                } elseif ($featureKey === 'approvals') {
+                    $count = self::pendingEmployerCount();
+                } elseif ($featureKey === 'job-approvals') {
+                    $count = self::pendingJobPostCount();
                 } else {
                     $count = self::tableCount($table);
                 }
@@ -206,6 +212,28 @@ class ModuleStats
         return (int) DB::table('staff_loans')
             ->where('user_id', auth()->id())
             ->where('status', 'open')
+            ->count();
+    }
+
+    private static function pendingEmployerCount()
+    {
+        if (! Schema::hasTable('employer_profiles')) {
+            return 0;
+        }
+
+        return (int) DB::table('employer_profiles')
+            ->where('status', 'pending')
+            ->count();
+    }
+
+    private static function pendingJobPostCount()
+    {
+        if (! Schema::hasTable('job_posts')) {
+            return 0;
+        }
+
+        return (int) DB::table('job_posts')
+            ->where('status', 'pending')
             ->count();
     }
 

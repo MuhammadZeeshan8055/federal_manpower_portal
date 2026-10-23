@@ -32,6 +32,10 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(route('client-portal.home'));
         }
 
+        if ($request->user()->isEmployer()) {
+            return redirect()->intended(route('employer.home'));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

@@ -101,8 +101,8 @@
 <div class="site-wrap search-panel-wrap">
     <form class="search-panel" id="job-search" action="#jobs" method="get">
         <div class="search-panel__intro"><span>Find your next role</span><strong>Search overseas jobs</strong></div>
-        <div class="search-control"><span>Job category</span><div class="custom-select" data-custom-select><input type="hidden" id="job-category" value=""><button type="button" class="custom-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span>All categories</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9.5 5 5 5-5 1.5 1.5-6.5 6.5L5.5 11 7 9.5Z"/></svg></button><div class="custom-select__menu" role="listbox"><button type="button" role="option" aria-selected="true" data-value="">All categories</button><button type="button" role="option" data-value="construction">Construction</button><button type="button" role="option" data-value="healthcare">Healthcare</button><button type="button" role="option" data-value="driving">Driving &amp; Logistics</button><button type="button" role="option" data-value="engineering">Engineering</button><button type="button" role="option" data-value="hospitality">Hospitality</button></div></div></div>
-        <div class="search-control"><span>Destination</span><div class="custom-select" data-custom-select><input type="hidden" id="job-country" value=""><button type="button" class="custom-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span>All destinations</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9.5 5 5 5-5 1.5 1.5-6.5 6.5L5.5 11 7 9.5Z"/></svg></button><div class="custom-select__menu" role="listbox"><button type="button" role="option" aria-selected="true" data-value="">All destinations</button><button type="button" role="option" data-value="uae">United Arab Emirates</button><button type="button" role="option" data-value="saudi-arabia">Saudi Arabia</button><button type="button" role="option" data-value="qatar">Qatar</button><button type="button" role="option" data-value="kuwait">Kuwait</button></div></div></div>
+        <div class="search-control"><span>Job category</span><div class="custom-select" data-custom-select><input type="hidden" id="job-category" value=""><button type="button" class="custom-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span>All categories</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9.5 5 5 5-5 1.5 1.5-6.5 6.5L5.5 11 7 9.5Z"/></svg></button><div class="custom-select__menu" role="listbox"><button type="button" role="option" aria-selected="true" data-value="">All categories</button>@foreach ($jobFilterCategories as $slug => $label)<button type="button" role="option" data-value="{{ $slug }}">{{ $label }}</button>@endforeach</div></div></div>
+        <div class="search-control"><span>Destination</span><div class="custom-select" data-custom-select><input type="hidden" id="job-country" value=""><button type="button" class="custom-select__trigger" aria-haspopup="listbox" aria-expanded="false"><span>All destinations</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9.5 5 5 5-5 1.5 1.5-6.5 6.5L5.5 11 7 9.5Z"/></svg></button><div class="custom-select__menu" role="listbox"><button type="button" role="option" aria-selected="true" data-value="">All destinations</button>@foreach ($jobFilterCountries as $slug => $label)<button type="button" role="option" data-value="{{ $slug }}">{{ $label }}</button>@endforeach</div></div></div>
         <label class="search-control"><span>Keyword</span><input id="job-keyword" type="search" placeholder="Trade, role or skill"></label>
         <button type="submit" class="btn btn-accent"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.5l.3.3v.8l5 5 1.5-1.5-5-5Zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14Z"/></svg>Search Jobs</button>
     </form>
@@ -204,17 +204,47 @@
         <div class="vacancy-layout">
             <aside class="vacancy-filter">
                 <strong>Filter Jobs</strong>
-                <label>Country<select id="filter-country"><option value="">All countries</option><option value="uae">United Arab Emirates</option><option value="saudi-arabia">Saudi Arabia</option><option value="qatar">Qatar</option><option value="kuwait">Kuwait</option><option value="oman">Oman</option></select></label>
-                <label>Category<select id="filter-category"><option value="">All categories</option><option value="construction">Construction</option><option value="healthcare">Healthcare</option><option value="driving">Driving</option><option value="engineering">Engineering</option><option value="hospitality">Hospitality</option></select></label>
-                <label>Experience<select id="filter-experience"><option value="">All experience</option><option value="junior">1–2 years</option><option value="mid">3 years</option><option value="senior">4+ years</option></select></label>
-                <label>Employment Type<select id="filter-type"><option value="">All types</option><option value="full-time">Full time</option><option value="contract">Contract</option></select></label>
+                <label>Country
+                    <select id="filter-country">
+                        <option value="">All countries</option>
+                        @foreach ($jobFilterCountries as $slug => $label)
+                            <option value="{{ $slug }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </label>
+                <label>Category
+                    <select id="filter-category">
+                        <option value="">All categories</option>
+                        @foreach ($jobFilterCategories as $slug => $label)
+                            <option value="{{ $slug }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </label>
+                <label>Experience
+                    <select id="filter-experience">
+                        <option value="">All experience</option>
+                        @foreach ($jobFilterExperiences as $slug => $label)
+                            <option value="{{ $slug }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </label>
+                <label>Employment Type
+                    <select id="filter-type">
+                        <option value="">All types</option>
+                        @foreach ($jobFilterTypes as $slug => $label)
+                            <option value="{{ $slug }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </label>
                 <button type="button" class="btn btn-navy" id="apply-filters">Apply filters</button><button type="button" class="filter-reset" id="reset-filters">Clear selection</button>
             </aside>
             <div class="vacancy-grid" id="jobs-grid">
-                @foreach ($jobs as $job)
+                @forelse ($jobs as $job)
                     @include('website.partials.job-card', ['job' => $job])
-                @endforeach
-                <p class="jobs-empty" id="jobs-empty" hidden>No sample vacancies match your selection.</p>
+                @empty
+                    <p class="jobs-empty">No approved vacancies yet. Check back soon.</p>
+                @endforelse
+                <p class="jobs-empty" id="jobs-empty" hidden>No vacancies match your selection.</p>
             </div>
         </div>
     </div>

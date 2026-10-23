@@ -12,9 +12,13 @@ class EnsureOfficeUser
     {
         $user = $request->user();
 
-        if (! $user || $user->isClient()) {
+        if (! $user || ! $user->isOfficeUser()) {
             if ($user?->isClient()) {
                 return redirect()->route('client-portal.home');
+            }
+
+            if ($user?->isEmployer()) {
+                return redirect()->route('employer.home');
             }
 
             return redirect()->route('login');

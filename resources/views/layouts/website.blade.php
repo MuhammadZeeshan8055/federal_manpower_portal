@@ -38,10 +38,11 @@
                 <a href="{{ route('website.jobs') }}" class="{{ request()->routeIs('website.jobs') ? 'is-active' : '' }}">Jobs</a>
                 <a href="{{ route('website.countries') }}" class="{{ request()->routeIs('website.countries') ? 'is-active' : '' }}">Countries</a>
                 <a href="{{ route('website.services') }}" class="{{ request()->routeIs('website.services') ? 'is-active' : '' }}">Services</a>
-                <a href="{{ route('website.employers') }}" class="{{ request()->routeIs('website.employers') ? 'is-active' : '' }}">Employers</a>
+                <a href="{{ route('website.employers') }}" class="{{ request()->routeIs('website.employers') || request()->routeIs('employer.*') ? 'is-active' : '' }}">Employers</a>
                 <a href="{{ route('website.contact') }}" class="{{ request()->routeIs('website.contact') ? 'is-active' : '' }}">Contact</a>
             </nav>
             <div class="site-header__actions">
+                <a href="{{ route('employer.register') }}" class="site-header__employer {{ request()->routeIs('employer.*') ? 'is-active' : '' }}">Register as employer</a>
                 <a href="{{ route('client-portal.login') }}" class="btn btn-ghost"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2-8 4.5V21h16v-2.5C20 16 16.4 14 12 14Z"/></svg>Login</a>
                 <a href="{{ route('client-portal.register') }}" class="btn btn-accent"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM7 10V7H5v3H2v2h3v3h2v-3h3v-2H7Zm8 4c-3.3 0-6 1.5-6 3.5V20h12v-2.5c0-2-2.7-3.5-6-3.5Z"/></svg>Register</a>
             </div>
@@ -87,7 +88,7 @@
         <div class="site-wrap site-footer__inner">
             <div class="site-footer__brand"><a href="{{ route('website.home') }}" class="site-logo site-logo--group"><img src="{{ asset('images/federal-group-logo.png') }}" alt="Federal Group of Companies" width="846" height="295"></a><p>Connecting skilled professionals with international employers through a transparent overseas recruitment process.</p></div>
             <div><h4>Quick links</h4><a href="{{ route('website.home') }}">Home</a><a href="{{ route('website.about') }}">About us</a><a href="{{ route('website.jobs') }}">Vacancies</a><a href="{{ route('website.countries') }}">Countries</a></div>
-            <div><h4>Our services</h4><a href="{{ route('client-portal.register') }}">Candidate registration</a><a href="{{ route('website.services') }}">Job matching</a><a href="{{ route('website.services') }}">Document guidance</a><a href="{{ route('website.employers') }}">Employer recruitment</a></div>
+            <div><h4>Our services</h4><a href="{{ route('client-portal.register') }}">Candidate registration</a><a href="{{ route('website.services') }}">Job matching</a><a href="{{ route('website.services') }}">Document guidance</a><a href="{{ route('employer.register') }}">Register as employer</a></div>
             <div><h4>Contact us</h4><p>+92 300 434 0666</p><p>info@federalmanpower.com</p><p>Office No. 12, Blue Area,<br>Islamabad, Pakistan</p><div class="site-footer__social"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Instagram">ig</a></div></div>
         </div>
         <div class="site-footer__bar"><div class="site-wrap"><span>&copy; {{ date('Y') }} Federal Manpower. All rights reserved.</span><span><a href="#">Privacy policy</a><a href="#">Terms &amp; conditions</a></span></div></div>

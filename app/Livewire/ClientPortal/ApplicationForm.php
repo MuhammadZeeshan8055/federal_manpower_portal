@@ -466,7 +466,7 @@ class ApplicationForm extends Component
             'documents' => $this->documentRows(),
             'age' => $this->age,
             'maxUploadMb' => max(1, (int) ceil(ClientPrivateFiles::maxKilobytes() / 1024)),
-        ])->layout('layouts.client-portal', [
+        ])->layout('layouts.client-portal-app', [
             'title' => $this->clientId ? 'Edit application' : 'Fill application',
         ]);
     }
