@@ -4,14 +4,16 @@ use App\Http\Controllers\ClientDocumentController;
 use App\Http\Controllers\ClientPortal\HomeController as ClientPortalHomeController;
 use App\Http\Controllers\ClientPortal\LoginController as ClientPortalLoginController;
 use App\Http\Controllers\ClientPortal\RegisterController as ClientPortalRegisterController;
-use App\Livewire\Attendance\StartShift;
-use App\Livewire\ClientPortal\ApplicationForm;
 use App\Http\Controllers\ClientPrintController;
 use App\Http\Controllers\ClientStatusController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentReceiptController;
+use App\Http\Controllers\PaymentScreenshotController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkspaceCountryController;
+use App\Livewire\Attendance\StartShift;
+use App\Livewire\ClientPortal\ApplicationForm;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteController::class, 'home'])->name('website.home');
@@ -73,6 +75,14 @@ Route::middleware(['auth', 'office'])->group(function () {
         Route::get('/clients/{client}/photo', [ClientDocumentController::class, 'photo'])
             ->middleware('throttle:60,1')
             ->name('clients.photo.show');
+
+        Route::get('/payments/{payment}/screenshot', [PaymentScreenshotController::class, 'show'])
+            ->middleware('throttle:60,1')
+            ->name('accounts.payments.screenshot');
+
+        Route::get('/payments/{payment}/receipt', [PaymentReceiptController::class, 'print'])
+            ->middleware('throttle:60,1')
+            ->name('accounts.payments.receipt');
 
         Route::get('/clients/{client}/print/preview', [ClientPrintController::class, 'preview'])
             ->name('clients.print.preview');

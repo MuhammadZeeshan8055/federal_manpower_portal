@@ -48,7 +48,7 @@ alwaysApply: true
 
 ## Delivery phases
 - **Phase 1 (demo):** Complete operational product — Clients, portal/QR, visitors, HR, polish.
-- **Phase 2 (after initial payment):** Accounts (methods, ledgers, reports) and Excel import (last). Do not build these in the demo go.
+- **Phase 2:** Accounts is started (methods, client payments, simple reports). Excel import still last.
 
 ## Progress (keep this updated)
 ### Done
@@ -84,19 +84,20 @@ alwaysApply: true
  - **Manage Users:** Admin CRUD + DIG-style feature access (module check + View/Manage); WFH exempt flag
  - Profile page restyled to portal shell (info / password / delete)
 
+ - **Accounts Step 6:** Payment methods + receiving accounts + client payments (private screenshot) + printable receipt PDF + simple reports (date range / by method + account)
+
 ### Not done yet (Phase 1)
 - Country-based document checklist rules
 - Demo polish
 
-### Blocked until Phase 2
-- Accounts (payments, methods, reports)
+### Blocked until later
 - Excel Import
 
 ## Do not add unless asked
 - Care Off margin / commission / payout fields
 - Invite-only client register (register is **public**)
 - Extra packages or layers without a clear need
-- Phase 2 Accounts / Excel before payment go-ahead
+- Excel import before go-ahead
 
 ## Structure preference
 - Business logic in small `app/Support/*` classes when shared

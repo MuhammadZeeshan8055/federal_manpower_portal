@@ -155,13 +155,25 @@
         <livewire:attendance.manage-staff-loans />
     </div>
 
+    <div x-show="moduleKey === 'accounts' && featureKey === 'payment_methods'">
+        <livewire:accounts.manage-payment-methods />
+    </div>
+
+    <div x-show="moduleKey === 'accounts' && featureKey === 'payments'">
+        <livewire:accounts.manage-payments wire:key="accounts-payments-screen" />
+    </div>
+
+    <div x-show="moduleKey === 'accounts' && featureKey === 'reports'">
+        <livewire:accounts.accounts-reports />
+    </div>
+
     <div x-show="moduleKey === 'settings' && featureKey === 'users'">
         <livewire:settings.manage-users />
     </div>
 
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'my-loans', 'staff-daily-attendance', 'apply-leave', 'leave-approvals', 'holidays', 'salary-slips', 'staff-loans'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'my-loans', 'staff-daily-attendance', 'apply-leave', 'leave-approvals', 'holidays', 'salary-slips', 'staff-loans'].includes(featureKey)) && !(moduleKey === 'accounts' && ['payments', 'payment_methods', 'reports'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

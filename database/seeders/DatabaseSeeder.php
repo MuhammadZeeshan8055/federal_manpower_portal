@@ -54,6 +54,7 @@ class DatabaseSeeder extends Seeder
             TradeSeeder::class,
             CareOffSeeder::class,
             CompanySeeder::class,
+            PaymentMethodSeeder::class,
         ]);
 
         User::query()->updateOrCreate(
