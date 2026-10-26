@@ -24,7 +24,13 @@ class WebsiteController extends Controller
 
     public function jobs()
     {
-        return view('website.jobs', ['jobs' => $this->jobsData()]);
+        return view('website.jobs', [
+            'jobs' => $this->jobsData(),
+            'jobFilterCountries' => $this->approvedJobOptions('country'),
+            'jobFilterCategories' => $this->approvedJobOptions('category'),
+            'jobFilterExperiences' => $this->approvedJobOptions('experience'),
+            'jobFilterTypes' => $this->approvedJobOptions('employment_type'),
+        ]);
     }
 
     public function countries()
