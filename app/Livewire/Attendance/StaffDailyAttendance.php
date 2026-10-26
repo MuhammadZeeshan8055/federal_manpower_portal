@@ -112,7 +112,7 @@ class StaffDailyAttendance extends Component
     private function officeUsersQuery()
     {
         return User::query()
-            ->where('role', '!=', 'client')
+            ->whereNotIn('role', ['client', 'employer'])
             ->orderBy('name');
     }
 }
