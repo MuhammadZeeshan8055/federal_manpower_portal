@@ -26,11 +26,11 @@
                 </div>
                 <div class="visitors-toolbar">
                     <select class="visitors-toolbar__select" wire:model.live="filter" aria-label="Status">
+                        <option value="all">All</option>
                         <option value="pending">Pending</option>
                         <option value="approved">Approved</option>
                         <option value="rejected">Rejected</option>
                         <option value="closed">Closed</option>
-                        <option value="all">All</option>
                     </select>
                     <label class="master-search">
                         <span class="master-search__icon" aria-hidden="true">@include('partials.icon', ['name' => 'search'])</span>

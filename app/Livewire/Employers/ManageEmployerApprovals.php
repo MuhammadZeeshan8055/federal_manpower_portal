@@ -14,7 +14,7 @@ class ManageEmployerApprovals extends Component
 
     public bool $denied = false;
 
-    public string $filter = 'pending';
+    public string $filter = 'all';
 
     public string $search = '';
 
