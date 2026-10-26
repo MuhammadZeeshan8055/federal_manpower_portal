@@ -263,7 +263,7 @@ class ManageSalarySlips extends Component
         return view('livewire.attendance.manage-salary-slips', [
             'slips' => $this->denied ? null : $query->paginate(12, ['*'], 'salarySlipsPage'),
             'staffUsers' => User::query()
-                ->where('role', '!=', 'client')
+                ->officeUsers()
                 ->orderBy('name')
                 ->get(['id', 'name', 'email']),
             'unpaidDeductionPreview' => $unpaidDeductionPreview,

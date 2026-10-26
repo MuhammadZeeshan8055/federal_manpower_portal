@@ -100,7 +100,7 @@ class OfficeSettings extends Component
 
         if (! $this->denied) {
             $staffUsers = User::query()
-                ->where('role', '!=', 'client')
+                ->officeUsers()
                 ->orderBy('name')
                 ->get(['id', 'name', 'email', 'role']);
         }
@@ -128,8 +128,8 @@ class OfficeSettings extends Component
         $this->exemptUserIds = [];
 
         $exemptRows = User::query()
+            ->officeUsers()
             ->where('bypass_attendance', true)
-            ->where('role', '!=', 'client')
             ->get(['id']);
 
         foreach ($exemptRows as $exempt) {
@@ -141,7 +141,7 @@ class OfficeSettings extends Component
     {
         // Clear all office users first, then mark checked ones
         User::query()
-            ->where('role', '!=', 'client')
+            ->officeUsers()
             ->update(['bypass_attendance' => false]);
 
         if (count($this->exemptUserIds) === 0) {
@@ -155,7 +155,7 @@ class OfficeSettings extends Component
         }
 
         User::query()
-            ->where('role', '!=', 'client')
+            ->officeUsers()
             ->whereIn('id', $ids)
             ->update(['bypass_attendance' => true]);
     }

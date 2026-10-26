@@ -330,7 +330,7 @@ class ManageStaffLoans extends Component
     private function officeUsers()
     {
         return User::query()
-            ->whereNotIn('role', ['client', 'employer'])
+            ->officeUsers()
             ->orderBy('name')
             ->get(['id', 'name', 'email']);
     }

@@ -72,6 +72,12 @@ class User extends Authenticatable
         return ! $this->isClient() && ! $this->isEmployer();
     }
 
+    /** Internal office accounts only — excludes client and employer portal users. */
+    public function scopeOfficeUsers($query)
+    {
+        return $query->whereIn('role', ['super_admin', 'admin', 'hr', 'accounts', 'staff']);
+    }
+
     public function isSuperAdmin(): bool
     {
         return $this->role === 'super_admin';
