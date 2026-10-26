@@ -34,6 +34,11 @@ class ManageStaffLoans extends Component
 
     public string $search = '';
 
+    public string $filterStaffId = '';
+
+    // '' = all, pending = remaining > 0, cleared = remaining == 0
+    public string $filterBalance = '';
+
     public string $viewMode = 'summary';
 
     public ?int $detailsUserId = null;
@@ -60,6 +65,24 @@ class ManageStaffLoans extends Component
 
     public function updatedSearch(): void
     {
+        $this->resetPage('loansPage');
+    }
+
+    public function updatedFilterStaffId(): void
+    {
+        $this->resetPage('loansPage');
+    }
+
+    public function updatedFilterBalance(): void
+    {
+        $this->resetPage('loansPage');
+    }
+
+    public function clearFilters(): void
+    {
+        $this->search = '';
+        $this->filterStaffId = '';
+        $this->filterBalance = '';
         $this->resetPage('loansPage');
     }
 
@@ -225,10 +248,32 @@ class ManageStaffLoans extends Component
         if (! $this->denied) {
             if ($this->viewMode === 'summary') {
                 $summaryRows = $this->staffBalanceRows();
-                $allTotals = $this->moneyTotals(StaffLoan::query()->with('payments')->get());
+                $totalsQuery = StaffLoan::query()->with('payments');
+
+                if ($this->filterStaffId !== '') {
+                    $totalsQuery->where('user_id', (int) $this->filterStaffId);
+                }
+
+                $allTotals = $this->moneyTotals($totalsQuery->get());
                 $collectiveTotalTaken = $allTotals['taken'];
                 $collectiveTotalReturned = $allTotals['returned'];
                 $collectiveRemaining = $allTotals['remaining'];
+
+                if ($this->filterBalance === 'pending' || $this->filterBalance === 'cleared') {
+                    $taken = 0.0;
+                    $returned = 0.0;
+                    $remaining = 0.0;
+
+                    foreach ($summaryRows as $row) {
+                        $taken += $row['total_taken'];
+                        $returned += $row['total_paid'];
+                        $remaining += $row['remaining'];
+                    }
+
+                    $collectiveTotalTaken = round($taken, 2);
+                    $collectiveTotalReturned = round($returned, 2);
+                    $collectiveRemaining = round($remaining, 2);
+                }
             }
 
             if ($this->viewMode === 'details' && $this->detailsUserId) {
@@ -276,12 +321,34 @@ class ManageStaffLoans extends Component
             'collectiveTotalReturned' => $collectiveTotalReturned,
             'collectiveRemaining' => $collectiveRemaining,
             'returnPending' => $returnPending,
-            'staffUsers' => User::query()
-                ->where('role', '!=', 'client')
-                ->orderBy('name')
-                ->get(['id', 'name', 'email']),
+            'staffUsers' => $this->officeUsers(),
+            'filterStaffOptions' => $this->filterStaffOptions(),
             'staffWithPending' => $this->staffWithPending(),
         ]);
+    }
+
+    private function officeUsers()
+    {
+        return User::query()
+            ->whereNotIn('role', ['client', 'employer'])
+            ->orderBy('name')
+            ->get(['id', 'name', 'email']);
+    }
+
+    private function filterStaffOptions(): array
+    {
+        $options = [];
+
+        foreach ($this->staffBalanceRows(false, false) as $row) {
+            $options[] = [
+                'id' => $row['user_id'],
+                'name' => $row['name'],
+            ];
+        }
+
+        usort($options, fn ($a, $b) => strcmp($a['name'], $b['name']));
+
+        return $options;
     }
 
     private function flashToast(string $message, string $type): void
@@ -325,7 +392,7 @@ class ManageStaffLoans extends Component
     {
         $pending = [];
 
-        foreach ($this->staffBalanceRows(false) as $row) {
+        foreach ($this->staffBalanceRows(false, false) as $row) {
             if ($row['remaining'] > 0) {
                 $pending[] = $row;
             }
@@ -334,7 +401,7 @@ class ManageStaffLoans extends Component
         return $pending;
     }
 
-    private function staffBalanceRows(bool $useSearch = true): array
+    private function staffBalanceRows(bool $useSearch = true, bool $useFilters = true): array
     {
         $loans = StaffLoan::query()
             ->with(['user', 'payments'])
@@ -363,22 +430,38 @@ class ManageStaffLoans extends Component
             $byStaff[$id]['remaining'] += $loan->remaining();
         }
 
-        if ($useSearch && trim($this->search) !== '') {
-            $term = strtolower(trim($this->search));
-            $filtered = [];
+        $byStaff = array_values($byStaff);
 
-            foreach ($byStaff as $row) {
-                if (str_contains(strtolower($row['name']), $term)) {
-                    $filtered[] = $row;
-                }
-            }
-
-            $byStaff = $filtered;
-        } else {
-            $byStaff = array_values($byStaff);
+        if ($useFilters && $this->filterStaffId !== '') {
+            $staffId = (int) $this->filterStaffId;
+            $byStaff = array_values(array_filter(
+                $byStaff,
+                fn ($row) => (int) $row['user_id'] === $staffId
+            ));
         }
 
-        // Highest remaining first, then name
+        if ($useFilters && $this->filterBalance === 'pending') {
+            $byStaff = array_values(array_filter(
+                $byStaff,
+                fn ($row) => $row['remaining'] > 0
+            ));
+        }
+
+        if ($useFilters && $this->filterBalance === 'cleared') {
+            $byStaff = array_values(array_filter(
+                $byStaff,
+                fn ($row) => $row['remaining'] <= 0
+            ));
+        }
+
+        if ($useSearch && trim($this->search) !== '') {
+            $term = strtolower(trim($this->search));
+            $byStaff = array_values(array_filter(
+                $byStaff,
+                fn ($row) => str_contains(strtolower($row['name']), $term)
+            ));
+        }
+
         usort($byStaff, function ($a, $b) {
             if ($a['remaining'] == $b['remaining']) {
                 return strcmp($a['name'], $b['name']);

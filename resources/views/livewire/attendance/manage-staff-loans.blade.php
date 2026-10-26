@@ -26,6 +26,23 @@
             </div>
         @endif
 
+        @if ($viewMode === 'summary')
+            <div class="loan-page-summary" aria-label="Loan totals">
+                <div>
+                    <small>Total taken</small>
+                    <strong class="loan-amt--taken">{{ number_format($collectiveTotalTaken, 2) }}</strong>
+                </div>
+                <div>
+                    <small>Total returned</small>
+                    <strong class="loan-amt--return">{{ number_format($collectiveTotalReturned, 2) }}</strong>
+                </div>
+                <div>
+                    <small>Remaining</small>
+                    <strong>{{ number_format($collectiveRemaining, 2) }}</strong>
+                </div>
+            </div>
+        @endif
+
         <div class="loan-forms-row">
             <section class="panel master-form-panel master-form-panel--collapsible loan-forms-row__col" :class="{ 'master-form-panel--open': addOpen }">
                 @include('partials.master-form-toggle', [
@@ -151,6 +168,23 @@
                         <button type="button" class="button button--ghost" wire:click="showSummary">
                             Back to balances
                         </button>
+                    @else
+                        <select class="visitors-toolbar__select" wire:model.live="filterStaffId" aria-label="Filter by staff">
+                            <option value="">All staff</option>
+                            @foreach ($filterStaffOptions as $staff)
+                                <option value="{{ $staff['id'] }}">{{ $staff['name'] }}</option>
+                            @endforeach
+                        </select>
+
+                        <select class="visitors-toolbar__select" wire:model.live="filterBalance" aria-label="Filter by balance">
+                            <option value="">All balances</option>
+                            <option value="pending">Pending remaining</option>
+                            <option value="cleared">Cleared</option>
+                        </select>
+
+                        @if ($filterStaffId !== '' || $filterBalance !== '' || trim($search) !== '')
+                            <button type="button" class="text-button" wire:click="clearFilters">Clear filters</button>
+                        @endif
                     @endif
 
                     <label class="master-search">
@@ -161,21 +195,6 @@
             </div>
 
             @if ($viewMode === 'summary')
-                <div class="loan-details-summary">
-                    <div>
-                        <small>Total taken</small>
-                        <strong class="loan-amt--taken">{{ number_format($collectiveTotalTaken, 2) }}</strong>
-                    </div>
-                    <div>
-                        <small>Total returned</small>
-                        <strong class="loan-amt--return">{{ number_format($collectiveTotalReturned, 2) }}</strong>
-                    </div>
-                    <div>
-                        <small>Remaining</small>
-                        <strong>{{ number_format($collectiveRemaining, 2) }}</strong>
-                    </div>
-                </div>
-
                 <div class="table-wrap">
                     <table class="data-table">
                         <thead>
