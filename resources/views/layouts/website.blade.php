@@ -18,9 +18,9 @@
     <div class="site-topbar">
         <div class="site-wrap site-topbar__inner">
             <div class="site-topbar__contact">
-                <a href="tel:+923004340666"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 1.9Z"/></svg>+92 300 434 0666</a>
+                <a href="tel:+923004340666"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 1.9Z"/></svg>0300 4340666</a>
                 <a href="mailto:info@federalmanpower.com"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12h20V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>info@federalmanpower.com</a>
-                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg>Office No. 12, Blue Area, Islamabad</span>
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg>Office No. 307, Talha Heights, Satellite Town, Rawalpindi</span>
             </div>
             <div class="site-topbar__social"><a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H8v3h3v7h3v-7h3l1-3h-4V9Z"/></svg></a><span>EN</span></div>
         </div>
@@ -88,7 +88,7 @@
             <div class="site-footer__brand"><a href="{{ route('website.home') }}" class="site-logo site-logo--group"><img src="{{ asset('images/federal-group-logo.png') }}" alt="Federal Group of Companies" width="846" height="295"></a><p>Federal Manpower Promoter · Overseas Employment Promoters · Licence No. OP&amp;HRD/4749/RWP. Serving Pakistan’s overseas employment needs with trusted placement and proper job roles.</p></div>
             <div><h4>Quick links</h4><a href="{{ route('website.home') }}">Home</a><a href="{{ route('website.about') }}">About us</a><a href="{{ route('website.jobs') }}">Vacancies</a><a href="{{ route('website.countries') }}">Countries</a></div>
             <div><h4>Our services</h4><a href="{{ route('client-portal.register') }}">Candidate portal</a><a href="{{ route('website.jobs') }}">Browse jobs</a><a href="{{ route('website.services') }}">How we work</a><a href="{{ route('employer.register') }}">Register as employer</a></div>
-            <div><h4>Contact us</h4><p>+92 300 434 0666</p><p>info@federalmanpower.com</p><p>Office No. 12, Blue Area,<br>Islamabad, Pakistan</p><div class="site-footer__social"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Instagram">ig</a></div></div>
+            <div><h4>Contact us</h4><p>Landline: <a href="tel:+92512716031">+92 51 2716031</a></p><p>Mobile: <a href="tel:+923004340666">+92 300 4340666</a></p><p><a href="mailto:info@federalmanpower.com">info@federalmanpower.com</a></p><p>Office No. 307, Talha Heights,<br>6th Rd, Satellite Town,<br>Rawalpindi, 46000</p><div class="site-footer__social"><a href="#" aria-label="Facebook">f</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="Instagram">ig</a></div></div>
         </div>
         <div class="site-footer__bar"><div class="site-wrap"><span>&copy; {{ date('Y') }} Federal Manpower. All rights reserved.</span><span><a href="#">Privacy policy</a><a href="#">Terms &amp; conditions</a></span></div></div>
     </footer>

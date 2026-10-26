@@ -2760,7 +2760,9 @@ select {
 .contact-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; align-items: start; }
 .contact-details > p { max-width: 500px; margin-top: 16px; }
 .contact-card { margin-top: 14px; padding: 20px; display: block; background: var(--soft); border: 1px solid var(--line); border-radius: 10px; }
-.contact-card strong, .contact-card span { display: block; }.contact-card strong { margin-bottom: 5px; color: var(--navy-900); font-size: 12px; }.contact-card span { color: var(--muted); font-size: 12px; }
+.contact-card strong, .contact-card span { display: block; }.contact-card strong { margin-bottom: 5px; color: var(--navy-900); font-size: 12px; }.contact-card span { color: var(--muted); font-size: 12px; line-height: 1.7; }
+.contact-card span a { color: var(--navy-900); font-weight: 600; }
+.contact-card span a:hover { color: var(--brand-blue); }
 .contact-form { padding: 32px; background: white; border: 1px solid var(--line); border-radius: 15px; box-shadow: var(--shadow-sm); }
 .contact-form h2 { margin-bottom: 24px; font-size: 24px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }

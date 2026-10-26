@@ -644,7 +644,7 @@
         <table class="footer footer--top">
             <tr>
                 <td class="footer-left">
-                    <img class="footer-icon" src="{{ $iconLocation }}" alt="">Office # 307, Talha Heights, 6th Road, Satellite Town, Rawalpindi Pakistan.
+                    <img class="footer-icon" src="{{ $iconLocation }}" alt="">Office No. 307, Talha Heights, 6th Rd, Satellite Town, Rawalpindi, 46000
                 </td>
                 <td class="footer-right">
                     <img class="footer-icon" src="{{ $iconGlobe }}" alt="">www.federalmanpower.com
@@ -657,7 +657,7 @@
                     <img class="footer-icon" src="{{ $iconLandline }}" alt="">+92 51 2716031
                 </td>
                 <td class="footer-contact">
-                    <img class="footer-icon" src="{{ $iconPhone }}" alt="">+92 300 5307415 &nbsp; +92 300 4340666
+                    <img class="footer-icon" src="{{ $iconPhone }}" alt="">+92 300 4340666 &nbsp; +92 302 4340666 &nbsp; +92 304 4340666 &nbsp; +92 330 1000069
                 </td>
                 <td class="footer-contact footer-contact--end">
                     <img class="footer-icon" src="{{ $iconMail }}" alt="">info@federalmanpower.com
