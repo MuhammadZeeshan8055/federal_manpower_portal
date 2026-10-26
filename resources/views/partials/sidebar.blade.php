@@ -50,7 +50,7 @@
                     @click="goModule()"
                     @mouseenter="$el.classList.add('nav-touched')"
                 >
-                    <span class="nav-item__icon">@include('partials.icon', ['name' => 'chart'])</span>
+                    <span class="nav-item__icon" x-html="navIcon(moduleIcon || 'chart')"></span>
                     <span class="nav-item__label">Module Dashboard</span>
                     <span class="nav-item__indicator"></span>
                 </button>
@@ -64,7 +64,7 @@
                         @click="openFeature(feature.key)"
                         @mouseenter="$el.classList.add('nav-touched')"
                     >
-                        <span class="nav-item__icon">@include('partials.icon', ['name' => 'document'])</span>
+                        <span class="nav-item__icon" x-html="navIcon(feature.icon || 'document')"></span>
                         <span class="nav-item__label" x-text="feature.label"></span>
                         <span class="nav-item__indicator"></span>
                     </button>

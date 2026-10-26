@@ -59,13 +59,21 @@
                 moduleKey: '',
                 moduleTitle: '',
                 moduleDescription: '',
+                moduleIcon: '',
                 features: [],
                 featureKey: '',
                 featureTitle: '',
 
                 modules: @js($modulesMap ?? []),
+                iconPaths: @js(\App\Support\PortalIcons::paths()),
                 startModule: @js($startModule ?? ''),
                 startFeature: @js($startFeature ?? ''),
+
+                navIcon(name) {
+                    var path = this.iconPaths[name] || this.iconPaths.document || this.iconPaths.grid || '';
+
+                    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';
+                },
 
                 init() {
                     var self = this;
@@ -166,6 +174,7 @@
                         this.moduleKey = '';
                         this.moduleTitle = '';
                         this.moduleDescription = '';
+                        this.moduleIcon = '';
                         this.features = [];
                         this.featureKey = '';
                         this.featureTitle = '';
@@ -185,6 +194,7 @@
                     this.moduleKey = moduleKey;
                     this.moduleTitle = module.title;
                     this.moduleDescription = module.description;
+                    this.moduleIcon = module.icon || '';
                     this.features = module.children ? module.children : [];
                     this.sidebarOpen = false;
                     window.scrollTo(0, 0);
