@@ -5094,7 +5094,7 @@ button.module-summary__card:disabled {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
-    margin: 0 0 14px;
+    margin: 0 0 12px;
 }
 .loan-page-summary > div {
     display: flex;
@@ -5117,10 +5117,54 @@ button.module-summary__card:disabled {
     font-size: 1.15rem;
     color: var(--ink);
 }
+.loan-page-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel, #fff);
+}
+.loan-page-filters .master-search {
+    min-width: 160px;
+    flex: 1 1 180px;
+    max-width: 280px;
+    margin-left: auto;
+}
 @media (max-width: 720px) {
     .loan-page-summary {
         grid-template-columns: 1fr;
     }
+    .loan-page-filters .master-search {
+        margin-left: 0;
+        max-width: none;
+    }
+}
+.loan-page-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.loan-page-body__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 16px;
+}
+.loan-page-body__title .panel__eyebrow {
+    margin: 0;
+    width: 100%;
+}
+.loan-page-body__title h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--ink);
+}
+.loan-page-body__title .button {
+    margin-left: auto;
 }
 .loan-forms-row {
     display: grid;
