@@ -34,7 +34,7 @@
             <button type="button" class="site-nav-toggle" id="site-nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span></span><span></span><span></span></button>
             <nav class="site-nav" id="site-nav" aria-label="Main navigation">
                 <a href="{{ route('website.home') }}" class="{{ request()->routeIs('website.home') ? 'is-active' : '' }}">Home</a>
-                <a href="{{ route('website.about') }}" class="{{ request()->routeIs('website.about') ? 'is-active' : '' }}">About Us</a>
+                <a href="{{ route('website.about') }}" class="{{ request()->routeIs('website.about') ? 'is-active' : '' }}">About</a>
                 <a href="{{ route('website.jobs') }}" class="{{ request()->routeIs('website.jobs') ? 'is-active' : '' }}">Jobs</a>
                 <a href="{{ route('website.countries') }}" class="{{ request()->routeIs('website.countries') ? 'is-active' : '' }}">Countries</a>
                 <a href="{{ route('website.services') }}" class="{{ request()->routeIs('website.services') ? 'is-active' : '' }}">Services</a>
@@ -42,7 +42,6 @@
                 <a href="{{ route('website.contact') }}" class="{{ request()->routeIs('website.contact') ? 'is-active' : '' }}">Contact</a>
             </nav>
             <div class="site-header__actions">
-                <a href="{{ route('employer.register') }}" class="site-header__employer {{ request()->routeIs('employer.*') ? 'is-active' : '' }}">Register as employer</a>
                 <a href="{{ route('client-portal.login') }}" class="btn btn-ghost"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.4 0-8 2-8 4.5V21h16v-2.5C20 16 16.4 14 12 14Z"/></svg>Login</a>
                 <a href="{{ route('client-portal.register') }}" class="btn btn-accent"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM7 10V7H5v3H2v2h3v3h2v-3h3v-2H7Zm8 4c-3.3 0-6 1.5-6 3.5V20h12v-2.5c0-2-2.7-3.5-6-3.5Z"/></svg>Register</a>
             </div>
