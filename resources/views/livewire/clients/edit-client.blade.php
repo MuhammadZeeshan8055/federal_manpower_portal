@@ -352,5 +352,62 @@
                 </div>
             </form>
         </section>
+
+        @if ($convertConfirmOpen)
+            <div
+                class="confirm-backdrop"
+                wire:keydown.escape.window="cancelConvertConfirm"
+                wire:click="cancelConvertConfirm"
+                role="presentation"
+            >
+                <section
+                    class="confirm-modal"
+                    wire:click.stop
+                    role="alertdialog"
+                    aria-modal="true"
+                    aria-labelledby="convert-country-title"
+                    aria-describedby="convert-country-description"
+                >
+                    <button type="button" class="confirm-modal__close" wire:click="cancelConvertConfirm" aria-label="Close dialog">
+                        &times;
+                    </button>
+
+                    <p class="confirm-modal__eyebrow">COUNTRY CHANGE</p>
+                    <h3 id="convert-country-title">Converted, or just fixing country?</h3>
+                    <p id="convert-country-description">
+                        Country is changing from
+                        <strong>{{ $convertFromName }}</strong>
+                        to
+                        <strong>{{ $convertToName }}</strong>.
+                        Choose Converted only if the person moved to a new destination.
+                        Choose Just update if the old country was entered by mistake.
+                    </p>
+
+                    <div class="confirm-modal__actions" style="flex-wrap:wrap;">
+                        <button type="button" class="confirm-button confirm-button--cancel" wire:click="cancelConvertConfirm">
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            class="confirm-button confirm-button--cancel"
+                            wire:click="confirmCountryCorrection"
+                            wire:loading.attr="disabled"
+                            wire:target="confirmCountryCorrection,confirmCountryConverted,saveClient"
+                        >
+                            Just update country
+                        </button>
+                        <button
+                            type="button"
+                            class="confirm-button confirm-button--ok"
+                            wire:click="confirmCountryConverted"
+                            wire:loading.attr="disabled"
+                            wire:target="confirmCountryCorrection,confirmCountryConverted,saveClient"
+                        >
+                            Converted
+                        </button>
+                    </div>
+                </section>
+            </div>
+        @endif
     @endif
 </div>

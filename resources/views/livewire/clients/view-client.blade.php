@@ -26,7 +26,19 @@
                     <legend>Job</legend>
                     <dl class="bio-view-grid">
                         <div><dt>Trade</dt><dd>{{ $client->trade?->name ?: '—' }}</dd></div>
-                        <div><dt>Country</dt><dd>{{ $client->country?->name ?: '—' }}</dd></div>
+                        <div>
+                            <dt>Country</dt>
+                            <dd>
+                                {{ $client->country?->name ?: '—' }}
+                                @if ($client->convertedFromCountry)
+                                    <span
+                                        class="status status--documentation"
+                                        style="margin-left:8px;vertical-align:middle;"
+                                        title="Previous destination"
+                                    >Converted from {{ $client->convertedFromCountry->name }}</span>
+                                @endif
+                            </dd>
+                        </div>
                         <div class="bio-view-grid__full">
                             <dt>Applied vacancy</dt>
                             <dd>

@@ -171,7 +171,7 @@ class ListClients extends Component
         }
 
         $query = Client::query()
-            ->with(['country:id,name', 'trade:id,name', 'processStatus:id,name'])
+            ->with(['country:id,name', 'convertedFromCountry:id,name', 'trade:id,name', 'processStatus:id,name'])
             ->withCount('documents')
             ->orderByDesc('id');
 

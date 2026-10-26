@@ -12,6 +12,7 @@ class Client extends Model
     protected $fillable = [
         'user_id',
         'country_id',
+        'converted_from_country_id',
         'trade_id',
         'company_id',
         'job_post_id',
@@ -148,6 +149,11 @@ class Client extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function convertedFromCountry(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'converted_from_country_id');
     }
 
     public function trade(): BelongsTo

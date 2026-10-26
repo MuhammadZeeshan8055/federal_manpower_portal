@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Country;
 use App\Models\ProcessStatus;
 use App\Models\Trade;
+use App\Support\ClientCountryConvert;
 use App\Support\ClientPrivateFiles;
 use App\Support\WorkspaceCountry;
 use Carbon\Carbon;
@@ -151,6 +152,16 @@ class EditClient extends Component
 
     public string $toastType = 'success';
 
+    public string $savedCountryId = '';
+
+    public bool $convertConfirmOpen = false;
+
+    public string $convertFromName = '';
+
+    public string $convertToName = '';
+
+    public ?bool $countryChangeIsConvert = null;
+
     public function mount(int $clientId): void
     {
         $user = auth()->user();
@@ -212,6 +223,57 @@ class EditClient extends Component
             'doc_files.*' => 'document',
         ]);
 
+        if ($this->countryChanged() && $this->countryChangeIsConvert === null) {
+            $this->openConvertConfirm();
+
+            return;
+        }
+
+        $this->persistClient();
+    }
+
+    public function confirmCountryConverted(): void
+    {
+        $this->countryChangeIsConvert = true;
+        $this->convertConfirmOpen = false;
+        $this->saveClient();
+    }
+
+    public function confirmCountryCorrection(): void
+    {
+        $this->countryChangeIsConvert = false;
+        $this->convertConfirmOpen = false;
+        $this->saveClient();
+    }
+
+    public function cancelConvertConfirm(): void
+    {
+        $this->convertConfirmOpen = false;
+        $this->countryChangeIsConvert = null;
+        $this->convertFromName = '';
+        $this->convertToName = '';
+    }
+
+    private function countryChanged(): bool
+    {
+        $old = $this->savedCountryId !== '' ? (int) $this->savedCountryId : null;
+        $new = $this->idOrNull($this->country_id);
+
+        return $old && $new && $old !== $new;
+    }
+
+    private function openConvertConfirm(): void
+    {
+        $from = Country::query()->find($this->savedCountryId);
+        $to = Country::query()->find($this->country_id);
+
+        $this->convertFromName = $from?->name ?: 'previous country';
+        $this->convertToName = $to?->name ?: 'new country';
+        $this->convertConfirmOpen = true;
+    }
+
+    private function persistClient(): void
+    {
         $allowedDocKeys = collect($this->documentRows())->pluck('key')->all();
 
         foreach (array_keys($this->doc_files) as $key) {
@@ -221,12 +283,14 @@ class EditClient extends Component
         }
 
         $careOffId = $this->source === 'referred' ? $this->idOrNull($this->care_off_id) : null;
+        $markAsConverted = $this->countryChangeIsConvert === true;
 
-        DB::transaction(function () use ($careOffId) {
+        DB::transaction(function () use ($careOffId, $markAsConverted) {
             $client = Client::query()->whereKey($this->clientId)->firstOrFail();
 
-            $client->update([
-                'country_id' => $this->idOrNull($this->country_id),
+            $client->update(array_merge(
+                ClientCountryConvert::fields($client, $this->idOrNull($this->country_id), $markAsConverted),
+                [
                 'trade_id' => $this->idOrNull($this->trade_id),
                 'company_id' => $this->idOrNull($this->company_id),
                 'care_off_id' => $careOffId,
@@ -261,7 +325,8 @@ class EditClient extends Component
                 'experience_rows' => Client::cleanExperienceRows($this->experiences),
                 'source' => $this->source,
                 'overall_status' => $this->overall_status,
-            ]);
+                ]
+            ));
 
             if ($this->photo) {
                 $this->deletePrivatePath($client->photo_path);
@@ -328,8 +393,20 @@ class EditClient extends Component
             $this->doc_files = [];
         });
 
+        $wasConverted = $this->countryChangeIsConvert === true;
+        $toName = $wasConverted
+            ? (Country::query()->whereKey($this->country_id)->value('name') ?: '')
+            : '';
+
+        $this->countryChangeIsConvert = null;
+        $this->convertConfirmOpen = false;
+        $this->convertFromName = '';
+        $this->convertToName = '';
+
         $this->loadClient();
-        $this->successMessage = 'Client updated.';
+        $this->successMessage = $wasConverted
+            ? ($toName !== '' ? 'Client converted to '.$toName.'.' : 'Client converted.')
+            : 'Client updated.';
         $this->dispatch('refresh-module-stats');
         $this->toastType = 'success';
         $this->toastVersion++;
@@ -397,6 +474,7 @@ class EditClient extends Component
         $this->notFound = false;
         $this->trade_id = (string) ($client->trade_id ?? '');
         $this->country_id = (string) ($client->country_id ?? '');
+        $this->savedCountryId = $this->country_id;
         $this->full_name = $client->full_name;
         $this->height = (string) ($client->height ?? '');
         $this->weight = (string) ($client->weight ?? '');

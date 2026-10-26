@@ -30,6 +30,7 @@ class ViewClient extends Component
         $this->client = Client::query()
             ->with([
                 'country:id,name',
+                'convertedFromCountry:id,name',
                 'trade:id,name',
                 'company:id,name',
                 'careOff:id,name',

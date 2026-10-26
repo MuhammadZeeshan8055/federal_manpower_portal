@@ -4197,6 +4197,18 @@ button.module-summary__card:disabled {
     box-shadow: 0 10px 22px rgba(201, 72, 61, 0.28);
     transform: translateY(-1px);
 }
+.confirm-button--ok {
+    color: #fff;
+    background: #659721;
+    border-color: #659721;
+    box-shadow: 0 8px 18px rgba(101, 151, 33, 0.2);
+}
+.confirm-button--ok:hover {
+    background: #56831b;
+    border-color: #56831b;
+    box-shadow: 0 10px 22px rgba(101, 151, 33, 0.28);
+    transform: translateY(-1px);
+}
 .confirm-button:focus-visible,
 .confirm-modal__close:focus-visible {
     outline: 3px solid rgba(28, 122, 180, 0.2);

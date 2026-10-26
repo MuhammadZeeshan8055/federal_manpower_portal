@@ -72,6 +72,7 @@ alwaysApply: true
  - Client portal auth Step 1: `/portal` register/login/home (`role=client`, `clients.user_id`, office/client middleware)
  - Client portal Step 2: `/portal/application` fill/edit bio data + private docs (`ApplicationForm`; no process status edit)
  - All Clients: Portal badge + Pending (no process status) + “Portal applications only” filter
+ - Country convert badge: on Edit save, if country changes → confirm Converted vs Just update; only Converted sets `converted_from_country_id` + list/view badge
  - Daily Visitors (desk log): name, contact, purpose, meet with, outcome (mature / immature), remarks, optional remind_on, follow_up_status / follow_up_remarks
  - Reminders list (`ManageReminders`); bell click opens that screen
  - Header notification bell (`NotificationBell`) + `visitors:send-reminders` daily schedule

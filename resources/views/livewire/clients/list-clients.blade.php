@@ -132,11 +132,24 @@
                                         @if ($client->user_id && ! $client->process_status_id)
                                             <span class="status status--screening" title="No process status yet">Pending</span>
                                         @endif
+                                        @if ($client->convertedFromCountry)
+                                            <span
+                                                class="status status--documentation"
+                                                title="Converted from {{ $client->convertedFromCountry->name }}"
+                                            >Converted</span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td>{{ $client->cnic }}</td>
                                 <td>{{ $client->passport_number }}</td>
-                                <td>{{ $client->country?->name ?: '—' }}</td>
+                                <td>
+                                    {{ $client->country?->name ?: '—' }}
+                                    @if ($client->convertedFromCountry)
+                                        <div class="muted" style="font-size:0.75rem;margin-top:2px;">
+                                            from {{ $client->convertedFromCountry->name }}
+                                        </div>
+                                    @endif
+                                </td>
                                 <td>{{ $client->trade?->name ?: '—' }}</td>
                                 <td>{{ $client->processStatus?->name ?: '—' }}</td>
                                 <td>{{ $client->documents_count }}</td>
