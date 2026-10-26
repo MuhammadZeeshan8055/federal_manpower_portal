@@ -7,7 +7,3 @@
 <section class="page-section page-section--soft"><div class="site-wrap"><div class="section-heading section-heading--split"><div><span class="section-kicker">Featured jobs</span><h2>Latest overseas vacancies</h2></div><a href="{{ route('client-portal.register') }}" class="text-link">Register to apply <span>&rarr;</span></a></div>@if (count($jobs))<div class="vacancy-grid page-vacancy-grid">@foreach ($jobs as $job) @include('website.partials.job-card', ['job' => $job]) @endforeach</div>@else<p class="muted" style="margin-top:1rem;">No approved vacancies yet. Register your candidate profile so you are ready when new jobs go live.</p>@endif</div></section>
 <section class="page-cta"><div class="site-wrap page-cta__inner"><div><span class="section-kicker">Don’t see your role?</span><h2>Create your profile for future vacancies.</h2></div><a href="{{ route('client-portal.register') }}" class="btn btn-accent">Register now <span>&rarr;</span></a></div></section>
 @endsection
-
-@push('scripts')
-<script>document.querySelectorAll('.vacancy-card__save').forEach(button => button.addEventListener('click', () => { button.classList.toggle('is-saved'); button.textContent = button.classList.contains('is-saved') ? '♥' : '♡'; }));</script>
-@endpush

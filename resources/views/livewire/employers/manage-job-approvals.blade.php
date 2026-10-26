@@ -80,7 +80,17 @@
                                         </button>
                                     @elseif ($job->isRejected() && $job->rejection_reason)
                                         <span class="muted employers-approvals-table__text">{{ $job->rejection_reason }}</span>
-                                    @else
+                                    @endif
+                                    @if ($canManage)
+                                        <button
+                                            type="button"
+                                            class="row-action row-action--delete"
+                                            wire:click="delete({{ $job->id }})"
+                                            wire:confirm="Delete this job permanently? It will be removed from the website."
+                                        >
+                                            <span>Delete</span>
+                                        </button>
+                                    @elseif (! $job->isPending() && ! ($job->isRejected() && $job->rejection_reason))
                                         <span class="muted">—</span>
                                     @endif
                                 </td>

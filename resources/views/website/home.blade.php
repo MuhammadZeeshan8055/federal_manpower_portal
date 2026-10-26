@@ -433,7 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
         filterJobs(criteria);
         document.getElementById('jobs').scrollIntoView({behavior: 'smooth'});
     });
-    document.querySelectorAll('.vacancy-card__save').forEach(button => button.addEventListener('click', () => { button.classList.toggle('is-saved'); button.textContent = button.classList.contains('is-saved') ? '♥' : '♡'; }));
 });
 </script>
 @endpush

@@ -123,6 +123,11 @@ class DatabaseSeeder extends Seeder
             ['attendance', 'my-loans', 'view'],
             ['attendance', 'apply-leave', 'manage'],
         ]);
+
+        // Demo website: approved employers + live vacancies (safe to re-run)
+        $this->call([
+            EmployerJobSeeder::class,
+        ]);
     }
 
     private function syncPermissions(User $user, array $rows): void

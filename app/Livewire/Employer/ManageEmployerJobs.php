@@ -107,6 +107,28 @@ class ManageEmployerJobs extends Component
         $this->flashToast('Job closed.', 'danger');
     }
 
+    public function deleteJob(int $id): void
+    {
+        if ($this->denied || $this->notApproved) {
+            return;
+        }
+
+        $job = $this->findOwnJob($id);
+
+        if (! $job) {
+            return;
+        }
+
+        if ($this->editingId === $job->id) {
+            $this->resetForm();
+        }
+
+        $job->delete();
+
+        $this->flashToast('Job deleted.', 'danger');
+        $this->resetPage('employerJobsPage');
+    }
+
     public function saveJob(): void
     {
         if ($this->denied || $this->notApproved) {

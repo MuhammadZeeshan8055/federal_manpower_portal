@@ -54,7 +54,7 @@ alwaysApply: true
 ### Done
 - Portal shell (sidebar, theme, permissions, dashboard module cards)
 - **Operations masters:** Care Offs, Companies, Universities, Countries, Trades, Process Statuses (CRUD + search/pagination where built)
- - Master seeders: ProcessStatusSeeder, TradeSeeder, CareOffSeeder, CompanySeeder (called from DatabaseSeeder; `php artisan db:seed`)
+ - Master seeders: ProcessStatusSeeder, TradeSeeder, CareOffSeeder, CompanySeeder, PaymentMethodSeeder, EmployerJobSeeder (called from DatabaseSeeder; `php artisan db:seed`)
 - **Clients (CRUD + docs):**
   - Add Client (collapsible sections, Continue gates, Save)
   - All Clients list (search, pagination, delete + private folder cleanup)

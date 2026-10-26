@@ -1329,25 +1329,6 @@ select {
     font-weight: 800;
     text-transform: uppercase;
 }
-.vacancy-card__save {
-    position: absolute;
-    z-index: 2;
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
-    display: grid;
-    place-items: center;
-    color: white;
-    background: rgba(0, 0, 0, 0.13);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-    font-size: 20px;
-}
-.vacancy-card__save.is-saved {
-    color: #ffe0e6;
-    background: #d9475f;
-}
 .vacancy-card__body {
     padding: 19px 17px 16px;
 }
@@ -2024,12 +2005,6 @@ select {
 .vacancy-card__visual--healthcare > .vacancy-card__badge {
     background: var(--green-600);
 }
-.vacancy-card__save {
-    color: #48677c;
-    background: rgba(255, 255, 255, 0.94);
-    border-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 10px rgba(5, 43, 70, 0.12);
-}
 .vacancy-card__body {
     padding: 16px 15px 14px;
 }
@@ -2129,7 +2104,7 @@ select {
     font-size: 8px;
 }
 .vacancy-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
 }
 .vacancy-card {
@@ -2161,13 +2136,6 @@ select {
     left: 8px;
     padding: 4px 7px;
     font-size: 7px;
-}
-.vacancy-card__save {
-    top: 8px;
-    right: 8px;
-    width: 27px;
-    height: 27px;
-    font-size: 16px;
 }
 .vacancy-card__body {
     padding: 15px 13px 13px;
@@ -2748,7 +2716,7 @@ select {
 .page-cta__inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .page-cta .section-kicker { color: #dff58a; }
 .page-cta h2 { margin: 0; font-size: clamp(1.8rem, 2.8vw, 2.8rem); }
-.page-vacancy-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.page-vacancy-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .countries-page-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
 .countries-page-grid .destination-card { min-width: 0; min-height: 265px; flex: none; }
 .services-page-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }

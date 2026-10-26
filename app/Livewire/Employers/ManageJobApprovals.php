@@ -120,6 +120,28 @@ class ManageJobApprovals extends Component
         $this->dispatch('refresh-module-stats');
     }
 
+    public function delete(int $id): void
+    {
+        if ($this->denied || ! auth()->user()->canManage('employers', 'job-approvals')) {
+            return;
+        }
+
+        $job = JobPost::query()->find($id);
+
+        if (! $job) {
+            return;
+        }
+
+        if ($this->rejectingId === $job->id) {
+            $this->cancelReject();
+        }
+
+        $job->delete();
+
+        $this->flashToast('Job deleted.', 'danger');
+        $this->dispatch('refresh-module-stats');
+    }
+
     public function render()
     {
         $jobs = null;

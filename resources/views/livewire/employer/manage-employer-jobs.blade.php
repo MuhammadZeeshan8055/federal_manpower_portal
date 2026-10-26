@@ -147,9 +147,8 @@
                                                 @if (! $job->isClosed())
                                                     <button type="button" class="ep-link" wire:click="editJob({{ $job->id }})">Edit</button>
                                                     <button type="button" class="ep-link ep-link--danger" wire:click="closeJob({{ $job->id }})" wire:confirm="Close this job?">Close</button>
-                                                @else
-                                                    <span class="ep-muted">—</span>
                                                 @endif
+                                                <button type="button" class="ep-link ep-link--danger" wire:click="deleteJob({{ $job->id }})" wire:confirm="Delete this job permanently?">Delete</button>
                                             </td>
                                         </tr>
                                     @empty

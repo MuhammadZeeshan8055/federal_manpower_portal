@@ -4,7 +4,6 @@
 <article class="vacancy-card" data-title="{{ strtolower($title) }}" data-category="{{ $category }}" data-country="{{ $country }}" data-experience="{{ $experienceLevel }}" data-type="{{ $typeSlug }}">
     <div class="vacancy-card__visual vacancy-card__visual--{{ $visual }}" style="background-image:url('{{ asset($image) }}')">
         <span class="vacancy-card__badge">{{ $badge }}</span>
-        <button type="button" class="vacancy-card__save" aria-label="Save {{ $title }}">&#9825;</button>
     </div>
     <div class="vacancy-card__body">
         <span class="vacancy-card__type">{{ \Illuminate\Support\Str::headline($category) }}</span>
