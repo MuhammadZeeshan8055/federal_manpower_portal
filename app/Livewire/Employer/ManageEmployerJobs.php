@@ -3,6 +3,7 @@
 namespace App\Livewire\Employer;
 
 use App\Models\JobPost;
+use App\Support\ClientPrivateFiles;
 use App\Support\EmployerNotifications;
 use App\Support\JobPosters;
 use Livewire\Component;
@@ -71,6 +72,7 @@ class ManageEmployerJobs extends Component
             return;
         }
 
+        $this->poster = ClientPrivateFiles::compressTemporaryIfNeeded($value, true);
         $this->resetValidation('poster');
     }
 
@@ -173,7 +175,7 @@ class ManageEmployerJobs extends Component
             return;
         }
 
-        $maxKb = JobPosters::maxKilobytes();
+        $uploadMaxKb = JobPosters::uploadMaxKilobytes();
 
         $this->validate([
             'title' => ['required', 'string', 'max:160'],
@@ -185,7 +187,7 @@ class ManageEmployerJobs extends Component
             'salary_text' => ['nullable', 'string', 'max:120'],
             'vacancies' => ['required', 'integer', 'min:1', 'max:9999'],
             'description' => ['nullable', 'string', 'max:5000'],
-            'poster' => ['nullable', 'image', 'max:'.$maxKb, 'mimes:jpg,jpeg,png,webp'],
+            'poster' => ['nullable', 'image', 'max:'.$uploadMaxKb, 'mimes:jpg,jpeg,png,webp'],
         ]);
 
         $profile = auth()->user()->employerProfile;
@@ -252,7 +254,7 @@ class ManageEmployerJobs extends Component
 
         return view('livewire.employer.manage-employer-jobs', [
             'jobs' => $jobs,
-            'maxPosterMb' => max(1, (int) ceil(JobPosters::maxKilobytes() / 1024)),
+            'maxPosterMb' => max(1, (int) ceil(JobPosters::uploadMaxKilobytes() / 1024)),
             'currentPosterUrl' => JobPosters::url($this->poster_path),
         ])->layout('layouts.employer-portal', [
             'title' => 'My jobs',

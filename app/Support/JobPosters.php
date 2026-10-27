@@ -15,14 +15,32 @@ class JobPosters
 
     public static function maxKilobytes(): int
     {
-        return 5120;
+        return ClientPrivateFiles::maxKilobytes();
+    }
+
+    public static function uploadMaxKilobytes(): int
+    {
+        return ClientPrivateFiles::uploadMaxKilobytes();
     }
 
     public static function store(int $jobId, UploadedFile|TemporaryUploadedFile $file): string
     {
-        $ext = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+        if ($file instanceof TemporaryUploadedFile) {
+            $file = ClientPrivateFiles::compressTemporaryIfNeeded($file, true);
+        }
+
+        $kind = ClientPrivateFiles::detectKind($file);
+        $ext = match ($kind) {
+            'png' => 'png',
+            'jpeg' => 'jpg',
+            default => strtolower($file->getClientOriginalExtension() ?: 'jpg'),
+        };
 
         if (! in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+            $ext = 'jpg';
+        }
+
+        if ($ext === 'jpeg') {
             $ext = 'jpg';
         }
 

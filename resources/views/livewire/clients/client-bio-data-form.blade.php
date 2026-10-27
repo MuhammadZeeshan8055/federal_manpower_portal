@@ -184,7 +184,7 @@
                                     Photo
                                     <span class="bio-file-placeholder">
                                         <input type="file" wire:model="photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-label="Client photo">
-                                        <small>JPG/PNG · max {{ $maxUploadMb }} MB · private</small>
+                                        <small>JPG/PNG · HD up to {{ $maxUploadMb }} MB · auto-shrunk, stays clear</small>
                                     </span>
                                     @error('photo') <span class="master-error">{{ $message }}</span> @enderror
                                     <div wire:loading wire:target="photo" class="muted" style="font-size:0.7rem;">Uploading…</div>
@@ -398,7 +398,7 @@
                     @if ($openDocuments)
                         <div class="bio-collapse__body">
                             <p class="bio-doc-note muted">
-                                Files go to private storage only (pdf / jpg / png, max {{ $maxUploadMb }} MB). Mark <strong>N/A</strong> when not needed.
+                                Private storage. HD JPG/PNG OK (up to {{ $maxUploadMb }} MB) — auto-shrunk while staying clear for visa processing. PDF stored as uploaded. Mark <strong>N/A</strong> when not needed.
                             </p>
                             <div class="table-wrap">
                                 <table class="data-table bio-doc-table">

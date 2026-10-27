@@ -14,13 +14,22 @@ return [
 
     /*
     | Private client files (storage/app/private via local disk).
-    | max_kilobytes = 5120 → 5 MB per stored file.
-    | JPG/PNG are compressed after upload to fit this limit.
+    | upload_max_kilobytes = HD arrival size (matches Livewire temp upload).
+    | max_kilobytes = target size after silent JPG/PNG compress.
+    | Compress keeps high quality / large dimensions for visa clarity.
+    | PDFs are not auto-compressed.
     */
     'client_files' => [
-        'max_kilobytes' => 5120,
+        'upload_max_kilobytes' => 25600,
+        'max_kilobytes' => 8192,
         'mimes' => ['pdf', 'jpg', 'jpeg', 'png'],
         'photo_mimes' => ['jpg', 'jpeg', 'png'],
+        'compress' => [
+            'max_dimension' => 3200,
+            'min_dimension' => 1800,
+            'start_quality' => 92,
+            'min_quality' => 80,
+        ],
     ],
 
     /*

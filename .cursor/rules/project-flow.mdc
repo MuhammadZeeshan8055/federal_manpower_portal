@@ -26,9 +26,9 @@ alwaysApply: true
 - Store only relative paths in DB (e.g. `clients/{id}/passport_copy.pdf`) — never public URLs
 - On download: check login, clients permission, row belongs to that client, path stays under `clients/{id}/` (block `..`)
 - Upload: whitelist mime/extensions + max size from `config/portal.php` (`client_files`)
-- JPG/PNG uploads are auto-compressed after temp upload to stay under `client_files.max_kilobytes` (silent). PDFs are not auto-compressed.
-- Suggested limit: **5 MB** per stored file (pdf/jpg/jpeg/png) — enough for scans, sane with many clients
-- Livewire temp upload max is higher (25 MB) so large phone photos can arrive before compress
+- JPG/PNG uploads are auto-compressed after temp upload to stay under `client_files.max_kilobytes` (silent). High JPEG quality + large dims kept for visa clarity; size is reduced without crushing the picture. PDFs are not auto-compressed.
+- Stored target: **8 MB** (`max_kilobytes`); HD arrival allowed up to **25 MB** (`upload_max_kilobytes` / Livewire temp)
+- Livewire temp upload max is 25 MB so large phone / HD photos can arrive before compress
 - `client_documents`: store a row only when a file is uploaded **or** marked N/A — skip empty checklist items
 
 ## Domain (plain language)

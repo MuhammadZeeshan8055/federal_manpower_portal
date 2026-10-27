@@ -184,7 +184,7 @@
                             <label>
                                 Photo
                                 <input type="file" wire:model="photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
-                                <span class="cp-app-hint">JPG/PNG · max {{ $maxUploadMb }} MB
+                                <span class="cp-app-hint">JPG/PNG · HD up to {{ $maxUploadMb }} MB (auto-shrunk, stays clear)
                                     @if ($photo_path) · current photo on file @endif
                                 </span>
                                 <span wire:loading wire:target="photo" class="cp-app-hint">Uploading…</span>
@@ -351,7 +351,7 @@
                 </button>
                 @if ($openDocuments)
                     <div class="cp-app-section__body contact-form">
-                        <p class="cp-app-hint cp-app-hint--block">Upload a file or mark N/A. Max {{ $maxUploadMb }} MB each (PDF/JPG/PNG).</p>
+                        <p class="cp-app-hint cp-app-hint--block">Upload a file or mark N/A. HD JPG/PNG OK (up to {{ $maxUploadMb }} MB) — auto-shrunk while staying clear for visa use. PDF stored as uploaded.</p>
 
                         @foreach ($documents as $doc)
                             <div class="cp-app-doc" wire:key="portal-doc-{{ $doc['key'] }}">

@@ -163,7 +163,7 @@
                                 @endif
                                 <span class="bio-file-placeholder">
                                     <input type="file" wire:model="photo" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
-                                    <small>Replace · JPG/PNG · max {{ $maxUploadMb }} MB</small>
+                                    <small>Replace · JPG/PNG · HD up to {{ $maxUploadMb }} MB (auto-shrunk, stays clear)</small>
                                 </span>
                                 @error('photo') <span class="master-error">{{ $message }}</span> @enderror
                             </label>
@@ -306,7 +306,7 @@
                     </button>
                     <div class="bio-collapse__body" x-show="open">
                         <p class="bio-doc-note muted">
-                            Private files only. View opens through a protected link. Max {{ $maxUploadMb }} MB · pdf / jpg / png.
+                            Private files only. HD photos OK (up to {{ $maxUploadMb }} MB) — JPG/PNG are auto-shrunk while staying clear for visa use. PDF is stored as uploaded.
                         </p>
                         <div class="table-wrap">
                             <table class="data-table bio-doc-table">

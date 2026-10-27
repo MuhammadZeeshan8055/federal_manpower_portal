@@ -194,7 +194,7 @@ class EditClient extends Component
             return;
         }
 
-        $maxKb = ClientPrivateFiles::maxKilobytes();
+        $uploadMaxKb = ClientPrivateFiles::uploadMaxKilobytes();
         $docMimes = implode(',', ClientPrivateFiles::allowedMimes());
 
         $this->validate([
@@ -217,7 +217,7 @@ class EditClient extends Component
             'email' => ['nullable', 'email', 'max:255'],
             'photo' => $this->photoRules(),
             'doc_files' => ['array'],
-            'doc_files.*' => ['nullable', 'file', 'max:'.$maxKb, 'mimes:'.$docMimes, ClientPrivateFiles::contentRule()],
+            'doc_files.*' => ['nullable', 'file', 'max:'.$uploadMaxKb, 'mimes:'.$docMimes, ClientPrivateFiles::contentRule()],
         ], [], [
             'full_name' => 'name',
             'father_name' => "father's name",
@@ -492,7 +492,7 @@ class EditClient extends Component
             'documents' => $this->documentRows(),
             'payments' => $payments,
             'age' => $this->age,
-            'maxUploadMb' => max(1, (int) ceil(ClientPrivateFiles::maxKilobytes() / 1024)),
+            'maxUploadMb' => max(1, (int) ceil(ClientPrivateFiles::uploadMaxKilobytes() / 1024)),
         ]);
     }
 
@@ -584,7 +584,7 @@ class EditClient extends Component
 
     private function photoRules(): array
     {
-        $maxKb = ClientPrivateFiles::maxKilobytes();
+        $maxKb = ClientPrivateFiles::uploadMaxKilobytes();
         $mimes = implode(',', ClientPrivateFiles::photoMimes());
 
         return ['nullable', 'image', 'max:'.$maxKb, 'mimes:'.$mimes, ClientPrivateFiles::contentRule(true)];

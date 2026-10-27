@@ -18,7 +18,12 @@ class ClientPrivateFiles
 
     public static function maxKilobytes(): int
     {
-        return (int) config('portal.client_files.max_kilobytes', 5120);
+        return (int) config('portal.client_files.max_kilobytes', 8192);
+    }
+
+    public static function uploadMaxKilobytes(): int
+    {
+        return (int) config('portal.client_files.upload_max_kilobytes', 25600);
     }
 
     public static function maxBytes(): int
@@ -141,12 +146,12 @@ class ClientPrivateFiles
     }
 
     /**
-     * Shrink large JPG/PNG uploads under the portal size limit (silent).
+     * Shrink large JPG/PNG uploads under the stored size limit (silent).
+     * Keeps high JPEG quality and large dimensions so visa scans stay clear.
      * PDF files are left as-is.
      */
     public static function compressTemporaryIfNeeded(TemporaryUploadedFile $file, bool $photosOnly = false): TemporaryUploadedFile
     {
-        // Caller should validate first; this is a hard stop before rewrite
         if (! self::matchesAllowedContent($file, $photosOnly)) {
             return $file;
         }
@@ -167,13 +172,11 @@ class ClientPrivateFiles
             return $file;
         }
 
-        $ext = $kind === 'png' ? 'png' : 'jpg';
-
         if (! function_exists('imagecreatetruecolor')) {
             return $file;
         }
 
-        $source = $ext === 'png'
+        $source = $kind === 'png'
             ? @imagecreatefrompng($path)
             : @imagecreatefromjpeg($path);
 
@@ -183,11 +186,16 @@ class ClientPrivateFiles
 
         $width = imagesx($source);
         $height = imagesy($source);
-        $quality = 85;
-        $maxDim = 2200;
+        $cfg = config('portal.client_files.compress', []);
+        $quality = (int) ($cfg['start_quality'] ?? 92);
+        $minQuality = (int) ($cfg['min_quality'] ?? 80);
+        $maxDim = (int) ($cfg['max_dimension'] ?? 3200);
+        $minDim = (int) ($cfg['min_dimension'] ?? 1800);
         $written = false;
+        $bytes = null;
 
-        for ($attempt = 0; $attempt < 8; $attempt++) {
+        // Prefer lowering size via mild re-encode first; only shrink dimensions if needed.
+        for ($attempt = 0; $attempt < 10; $attempt++) {
             $scale = min(1.0, $maxDim / max($width, $height, 1));
             $newW = max(1, (int) round($width * $scale));
             $newH = max(1, (int) round($height * $scale));
@@ -195,6 +203,11 @@ class ClientPrivateFiles
             $canvas = imagecreatetruecolor($newW, $newH);
             $white = imagecolorallocate($canvas, 255, 255, 255);
             imagefill($canvas, 0, 0, $white);
+
+            if ($kind === 'png') {
+                imagealphablending($canvas, true);
+            }
+
             imagecopyresampled($canvas, $source, 0, 0, 0, 0, $newW, $newH, $width, $height);
 
             ob_start();
@@ -208,16 +221,25 @@ class ClientPrivateFiles
                 break;
             }
 
-            $quality = max(40, $quality - 8);
-            $maxDim = max(900, (int) round($maxDim * 0.85));
+            if ($quality > $minQuality) {
+                $quality = max($minQuality, $quality - 3);
+                continue;
+            }
+
+            $nextDim = (int) round($maxDim * 0.9);
+
+            if ($nextDim < $minDim) {
+                break;
+            }
+
+            $maxDim = $nextDim;
         }
 
-        if (! $written && isset($bytes) && is_string($bytes) && $bytes !== '') {
+        if (! $written && is_string($bytes) && $bytes !== '') {
             file_put_contents($path, $bytes);
         }
 
         imagedestroy($source);
-
         clearstatcache(true, $path);
 
         return $file;

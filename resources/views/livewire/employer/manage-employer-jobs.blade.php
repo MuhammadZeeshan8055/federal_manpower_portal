@@ -113,7 +113,7 @@
                             Job poster image
                             <input type="file" wire:model="poster" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
                             <span class="ep-muted" style="display:block;margin-top:6px;font-size:12px;">
-                                Optional. JPG / PNG / WebP · max {{ $maxPosterMb }} MB. Shown on the public jobs page.
+                                Optional HD poster (JPG / PNG / WebP · up to {{ $maxPosterMb }} MB). We shrink the file size automatically while keeping the picture clear.
                             </span>
                             @error('poster') <span class="ep-field-error">{{ $message }}</span> @enderror
                         </label>
