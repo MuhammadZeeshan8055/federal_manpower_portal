@@ -1,4 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Shared hosting fallback when the domain cannot point directly to /public.
+    # Do not rewrite an internally redirected /public request a second time.
+    RewriteCond %{REQUEST_URI} !^/public(?:/|$) [NC]
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
