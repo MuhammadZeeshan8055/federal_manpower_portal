@@ -18,6 +18,7 @@
     class="portal-body"
     x-data="portalApp()"
     :class="{ 'nav-open': sidebarOpen, 'sidebar-collapsed': sidebarCollapsed }"
+    @open-batch-clients="openBatchClients($event.detail.id, $event.detail.label)"
 >
     <div class="portal-shell">
         @include('partials.sidebar')
@@ -312,11 +313,13 @@
 
                     this.show(this.moduleKey, key, true);
 
-                    // Status card → filter All Clients list
+                    // Status / batch card → filter All Clients list
                     if (this.moduleKey === 'clients' && key === 'list') {
                         this.filterClients(
                             options.processStatusId ? String(options.processStatusId) : '',
-                            options.label || ''
+                            options.label || '',
+                            options.batchId ? String(options.batchId) : '',
+                            options.batchLabel || ''
                         );
                     }
                 },
@@ -332,8 +335,18 @@
                     });
                 },
 
-                filterClients(statusId, label) {
-                    if (label) {
+                openBatchClients(batchId, label) {
+                    this.moduleKey = 'clients';
+                    this.openFeature('list', {
+                        batchId: batchId || '',
+                        batchLabel: label || '',
+                    });
+                },
+
+                filterClients(statusId, label, batchId, batchLabel) {
+                    if (batchLabel) {
+                        this.featureTitle = batchLabel;
+                    } else if (label) {
                         this.featureTitle = label;
                     }
 
@@ -342,6 +355,12 @@
                             detail: {
                                 id: statusId || '',
                                 label: label || '',
+                            },
+                        }));
+                        window.dispatchEvent(new CustomEvent('clients-filter-batch', {
+                            detail: {
+                                id: batchId || '',
+                                label: batchLabel || '',
                             },
                         }));
                     });

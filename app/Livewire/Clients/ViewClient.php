@@ -33,6 +33,7 @@ class ViewClient extends Component
                 'convertedFromCountry:id,name',
                 'trade:id,name',
                 'company:id,name',
+                'batch:id,number',
                 'careOff:id,name',
                 'processStatus:id,name',
                 'jobPost.employer',

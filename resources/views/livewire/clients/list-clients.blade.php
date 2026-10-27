@@ -19,6 +19,7 @@
     }"
     @keydown.escape.window="if (deleteOpen) closeDelete()"
     @clients-filter-status.window="$wire.applyStatusFilter($event.detail.id || '', $event.detail.label || '')"
+    @clients-filter-batch.window="$wire.applyBatchFilter($event.detail.id || '', $event.detail.label || '')"
     @portal-feature-shown.window="
         if ($event.detail && $event.detail.module === 'clients' && $event.detail.feature === 'list') {
             $wire.ensureList();
@@ -73,6 +74,8 @@
                     <h3>
                         @if ($sourceFilter === 'portal')
                             Portal applications
+                        @elseif ($batchFilterLabel !== '')
+                            Batch {{ $batchFilterLabel }}
                         @elseif ($statusFilterLabel !== '')
                             {{ $statusFilterLabel }}
                         @else
@@ -80,6 +83,11 @@
                         @endif
                     </h3>
                     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+                        @if ($batchFilterLabel !== '')
+                            <button type="button" class="text-button" wire:click="clearBatchFilter">
+                                Clear batch filter
+                            </button>
+                        @endif
                         @if ($statusFilterLabel !== '')
                             <button type="button" class="text-button" wire:click="clearStatusFilter">
                                 Clear status filter

@@ -266,6 +266,18 @@
                                 ])
                             </label>
                             <label>
+                                Batch number
+                                @include('partials.searchable-select', [
+                                    'options' => $batches,
+                                    'wireModel' => 'batch_id',
+                                    'selectedId' => $batch_id,
+                                    'placeholder' => 'Select batch number',
+                                    'searchPlaceholder' => 'Search batch number...',
+                                    'emptyText' => 'No batch found',
+                                ])
+                                @error('batch_id') <span class="master-error">{{ $message }}</span> @enderror
+                            </label>
+                            <label>
                                 Process status
                                 @include('partials.searchable-select', [
                                     'options' => $processStatuses,

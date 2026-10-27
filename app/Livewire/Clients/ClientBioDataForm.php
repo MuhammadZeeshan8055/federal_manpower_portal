@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Clients;
 
+use App\Models\Batch;
 use App\Models\CareOff;
 use App\Models\Client;
 use App\Models\ClientDocument;
@@ -10,6 +11,7 @@ use App\Models\Country;
 use App\Models\ProcessStatus;
 use App\Models\Trade;
 use App\Support\ClientPrivateFiles;
+use App\Support\PortalRefresh;
 use App\Support\WorkspaceCountry;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -123,6 +125,8 @@ class ClientBioDataForm extends Component
     public string $care_off_id = '';
 
     public string $company_id = '';
+
+    public string $batch_id = '';
 
     public string $process_status_id = '';
 
@@ -298,6 +302,7 @@ class ClientBioDataForm extends Component
             'country_id' => ['nullable'],
             'trade_id' => ['nullable'],
             'company_id' => ['nullable'],
+            'batch_id' => ['nullable'],
             'process_status_id' => ['nullable'],
             'email' => ['nullable', 'email', 'max:255'],
             'photo' => $this->photoRules(),
@@ -315,6 +320,7 @@ class ClientBioDataForm extends Component
             'passport_expiry' => 'date of expiry',
             'passport_available' => 'passport available',
             'care_off_id' => 'care off',
+            'batch_id' => 'batch',
             'doc_files.*' => 'document',
         ]);
 
@@ -335,6 +341,7 @@ class ClientBioDataForm extends Component
                 'country_id' => $this->idOrNull($this->country_id),
                 'trade_id' => $this->idOrNull($this->trade_id),
                 'company_id' => $this->idOrNull($this->company_id),
+                'batch_id' => $this->idOrNull($this->batch_id),
                 'care_off_id' => $careOffId,
                 'process_status_id' => $this->idOrNull($this->process_status_id),
                 'created_by' => auth()->id(),
@@ -415,6 +422,7 @@ class ClientBioDataForm extends Component
         $this->toastVersion++;
         $this->resetForm();
         $this->dispatch('refresh-module-stats');
+        $this->js(PortalRefresh::jsNotifyListsChanged());
     }
 
     public function getAgeProperty(): string
@@ -461,6 +469,12 @@ class ClientBioDataForm extends Component
             'countries' => Country::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'trades' => Trade::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'companies' => $companies->get(['id', 'name']),
+            'batches' => Batch::query()
+                ->where('is_active', true)
+                ->orderBy('number')
+                ->get(['id', 'number'])
+                ->map(fn (Batch $batch) => ['id' => $batch->id, 'name' => $batch->label()])
+                ->values(),
             'careOffs' => CareOff::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'processStatuses' => ProcessStatus::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get(['id', 'name']),
             'documents' => $this->documentRows(),
@@ -513,6 +527,7 @@ class ClientBioDataForm extends Component
         $this->source = 'direct';
         $this->care_off_id = '';
         $this->company_id = '';
+        $this->batch_id = '';
         $this->process_status_id = '';
         $this->overall_status = 'active';
         $this->photo = null;

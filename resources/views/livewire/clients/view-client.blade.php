@@ -170,6 +170,7 @@
                         <div><dt>Source</dt><dd>{{ $client->source === 'referred' ? 'Referred' : 'Direct' }}</dd></div>
                         <div><dt>Care Off</dt><dd>{{ $client->careOff?->name ?: '—' }}</dd></div>
                         <div><dt>Company</dt><dd>{{ $client->company?->name ?: '—' }}</dd></div>
+                        <div><dt>Batch number</dt><dd>{{ $client->batch?->label() ?: '—' }}</dd></div>
                         <div><dt>Process status</dt><dd>{{ $client->processStatus?->name ?: '—' }}</dd></div>
                         <div><dt>Overall status</dt><dd>{{ $client->overall_status === 'active' ? 'Active' : 'Inactive' }}</dd></div>
                     </dl>

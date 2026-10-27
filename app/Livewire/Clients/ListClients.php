@@ -30,6 +30,10 @@ class ListClients extends Component
 
     public string $statusFilterLabel = '';
 
+    public string $batch_id = '';
+
+    public string $batchFilterLabel = '';
+
     // '' = all, 'portal' = client portal applications only
     public string $sourceFilter = '';
 
@@ -56,6 +60,11 @@ class ListClients extends Component
             $this->process_status_id = (string) request('status');
             $this->statusFilterLabel = (string) request('label', '');
         }
+
+        if (request()->filled('batch')) {
+            $this->batch_id = (string) request('batch');
+            $this->batchFilterLabel = (string) request('batch_label', '');
+        }
     }
 
     public function updatedSearch(): void
@@ -74,6 +83,20 @@ class ListClients extends Component
     {
         $this->process_status_id = '';
         $this->statusFilterLabel = '';
+        $this->resetPage('clientsPage');
+    }
+
+    public function applyBatchFilter(?string $id = '', ?string $label = ''): void
+    {
+        $this->batch_id = $id ? (string) $id : '';
+        $this->batchFilterLabel = $label ? (string) $label : '';
+        $this->resetPage('clientsPage');
+    }
+
+    public function clearBatchFilter(): void
+    {
+        $this->batch_id = '';
+        $this->batchFilterLabel = '';
         $this->resetPage('clientsPage');
     }
 
@@ -181,7 +204,7 @@ class ListClients extends Component
         }
 
         $query = Client::query()
-            ->with(['country:id,name', 'convertedFromCountry:id,name', 'trade:id,name', 'processStatus:id,name'])
+            ->with(['country:id,name', 'convertedFromCountry:id,name', 'trade:id,name', 'processStatus:id,name', 'batch:id,number'])
             ->withCount('documents')
             ->orderByDesc('id');
 
@@ -189,6 +212,10 @@ class ListClients extends Component
 
         if ($this->process_status_id !== '') {
             $query->where('process_status_id', (int) $this->process_status_id);
+        }
+
+        if ($this->batch_id !== '') {
+            $query->where('batch_id', (int) $this->batch_id);
         }
 
         if ($this->sourceFilter === 'portal') {

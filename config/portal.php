@@ -61,6 +61,7 @@ return [
             'children' => [
                 ['key' => 'create', 'label' => 'Add Client', 'icon' => 'user-plus'],
                 ['key' => 'list', 'label' => 'All Clients', 'icon' => 'list'],
+                ['key' => 'batches', 'label' => 'Batches', 'icon' => 'badge'],
                 ['key' => 'documents', 'label' => 'Documents', 'icon' => 'document'],
                 ['key' => 'import', 'label' => 'Excel Import', 'icon' => 'upload', 'admin_only' => true],
             ],

@@ -80,6 +80,17 @@ class PortalModules
                 continue;
             }
 
+            // Batches uses Clients list access when batches permission is not set yet
+            if ($moduleKey === 'clients' && $feature['key'] === 'batches') {
+                if ($user->canView('clients', 'batches')
+                    || $user->canView('clients', 'list')
+                    || $user->canManage('clients', 'list')) {
+                    $allowedFeatures[] = $feature;
+                }
+
+                continue;
+            }
+
             if ($user->canView($moduleKey, $feature['key'])) {
                 $allowedFeatures[] = $feature;
             }
