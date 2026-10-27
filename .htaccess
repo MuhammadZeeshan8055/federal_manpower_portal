@@ -1,19 +1,28 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /federalmanpower/
 
-    # Block sensitive files at the project root.
+    # Block sensitive project paths.
     RewriteRule ^(\.env|composer\.(json|lock|phar)|artisan|phpunit\.xml)(/|$) - [F,L]
-    RewriteRule ^(\.git|\.cursor|app|bootstrap|config|database|resources|routes|storage|tests|vendor)(/|$) - [F,L]
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor|docs|\.git|\.cursor)(/|$) - [F,L]
 
-    # Leave requests that are already under /public alone.
-    RewriteCond %{REQUEST_URI} ^/federalmanpower/public(/|$) [NC]
-    RewriteRule ^ - [L]
+    # Front controller itself.
+    RewriteRule ^index\.php$ - [L]
 
-    # Empty path → Laravel front controller
-    RewriteRule ^$ /federalmanpower/public/index.php [L]
+    # Static files that live under /public (css, images, robots.txt, …).
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{DOCUMENT_ROOT}/federalmanpower/public/$1 -f
+    RewriteRule ^(.*)$ public/$1 [L]
 
-    # Absolute path rewrite (LiteSpeed-friendly)
-    RewriteRule ^(.*)$ /federalmanpower/public/$1 [L]
+    # Folders under /public
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/federalmanpower/public/$1 -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Everything else → root index.php (boots Laravel). No /public in the URL.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
 </IfModule>
 
 DirectoryIndex index.php
