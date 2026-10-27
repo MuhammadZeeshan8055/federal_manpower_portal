@@ -228,6 +228,15 @@
                                     <input type="date" wire:model="passport_expiry" required>
                                     @error('passport_expiry') <span class="master-error">{{ $message }}</span> @enderror
                                 </label>
+                                <label>
+                                    <span class="bio-form__label">Passport available</span>
+                                    <select wire:model="passport_available">
+                                        <option value="">Select</option>
+                                        <option value="yes">Yes — physical passport with us</option>
+                                        <option value="no">No — not available</option>
+                                    </select>
+                                    @error('passport_available') <span class="master-error">{{ $message }}</span> @enderror
+                                </label>
                             </div>
                             <div class="bio-form__actions">
                                 <button type="button" class="button button--soft" wire:click="continuePassport">

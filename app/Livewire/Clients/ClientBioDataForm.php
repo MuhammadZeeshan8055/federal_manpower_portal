@@ -97,6 +97,8 @@ class ClientBioDataForm extends Component
 
     public string $passport_expiry = '';
 
+    public string $passport_available = '';
+
     public string $medical_fitness = '';
 
     public string $degree = '';
@@ -230,10 +232,12 @@ class ClientBioDataForm extends Component
             'passport_number' => ['required', 'string', 'max:50'],
             'passport_issue_date' => ['required', 'date'],
             'passport_expiry' => ['required', 'date', 'after:passport_issue_date'],
+            'passport_available' => ['nullable', 'in:yes,no'],
         ], [], [
             'passport_number' => 'passport number',
             'passport_issue_date' => 'date of issue',
             'passport_expiry' => 'date of expiry',
+            'passport_available' => 'passport available',
         ]);
 
         $this->openPassport = false;
@@ -288,6 +292,7 @@ class ClientBioDataForm extends Component
             'passport_number' => ['required', 'string', 'max:50'],
             'passport_issue_date' => ['required', 'date'],
             'passport_expiry' => ['required', 'date', 'after:passport_issue_date'],
+            'passport_available' => ['nullable', 'in:yes,no'],
             'source' => ['required', 'in:direct,referred'],
             'care_off_id' => [$this->source === 'referred' ? 'required' : 'nullable'],
             'country_id' => ['nullable'],
@@ -308,6 +313,7 @@ class ClientBioDataForm extends Component
             'passport_number' => 'passport number',
             'passport_issue_date' => 'date of issue',
             'passport_expiry' => 'date of expiry',
+            'passport_available' => 'passport available',
             'care_off_id' => 'care off',
             'doc_files.*' => 'document',
         ]);
@@ -353,6 +359,7 @@ class ClientBioDataForm extends Component
                 'passport_number' => $this->passport_number,
                 'passport_issue_date' => $this->passport_issue_date,
                 'passport_expiry' => $this->passport_expiry,
+                'passport_available' => $this->nullIfEmpty($this->passport_available),
                 'degree' => $this->nullIfEmpty($this->degree),
                 'degree_year' => $this->nullIfEmpty($this->degree_year),
                 'certification' => $this->nullIfEmpty($this->certification),
@@ -493,6 +500,7 @@ class ClientBioDataForm extends Component
         $this->passport_number = '';
         $this->passport_issue_date = '';
         $this->passport_expiry = '';
+        $this->passport_available = '';
         $this->medical_fitness = '';
         $this->degree = '';
         $this->degree_year = '';

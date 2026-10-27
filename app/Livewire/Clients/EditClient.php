@@ -104,6 +104,8 @@ class EditClient extends Component
 
     public string $passport_expiry = '';
 
+    public string $passport_available = '';
+
     public string $medical_fitness = '';
 
     public string $degree = '';
@@ -203,6 +205,7 @@ class EditClient extends Component
             'passport_number' => ['required', 'string', 'max:50'],
             'passport_issue_date' => ['required', 'date'],
             'passport_expiry' => ['required', 'date', 'after:passport_issue_date'],
+            'passport_available' => ['nullable', 'in:yes,no'],
             'source' => ['required', 'in:direct,referred'],
             'care_off_id' => [$this->source === 'referred' ? 'required' : 'nullable'],
             'overall_status' => ['required', 'in:active,inactive'],
@@ -220,6 +223,7 @@ class EditClient extends Component
             'passport_number' => 'passport number',
             'passport_issue_date' => 'date of issue',
             'passport_expiry' => 'date of expiry',
+            'passport_available' => 'passport available',
             'care_off_id' => 'care off',
             'doc_files.*' => 'document',
         ]);
@@ -316,6 +320,7 @@ class EditClient extends Component
                 'passport_number' => $this->passport_number,
                 'passport_issue_date' => $this->passport_issue_date,
                 'passport_expiry' => $this->passport_expiry,
+                'passport_available' => $this->nullIfEmpty($this->passport_available),
                 'degree' => $this->nullIfEmpty($this->degree),
                 'degree_year' => $this->nullIfEmpty($this->degree_year),
                 'certification' => $this->nullIfEmpty($this->certification),
@@ -510,6 +515,7 @@ class EditClient extends Component
         $this->passport_number = $client->passport_number;
         $this->passport_issue_date = optional($client->passport_issue_date)->format('Y-m-d') ?? '';
         $this->passport_expiry = optional($client->passport_expiry)->format('Y-m-d') ?? '';
+        $this->passport_available = (string) ($client->passport_available ?? '');
         $this->medical_fitness = (string) ($client->medical_fitness ?? '');
         $this->degree = (string) ($client->degree ?? '');
         $this->degree_year = (string) ($client->degree_year ?? '');

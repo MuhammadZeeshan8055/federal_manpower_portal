@@ -40,6 +40,7 @@ class Client extends Model
         'passport_number',
         'passport_issue_date',
         'passport_expiry',
+        'passport_available',
         'degree',
         'degree_year',
         'certification',

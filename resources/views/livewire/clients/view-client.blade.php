@@ -108,6 +108,18 @@
                         <div><dt>Passport no.</dt><dd>{{ $client->passport_number }}</dd></div>
                         <div><dt>Date of issue</dt><dd>{{ optional($client->passport_issue_date)->format('Y-m-d') ?: '—' }}</dd></div>
                         <div><dt>Date of expiry</dt><dd>{{ optional($client->passport_expiry)->format('Y-m-d') ?: '—' }}</dd></div>
+                        <div>
+                            <dt>Passport available</dt>
+                            <dd>
+                                @if ($client->passport_available === 'yes')
+                                    Yes — physical passport with us
+                                @elseif ($client->passport_available === 'no')
+                                    No — not available
+                                @else
+                                    —
+                                @endif
+                            </dd>
+                        </div>
                     </dl>
                 </fieldset>
 
