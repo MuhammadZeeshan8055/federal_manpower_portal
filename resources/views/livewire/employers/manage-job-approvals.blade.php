@@ -68,7 +68,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="employers-approvals-table__text">{{ $job->employer?->company_name ?? '—' }}</td>
+                                <td class="employers-approvals-table__text">{{ $job->employer?->company_name ?? 'Office' }}</td>
                                 <td>{{ $job->country ?: '—' }}</td>
                                 <td>
                                     @if ($job->isPending())

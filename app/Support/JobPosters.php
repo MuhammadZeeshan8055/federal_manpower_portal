@@ -66,10 +66,17 @@ class JobPosters
             return null;
         }
 
+        $path = str_replace('\\', '/', $path);
+
+        if (str_contains($path, '..') || str_starts_with($path, '/')) {
+            return null;
+        }
+
         if (! Storage::disk(self::disk())->exists($path)) {
             return null;
         }
 
-        return Storage::disk(self::disk())->url($path);
+        // Root-relative so images work regardless of APP_URL host/port.
+        return '/storage/'.$path;
     }
 }

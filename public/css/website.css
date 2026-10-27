@@ -2158,6 +2158,10 @@ select {
 .vacancy-card__visual--engineering {
     background-position: 100% 30%;
 }
+.vacancy-card__visual--poster {
+    background-size: cover;
+    background-position: center;
+}
 .vacancy-card__visual > .vacancy-card__badge {
     position: absolute;
     z-index: 2;

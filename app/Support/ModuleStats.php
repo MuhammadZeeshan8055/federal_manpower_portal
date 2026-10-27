@@ -112,6 +112,7 @@ class ModuleStats
             'staff-loans' => 'staff_loans',
             'office-settings' => 'attendance_settings',
             'holidays' => 'holidays',
+            'jobs' => 'job_posts',
             'approvals' => 'employer_profiles',
             'job-approvals' => 'job_posts',
         ];

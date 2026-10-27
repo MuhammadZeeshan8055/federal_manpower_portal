@@ -60,7 +60,7 @@ class ManageJobApprovals extends Component
             return;
         }
 
-        if (! $job->employer || ! $job->employer->isApproved()) {
+        if ($job->employer && ! $job->employer->isApproved()) {
             $this->flashToast('Approve the employer company first.', 'danger');
 
             return;

@@ -107,9 +107,10 @@ return [
         [
             'key' => 'employers',
             'title' => 'Employers',
-            'description' => 'Approve employer accounts and job posts.',
+            'description' => 'Post jobs, approve employer accounts and employer job posts.',
             'icon' => 'building',
             'children' => [
+                ['key' => 'jobs', 'label' => 'Jobs', 'icon' => 'briefcase'],
                 ['key' => 'approvals', 'label' => 'Employer Approvals', 'icon' => 'shield', 'admin_only' => true],
                 ['key' => 'job-approvals', 'label' => 'Job Approvals', 'icon' => 'briefcase', 'admin_only' => true],
             ],

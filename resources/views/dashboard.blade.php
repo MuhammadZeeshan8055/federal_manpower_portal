@@ -175,6 +175,10 @@
         <livewire:accounts.accounts-reports />
     </div>
 
+    <div x-show="moduleKey === 'employers' && featureKey === 'jobs'">
+        <livewire:employers.manage-jobs wire:key="employers-jobs-screen" />
+    </div>
+
     <div x-show="moduleKey === 'employers' && featureKey === 'approvals'">
         <livewire:employers.manage-employer-approvals />
     </div>
@@ -189,7 +193,7 @@
 
     <div
         class="module-placeholder__hero"
-        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'batches', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'my-loans', 'staff-daily-attendance', 'apply-leave', 'leave-approvals', 'holidays', 'salary-slips', 'staff-loans'].includes(featureKey)) && !(moduleKey === 'accounts' && ['payments', 'protector_payments', 'payment_methods', 'reports'].includes(featureKey)) && !(moduleKey === 'employers' && ['approvals', 'job-approvals'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
+        x-show="!(moduleKey === 'operations' && ['countries', 'companies', 'universities', 'care_offs', 'trades', 'process_statuses'].includes(featureKey)) && !(moduleKey === 'clients' && ['create', 'list', 'batches', 'documents'].includes(featureKey)) && !(moduleKey === 'visitors' && ['list', 'reminders'].includes(featureKey)) && !(moduleKey === 'attendance' && ['office-settings', 'my-daily-attendance', 'my-loans', 'staff-daily-attendance', 'apply-leave', 'leave-approvals', 'holidays', 'salary-slips', 'staff-loans'].includes(featureKey)) && !(moduleKey === 'accounts' && ['payments', 'protector_payments', 'payment_methods', 'reports'].includes(featureKey)) && !(moduleKey === 'employers' && ['jobs', 'approvals', 'job-approvals'].includes(featureKey)) && !(moduleKey === 'settings' && featureKey === 'users')"
     >
         <p>This screen will hold the real tools for this feature. Next steps will add forms and tables here.</p>
         <p class="muted">

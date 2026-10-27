@@ -86,7 +86,7 @@ alwaysApply: true
  - Profile page restyled to portal shell (info / password / delete)
 
  - **Accounts Step 6:** Payment methods + receiving accounts + client payments (private screenshot) + printable receipt PDF + simple reports (date range / by method + account)
- - **Employer Step 7:** Employer register/login → admin approve company → post jobs → admin approve jobs before public; website jobs from approved posts only
+ - **Employer Step 7:** Employer register/login → admin approve company → post jobs → admin approve jobs before public; office staff can also post/edit jobs under Employers → Jobs (live immediately, no approval); website jobs from approved posts only
 
 ### Not done yet (Phase 1)
 - Country-based document checklist rules
