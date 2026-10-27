@@ -195,4 +195,9 @@ class Client extends Model
     {
         return $this->hasMany(ClientDocument::class);
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class)->orderByDesc('paid_on')->orderByDesc('id');
+    }
 }

@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\ClientDocument;
 use App\Models\Company;
 use App\Models\Country;
+use App\Models\Payment;
 use App\Models\ProcessStatus;
 use App\Models\Trade;
 use App\Support\ClientCountryConvert;
@@ -449,6 +450,17 @@ class EditClient extends Component
 
         WorkspaceCountry::filterCompanies($companies);
 
+        $payments = collect();
+
+        if (! $this->denied && ! $this->notFound) {
+            $payments = Payment::query()
+                ->with(['method', 'account'])
+                ->where('client_id', $this->clientId)
+                ->orderByDesc('paid_on')
+                ->orderByDesc('id')
+                ->get();
+        }
+
         return view('livewire.clients.edit-client', [
             'countries' => Country::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'trades' => Trade::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
@@ -456,6 +468,7 @@ class EditClient extends Component
             'careOffs' => CareOff::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
             'processStatuses' => ProcessStatus::query()->where('is_active', true)->orderBy('sort_order')->orderBy('name')->get(['id', 'name']),
             'documents' => $this->documentRows(),
+            'payments' => $payments,
             'age' => $this->age,
             'maxUploadMb' => max(1, (int) ceil(ClientPrivateFiles::maxKilobytes() / 1024)),
         ]);

@@ -200,6 +200,11 @@
                         </table>
                     </div>
                 </fieldset>
+
+                <fieldset class="bio-section">
+                    <legend>Payments</legend>
+                    @include('partials.client-payments', ['payments' => $client->payments])
+                </fieldset>
             </div>
         </section>
     @endif

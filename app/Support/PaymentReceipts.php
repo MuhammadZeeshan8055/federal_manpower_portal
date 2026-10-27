@@ -82,8 +82,13 @@ class PaymentReceipts
             return true;
         }
 
-        return $user->canView('accounts', 'payments')
+        if ($user->canView('accounts', 'payments')
             || $user->canManage('accounts', 'payments')
-            || $user->canView('accounts', 'reports');
+            || $user->canView('accounts', 'reports')) {
+            return true;
+        }
+
+        return $user->canView('clients', 'list')
+            || $user->canManage('clients', 'list');
     }
 }

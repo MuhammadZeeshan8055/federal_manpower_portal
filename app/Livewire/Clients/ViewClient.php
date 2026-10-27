@@ -37,6 +37,8 @@ class ViewClient extends Component
                 'processStatus:id,name',
                 'jobPost.employer',
                 'documents',
+                'payments.method',
+                'payments.account',
             ])
             ->find($clientId);
 

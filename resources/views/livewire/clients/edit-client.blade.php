@@ -346,6 +346,19 @@
                     </div>
                 </div>
 
+                <div class="bio-collapse" x-data="{ open: true }" :class="{ 'is-open': open }">
+                    <button type="button" class="bio-collapse__toggle" @click="open = !open" :aria-expanded="open.toString()">
+                        <span>Payments</span>
+                        <span class="bio-collapse__chevron" aria-hidden="true"></span>
+                    </button>
+                    <div class="bio-collapse__body" x-show="open">
+                        <p class="bio-doc-note muted">
+                            Recorded in Accounts. View only here — edit payments from the Payments screen.
+                        </p>
+                        @include('partials.client-payments', ['payments' => $payments])
+                    </div>
+                </div>
+
                 <div class="bio-form__actions">
                     <button type="button" class="button button--ghost" wire:click="backToList">Cancel</button>
                     <button type="submit" class="button button--soft">Save changes</button>
