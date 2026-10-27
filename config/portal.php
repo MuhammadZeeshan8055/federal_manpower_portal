@@ -90,6 +90,7 @@ return [
             'icon' => 'wallet',
             'children' => [
                 ['key' => 'payments', 'label' => 'Payments', 'icon' => 'wallet'],
+                ['key' => 'protector_payments', 'label' => 'Protector Payments', 'icon' => 'shield'],
                 ['key' => 'payment_methods', 'label' => 'Payment Methods', 'icon' => 'settings'],
                 ['key' => 'reports', 'label' => 'Reports', 'icon' => 'chart'],
             ],
