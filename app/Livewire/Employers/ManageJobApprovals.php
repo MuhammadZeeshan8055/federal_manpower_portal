@@ -3,6 +3,7 @@
 namespace App\Livewire\Employers;
 
 use App\Models\JobPost;
+use App\Support\JobPosters;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -136,6 +137,7 @@ class ManageJobApprovals extends Component
             $this->cancelReject();
         }
 
+        JobPosters::deleteFolder($job->id);
         $job->delete();
 
         $this->flashToast('Job deleted.', 'danger');

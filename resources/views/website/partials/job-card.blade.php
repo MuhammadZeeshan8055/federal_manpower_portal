@@ -2,7 +2,7 @@
     [$visual, $title, $category, $country, $countryName, $experience, $experienceLevel, $type, $typeSlug, $salary, $badge, $image, $jobId] = $job;
 @endphp
 <article class="vacancy-card" data-title="{{ strtolower($title) }}" data-category="{{ $category }}" data-country="{{ $country }}" data-experience="{{ $experienceLevel }}" data-type="{{ $typeSlug }}">
-    <div class="vacancy-card__visual vacancy-card__visual--{{ $visual }}" style="background-image:url('{{ asset($image) }}')">
+    <div class="vacancy-card__visual vacancy-card__visual--{{ $visual }}" style="background-image:url('{{ str_starts_with($image, 'http') || str_starts_with($image, '/') ? $image : asset($image) }}')">
         <span class="vacancy-card__badge">{{ $badge }}</span>
     </div>
     <div class="vacancy-card__body">

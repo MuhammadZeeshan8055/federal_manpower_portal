@@ -95,6 +95,8 @@ class WebsiteController extends Controller
                 $experience = $job->experience ?: '—';
                 $experienceSlug = Str::slug($experience) ?: 'any';
 
+                $posterUrl = $job->posterUrl();
+
                 return [
                     $this->visualForCategory($categorySlug),
                     $job->title,
@@ -107,7 +109,7 @@ class WebsiteController extends Controller
                     Str::slug($type) ?: 'full-time',
                     $job->salary_text ?: 'Negotiable',
                     'Open',
-                    'images/website/job-cards-strip.png',
+                    $posterUrl ?: asset('images/website/job-cards-strip.png'),
                     $job->id,
                 ];
             })

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\JobPosters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,7 @@ class JobPost extends Model
         'salary_text',
         'vacancies',
         'description',
+        'poster_path',
         'status',
         'rejection_reason',
         'approved_by',
@@ -66,5 +68,15 @@ class JobPost extends Model
     public function isClosed(): bool
     {
         return $this->status === 'closed';
+    }
+
+    public function posterUrl(): ?string
+    {
+        return JobPosters::url($this->poster_path);
+    }
+
+    public function hasPoster(): bool
+    {
+        return $this->posterUrl() !== null;
     }
 }

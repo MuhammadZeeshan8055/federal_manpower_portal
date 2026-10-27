@@ -3163,6 +3163,21 @@ select {
     font-size: 11px;
     margin-top: 4px;
 }
+.ep-poster-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin: -4px 0 8px;
+}
+.ep-poster-preview img {
+    width: min(100%, 280px);
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #dce9ef;
+    background: #f3f8fb;
+}
 .ep-row-actions {
     white-space: nowrap;
     text-align: right;

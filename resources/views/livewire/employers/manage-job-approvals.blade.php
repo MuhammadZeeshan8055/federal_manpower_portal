@@ -54,8 +54,19 @@
                         @forelse ($jobs as $job)
                             <tr wire:key="job-approval-{{ $job->id }}">
                                 <td class="employers-approvals-table__text">
-                                    <strong>{{ $job->title }}</strong>
-                                    <div class="muted">{{ $job->category ?: '—' }} · {{ $job->employment_type ?: '—' }}</div>
+                                    <div style="display:flex;gap:10px;align-items:center;">
+                                        @if ($job->hasPoster())
+                                            <img
+                                                src="{{ $job->posterUrl() }}"
+                                                alt=""
+                                                style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--line,#dce9ef);flex-shrink:0;"
+                                            >
+                                        @endif
+                                        <div>
+                                            <strong>{{ $job->title }}</strong>
+                                            <div class="muted">{{ $job->category ?: '—' }} · {{ $job->employment_type ?: '—' }}</div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="employers-approvals-table__text">{{ $job->employer?->company_name ?? '—' }}</td>
                                 <td>{{ $job->country ?: '—' }}</td>

@@ -109,6 +109,30 @@
                             @error('description') <span class="ep-field-error">{{ $message }}</span> @enderror
                         </label>
 
+                        <label>
+                            Job poster image
+                            <input type="file" wire:model="poster" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+                            <span class="ep-muted" style="display:block;margin-top:6px;font-size:12px;">
+                                Optional. JPG / PNG / WebP · max {{ $maxPosterMb }} MB. Shown on the public jobs page.
+                            </span>
+                            @error('poster') <span class="ep-field-error">{{ $message }}</span> @enderror
+                        </label>
+
+                        @if ($poster)
+                            <div class="ep-poster-preview">
+                                <img src="{{ $poster->temporaryUrl() }}" alt="New poster preview">
+                            </div>
+                        @elseif ($currentPosterUrl)
+                            <div class="ep-poster-preview">
+                                <img src="{{ $currentPosterUrl }}" alt="Current job poster">
+                                @if ($editingId)
+                                    <button type="button" class="ep-link ep-link--danger" wire:click="removePoster" wire:confirm="Remove this poster?">
+                                        Remove poster
+                                    </button>
+                                @endif
+                            </div>
+                        @endif
+
                         <div class="ep-actions">
                             <button type="submit" class="btn btn-accent">
                                 {{ $editingId ? 'Save & submit for approval' : 'Submit for approval' }}

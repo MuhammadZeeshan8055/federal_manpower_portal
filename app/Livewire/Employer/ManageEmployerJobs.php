@@ -4,11 +4,15 @@ namespace App\Livewire\Employer;
 
 use App\Models\JobPost;
 use App\Support\EmployerNotifications;
+use App\Support\JobPosters;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class ManageEmployerJobs extends Component
 {
+    use WithFileUploads;
     use WithPagination;
 
     public bool $denied = false;
@@ -35,6 +39,10 @@ class ManageEmployerJobs extends Component
 
     public string $description = '';
 
+    public ?string $poster_path = null;
+
+    public $poster = null;
+
     public string $successMessage = '';
 
     public int $toastVersion = 0;
@@ -55,6 +63,15 @@ class ManageEmployerJobs extends Component
         if (! $profile->isApproved()) {
             $this->notApproved = true;
         }
+    }
+
+    public function updatedPoster($value): void
+    {
+        if (! $value instanceof TemporaryUploadedFile) {
+            return;
+        }
+
+        $this->resetValidation('poster');
     }
 
     public function editJob(int $id): void
@@ -79,6 +96,8 @@ class ManageEmployerJobs extends Component
         $this->salary_text = (string) ($job->salary_text ?? '');
         $this->vacancies = (string) $job->vacancies;
         $this->description = (string) ($job->description ?? '');
+        $this->poster_path = $job->poster_path;
+        $this->poster = null;
         $this->successMessage = '';
         $this->resetValidation();
     }
@@ -86,6 +105,24 @@ class ManageEmployerJobs extends Component
     public function cancelEdit(): void
     {
         $this->resetForm();
+    }
+
+    public function removePoster(): void
+    {
+        if ($this->denied || $this->notApproved || ! $this->editingId) {
+            return;
+        }
+
+        $job = $this->findOwnJob($this->editingId);
+
+        if (! $job) {
+            return;
+        }
+
+        JobPosters::deleteFolder($job->id);
+        $job->update(['poster_path' => null]);
+        $this->poster_path = null;
+        $this->poster = null;
     }
 
     public function closeJob(int $id): void
@@ -123,6 +160,7 @@ class ManageEmployerJobs extends Component
             $this->resetForm();
         }
 
+        JobPosters::deleteFolder($job->id);
         $job->delete();
 
         $this->flashToast('Job deleted.', 'danger');
@@ -135,6 +173,8 @@ class ManageEmployerJobs extends Component
             return;
         }
 
+        $maxKb = JobPosters::maxKilobytes();
+
         $this->validate([
             'title' => ['required', 'string', 'max:160'],
             'category' => ['nullable', 'string', 'max:80'],
@@ -145,6 +185,7 @@ class ManageEmployerJobs extends Component
             'salary_text' => ['nullable', 'string', 'max:120'],
             'vacancies' => ['required', 'integer', 'min:1', 'max:9999'],
             'description' => ['nullable', 'string', 'max:5000'],
+            'poster' => ['nullable', 'image', 'max:'.$maxKb, 'mimes:jpg,jpeg,png,webp'],
         ]);
 
         $profile = auth()->user()->employerProfile;
@@ -173,12 +214,24 @@ class ManageEmployerJobs extends Component
             }
 
             $job->update($data);
+
+            if ($this->poster) {
+                $path = JobPosters::store($job->id, $this->poster);
+                $job->update(['poster_path' => $path]);
+            }
+
             EmployerNotifications::jobSubmitted($job->fresh(), true);
             $this->flashToast('Job updated — waiting for admin approval again.', 'success');
         } else {
             $data['employer_profile_id'] = $profile->id;
             $job = JobPost::query()->create($data);
-            EmployerNotifications::jobSubmitted($job);
+
+            if ($this->poster) {
+                $path = JobPosters::store($job->id, $this->poster);
+                $job->update(['poster_path' => $path]);
+            }
+
+            EmployerNotifications::jobSubmitted($job->fresh());
             $this->flashToast('Job submitted — waiting for admin approval.', 'success');
         }
 
@@ -199,6 +252,8 @@ class ManageEmployerJobs extends Component
 
         return view('livewire.employer.manage-employer-jobs', [
             'jobs' => $jobs,
+            'maxPosterMb' => max(1, (int) ceil(JobPosters::maxKilobytes() / 1024)),
+            'currentPosterUrl' => JobPosters::url($this->poster_path),
         ])->layout('layouts.employer-portal', [
             'title' => 'My jobs',
         ]);
@@ -237,6 +292,8 @@ class ManageEmployerJobs extends Component
         $this->salary_text = '';
         $this->vacancies = '1';
         $this->description = '';
+        $this->poster_path = null;
+        $this->poster = null;
         $this->resetValidation();
     }
 }
