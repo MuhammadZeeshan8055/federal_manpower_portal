@@ -64,6 +64,9 @@ class ViewClient extends Component
             ['key' => 'frc', 'label' => 'FRC'],
             ['key' => 'birth_certificate', 'label' => 'Birth certificate'],
             ['key' => 'medical', 'label' => 'Medical'],
+            ['key' => 'stamp_self', 'label' => 'Stamp self'],
+            ['key' => 'stamp_guarantor', 'label' => 'Stamp guarantor'],
+            ['key' => 'cheque', 'label' => 'Cheque'],
         ];
     }
 
