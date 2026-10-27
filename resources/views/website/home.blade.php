@@ -258,27 +258,80 @@
             <p>Operations, candidate support and employer coordination — working from one manpower portal.</p>
         </div>
         @php
-            $teamMembers = [
-                ['team-director.webp', 'Recruitment leadership', 'Sets placement priorities and keeps overseas employer partnerships on track.'],
-                ['team-talent-lead.webp', 'Candidate desk', 'Reviews portal applications, bio data and documents for each case.'],
-                ['team-employer-relations.webp', 'Employer desk', 'Approves companies, activates job posts and aligns manpower requirements.'],
-                ['team-candidate-success.webp', 'Process follow-up', 'Updates process status and keeps candidates informed of next steps.'],
+            $teamLeaders = [
+                ['name' => 'Bilal Wasim', 'role' => 'Chief Executive Officer', 'image' => 'team-bilal-wasim.png', 'initials' => 'BW'],
+                ['name' => 'Kashif Imran', 'role' => 'Vice Chairman', 'image' => 'team-kashif-imran.png', 'initials' => 'KI'],
+            ];
+            $teamStaff = [
+                ['name' => 'Ansar Mehmood Warraich', 'role' => 'Business Development Manager', 'image' => null, 'initials' => 'AW'],
+                ['name' => 'Nadeem Akram', 'role' => 'Manager Technical Recruitment', 'image' => null, 'initials' => 'NA'],
+                ['name' => 'Zohaib Hassan', 'role' => 'Accounts Officer', 'image' => null, 'initials' => 'ZH'],
             ];
         @endphp
-        <div class="team-grid">
-            @foreach ($teamMembers as [$image, $role, $description])
-                <article class="team-card">
-                    <div class="team-card__photo">
-                        <img src="{{ asset('images/website/' . $image) }}" alt="{{ $role }}" width="900" height="1125" loading="lazy">
-                        <span aria-hidden="true">0{{ $loop->iteration }}</span>
-                    </div>
-                    <div class="team-card__content">
-                        <span>Federal Manpower</span>
-                        <h3>{{ $role }}</h3>
-                        <p>{{ $description }}</p>
-                    </div>
-                </article>
-            @endforeach
+        <div class="team-layout">
+            <div class="team-grid team-grid--leaders">
+                @foreach ($teamLeaders as $member)
+                    <article class="team-card team-card--leader">
+                        <div class="team-card__glow" aria-hidden="true"></div>
+                        <div class="team-card__photo">
+                            <div class="team-card__ring">
+                                <div class="team-card__avatar">
+                                    @if ($member['image'])
+                                        <img
+                                            src="{{ asset('images/website/' . $member['image']) }}"
+                                            alt="{{ $member['name'] }}"
+                                            width="320"
+                                            height="320"
+                                            loading="lazy"
+                                        >
+                                    @else
+                                        <span class="team-card__initials" aria-hidden="true">{{ $member['initials'] }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-card__content">
+                            <span class="team-card__eyebrow">Leadership</span>
+                            <h3>{{ $member['name'] }}</h3>
+                            <p>{{ $member['role'] }}</p>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <div class="team-divider" aria-hidden="true">
+                <span></span>
+                <em>Team</em>
+                <span></span>
+            </div>
+
+            <div class="team-grid team-grid--staff">
+                @foreach ($teamStaff as $member)
+                    <article class="team-card team-card--staff">
+                        <div class="team-card__photo">
+                            <div class="team-card__ring">
+                                <div class="team-card__avatar">
+                                    @if ($member['image'])
+                                        <img
+                                            src="{{ asset('images/website/' . $member['image']) }}"
+                                            alt="{{ $member['name'] }}"
+                                            width="320"
+                                            height="320"
+                                            loading="lazy"
+                                        >
+                                    @else
+                                        <span class="team-card__initials" aria-hidden="true">{{ $member['initials'] }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-card__content">
+                            <h3>{{ $member['name'] }}</h3>
+                            <p>{{ $member['role'] }}</p>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
         </div>
     </div>
 </section>
