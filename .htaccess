@@ -1,8 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /federalmanpower/
 
-    # Shared hosting: send traffic into /public (works at domain root or in a subfolder).
-    # Per-directory match — skip if already under public/ to avoid a rewrite loop.
-    RewriteRule ^public/ - [L]
+    # Already under /public — do not rewrite again.
+    RewriteRule ^public(/|$) - [L]
+
+    # Send everything else into the Laravel public folder.
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
+
+DirectoryIndex public/index.php index.php
