@@ -127,6 +127,16 @@ class ListClients extends Component
         $this->resetPage('clientsPage');
     }
 
+    public function ensureList(): void
+    {
+        if ($this->editingId === null && $this->viewingId === null) {
+            return;
+        }
+
+        $this->editingId = null;
+        $this->viewingId = null;
+    }
+
     public function deleteClient(int $id): void
     {
         if ($this->denied || ! $this->canManageClients) {

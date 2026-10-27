@@ -19,6 +19,11 @@
     }"
     @keydown.escape.window="if (deleteOpen) closeDelete()"
     @clients-filter-status.window="$wire.applyStatusFilter($event.detail.id || '', $event.detail.label || '')"
+    @portal-feature-shown.window="
+        if ($event.detail && $event.detail.module === 'clients' && $event.detail.feature === 'list') {
+            $wire.ensureList();
+        }
+    "
 >
     @if ($denied)
         <div class="panel empty-card">
