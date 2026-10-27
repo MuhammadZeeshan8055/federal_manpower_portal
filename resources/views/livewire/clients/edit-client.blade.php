@@ -74,7 +74,7 @@
                     </label>
                 </div>
                 <div class="bio-print-actions">
-                    <a class="button button--ghost" href="/clients/{{ $clientId }}/print" target="_blank">Print</a>
+                    <a class="button button--ghost" href="{{ route('clients.print', $clientId) }}" target="_blank">Print</a>
                 </div>
             </div>
 

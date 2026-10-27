@@ -17,7 +17,7 @@
                 </button>
                 <p class="bio-section-title">View client</p>
                 <div class="bio-print-actions">
-                    <a class="button button--ghost" href="/clients/{{ $client->id }}/print" target="_blank">Print</a>
+                    <a class="button button--ghost" href="{{ route('clients.print', $client) }}" target="_blank">Print</a>
                 </div>
             </div>
 

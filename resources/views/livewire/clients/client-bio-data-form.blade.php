@@ -64,7 +64,7 @@
                 </div>
                 <div class="bio-print-actions">
                     @if ($lastSavedClientId)
-                        <a class="button button--ghost" href="/clients/{{ $lastSavedClientId }}/print" target="_blank">Print</a>
+                        <a class="button button--ghost" href="{{ route('clients.print', $lastSavedClientId) }}" target="_blank">Print</a>
                     @else
                         <button type="button" class="button button--ghost" disabled title="Save the client first">Print</button>
                     @endif
