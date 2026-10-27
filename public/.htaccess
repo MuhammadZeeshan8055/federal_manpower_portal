@@ -4,6 +4,7 @@
     </IfModule>
 
     RewriteEngine On
+    RewriteBase /federal_manpower_portal/public/
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
